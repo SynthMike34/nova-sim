@@ -15,10 +15,21 @@ TOE_PUSH in spinta/late-stance · TOE_BRAKE in atterraggio. Stop-loss: sessione.
 """
 import os as _os
 def _MP(_n):
+    if _os.path.isabs(_n) or _os.sep in _n or '/' in _n:
+        if _os.path.exists(_n): return _n
     _qui = _os.path.dirname(_os.path.abspath(__file__))
-    for _c in (_n, _os.path.join(_qui, '..', 'models', _n), _os.path.join(_qui, _n)):
+    _base = _os.path.dirname(_qui)
+    for _c in (_n,
+               _os.path.join(_base, 'models', _os.path.basename(_n)),
+               _os.path.join(_base, 'config', _os.path.basename(_n)),
+               _os.path.join(_qui, _os.path.basename(_n))):
         if _os.path.exists(_c): return _c
-    return _n
+    return _os.path.join(_base, 'models', _os.path.basename(_n))
+def _DER(_n):
+    _qui = _os.path.dirname(_os.path.abspath(__file__))
+    _d = _os.path.join(_os.path.dirname(_qui), 'models')
+    if not _os.path.isdir(_d): _d = _qui
+    return _os.path.join(_d, _os.path.basename(_n))
 import sys
 import json
 import importlib
@@ -29,7 +40,7 @@ VERSIONE = '0.6'
 TOE_PUSH = 0.45        # rad di flessione nella spinta (solo tratto FINALE)
 H_PUSH, T_PUSH2 = 0.70, 0.42   # Step 2: alluce profondo (40 gr), dita 2-5 leggere (24)
 H_BRAKE, T_BRAKE, T_RITARDO = 0.50, 0.50, 0.025  # brake asimmetrico (toes +25 ms)
-XML_TOES = 'tx34_v1_toes.xml'
+XML_TOES = _MP('tx34_v1_toes.xml')
 TOE_PUSH_W = 0.28      # push dolce in camminata (finestra stretta)
 TOE_BRAKE = 0.55       # rad al contatto in atterraggio
 TOE_BASE = 0.03
@@ -173,7 +184,7 @@ def _blocco_split(lato):
 
 def genera_toes_xml():
     """2A: deriva il modello con alluce indipendente e ne verifica la stabilita."""
-    s = open('tx34_v1.xml').read()
+    s = open(_MP('tx34_v1.xml')).read()
     for lato in ('r', 'l'):
         blocco = BODY_R.replace('r_', lato + '_')
         assert blocco in s, 'blocco toe %s non trovato' % lato
@@ -184,7 +195,7 @@ def genera_toes_xml():
             '<position joint="%s_hallux_pitch" kp="30" forcerange="-4 4"/>\n'
             '    <position joint="%s_toes_pitch" kp="30" forcerange="-3 3"/>'
             % (lato, lato), 1)
-    open(XML_TOES, 'w').write(s)
+    open(_DER(XML_TOES), 'w').write(s)
     m = mujoco.MjModel.from_xml_path(XML_TOES)
     total_mass = m.body_mass.sum()
     print(f"[MASSA MODELLO] {total_mass:.3f} kg")
@@ -234,9 +245,11 @@ def prova_salto_alluce(h=H_PUSH, t2=T_PUSH2, frac=0.6):
                 vx_decollo=vx_dec)
 
 def _e6_su_toes():
-    src = open('e6_supervisore.py').read()
-    src = src.replace("XML = 'tx34_v1.xml'", "XML = '%s'" % XML_TOES)
-    open('_e6_toes.py', 'w').write(src)
+    src = open(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), 'e6_supervisore.py')).read()
+    src = src.replace("XML = _MP('tx34_v1.xml')", "XML = _MP('%s')" % _os.path.basename(XML_TOES))
+    _dst = _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), '_e6_toes.py')
+    open(_dst, 'w').write(src)
+    sys.path.insert(0, _os.path.dirname(_dst))
     if '_e6_toes' in sys.modules:
         return importlib.reload(sys.modules['_e6_toes'])
     return importlib.import_module('_e6_toes')

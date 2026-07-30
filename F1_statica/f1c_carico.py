@@ -13,6 +13,23 @@ B = MARCIA SUL POSTO (gait_core, 4 passi) con carico in mano.
 Il carico e' massa aggiunta alla mano destra NEL SORGENTE (regola piattaforma);
 il modello derivato tx34_v1_carico.xml si rigenera a ogni esecuzione.
 """
+import os as _os
+def _MP(_n):
+    if _os.path.isabs(_n) or _os.sep in _n or '/' in _n:
+        if _os.path.exists(_n): return _n
+    _qui = _os.path.dirname(_os.path.abspath(__file__))
+    _base = _os.path.dirname(_qui)
+    for _c in (_n,
+               _os.path.join(_base, 'models', _os.path.basename(_n)),
+               _os.path.join(_base, 'config', _os.path.basename(_n)),
+               _os.path.join(_qui, _os.path.basename(_n))):
+        if _os.path.exists(_c): return _c
+    return _os.path.join(_base, 'models', _os.path.basename(_n))
+def _DER(_n):
+    _qui = _os.path.dirname(_os.path.abspath(__file__))
+    _d = _os.path.join(_os.path.dirname(_qui), 'models')
+    if not _os.path.isdir(_d): _d = _qui
+    return _os.path.join(_d, _os.path.basename(_n))
 import os
 import sys
 import sys
@@ -22,7 +39,7 @@ import mujoco
 import f1b_reach as R          # riuso certificato: passo(), braccio_verso(), smooth()
 
 VERSIONE = '1.3'
-XML = 'tx34_v1.xml'
+XML = _MP('tx34_v1.xml')
 RIGA_MANO_DX = '<geom type="sphere" size="0.04" mass="0.75"/>'
 
 def xml_con_carico(kg):
@@ -80,7 +97,7 @@ def tieni(kg, target_rel, T=4.5, registra=False):
 def marcia(kg, n_passi=2):
     """Camminata v2 con carico: passi completati + picchi coppia gambe."""
     from gait_core import gait
-    xml_tmp = 'tx34_v1_carico.xml'
+    xml_tmp = _DER('tx34_v1_carico.xml')
     open(xml_tmp, 'w').write(xml_con_carico(kg))
     F = []
     def rec(t, d):
@@ -105,7 +122,7 @@ def campagna():
     carichi = (0.0, 2.0, 4.0, 6.0, 8.0)
     ris = dict(A=[], A2=[], B=[])
     import importlib.util
-    for _p in ('../core', 'core', '/home/claude/NOVA-SIM/core'):
+    for _p in (_os.path.join(_os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))), 'core'), '../core', 'core'):
         if os.path.isdir(_p) and _p not in sys.path:
             sys.path.insert(0, _p)
     gait_ok = importlib.util.find_spec('gait_core') is not None

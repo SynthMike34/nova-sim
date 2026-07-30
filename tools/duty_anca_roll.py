@@ -13,22 +13,33 @@ step=0.14, t_sw=0.6, lift=0.04, y_in=0.0, lean=0.15, n_passi=2.
 """
 import os as _os
 def _MP(_n):
+    if _os.path.isabs(_n) or _os.sep in _n or '/' in _n:
+        if _os.path.exists(_n): return _n
     _qui = _os.path.dirname(_os.path.abspath(__file__))
-    for _c in (_n, _os.path.join(_qui, '..', 'models', _n), _os.path.join(_qui, _n)):
+    _base = _os.path.dirname(_qui)
+    for _c in (_n,
+               _os.path.join(_base, 'models', _os.path.basename(_n)),
+               _os.path.join(_base, 'config', _os.path.basename(_n)),
+               _os.path.join(_qui, _os.path.basename(_n))):
         if _os.path.exists(_c): return _c
-    return _n
+    return _os.path.join(_base, 'models', _os.path.basename(_n))
+def _DER(_n):
+    _qui = _os.path.dirname(_os.path.abspath(__file__))
+    _d = _os.path.join(_os.path.dirname(_qui), 'models')
+    if not _os.path.isdir(_d): _d = _qui
+    return _os.path.join(_d, _os.path.basename(_n))
 import sys
 import os
 import numpy as np
 
 VERSIONE = '1.2'
 SOGLIA = 43.0          # Nm — coppia nominale continuativa RMD-X8 (datasheet)
-BASE = '/home/claude/NOVA-SIM'
+BASE = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
 
 
 def esegui():
     sys.path.insert(0, os.path.join(BASE, 'core'))
-    os.chdir(os.path.join(BASE, 'models'))
+    pass  # percorsi risolti da _MP
     import mujoco
     from gait_core import gait
 
@@ -121,7 +132,7 @@ def main():
     ax.legend(loc='upper right', fontsize=8)
     ax.grid(alpha=0.3)
     fig.tight_layout()
-    dest = '/home/claude/run/duty_anca_roll.png'
+    dest = _os.path.join(_os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))), 'outputs', 'duty_anca_roll.png')
     fig.savefig(dest, dpi=110)
     print('grafico: ' + dest)
 

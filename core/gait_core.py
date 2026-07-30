@@ -1,9 +1,20 @@
 import os as _os
 def _MP(_n):
+    if _os.path.isabs(_n) or _os.sep in _n or '/' in _n:
+        if _os.path.exists(_n): return _n
     _qui = _os.path.dirname(_os.path.abspath(__file__))
-    for _c in (_n, _os.path.join(_qui, '..', 'models', _n), _os.path.join(_qui, _n)):
+    _base = _os.path.dirname(_qui)
+    for _c in (_n,
+               _os.path.join(_base, 'models', _os.path.basename(_n)),
+               _os.path.join(_base, 'config', _os.path.basename(_n)),
+               _os.path.join(_qui, _os.path.basename(_n))):
         if _os.path.exists(_c): return _c
-    return _n
+    return _os.path.join(_base, 'models', _os.path.basename(_n))
+def _DER(_n):
+    _qui = _os.path.dirname(_os.path.abspath(__file__))
+    _d = _os.path.join(_os.path.dirname(_qui), 'models')
+    if not _os.path.isdir(_d): _d = _qui
+    return _os.path.join(_d, _os.path.basename(_n))
 import os
 import mujoco, numpy as np
 L1, L2 = 0.38, 0.40
@@ -20,7 +31,7 @@ def smooth(u): return 0.5 - 0.5*np.cos(np.pi*np.clip(u, 0, 1))
 def gait(step=0.10, za0=0.78, lift=0.05, t_sw=1.0,
          Ky=5.0, Kyd=2.0, Kx=2.5, y_in=0.015, lean=0.0, xb=0.02, n_passi=6,
          verbose=False, xml='tx34_v1.xml', video_ogni=0, recorder=None):
-    m = mujoco.MjModel.from_xml_path(xml)
+    m = mujoco.MjModel.from_xml_path(_MP(xml))
     print(f"[MASSA MODELLO] {m.body_mass.sum():.3f} kg")
     _pay = float(os.environ.get("NOVA_PAYLOAD_KG", 0))
     assert 65.5 + _pay < m.body_mass.sum() < 67.0 + _pay, f"MASSA FUORI RANGE: {m.body_mass.sum():.3f} kg (payload {_pay})"

@@ -13,10 +13,21 @@ di marcia, generato dalle anche (roll) con piedi a terra, equilibrio di caviglia
 """
 import os as _os
 def _MP(_n):
+    if _os.path.isabs(_n) or _os.sep in _n or '/' in _n:
+        if _os.path.exists(_n): return _n
     _qui = _os.path.dirname(_os.path.abspath(__file__))
-    for _c in (_n, _os.path.join(_qui, '..', 'models', _n), _os.path.join(_qui, _n)):
+    _base = _os.path.dirname(_qui)
+    for _c in (_n,
+               _os.path.join(_base, 'models', _os.path.basename(_n)),
+               _os.path.join(_base, 'config', _os.path.basename(_n)),
+               _os.path.join(_qui, _os.path.basename(_n))):
         if _os.path.exists(_c): return _c
-    return _n
+    return _os.path.join(_base, 'models', _os.path.basename(_n))
+def _DER(_n):
+    _qui = _os.path.dirname(_os.path.abspath(__file__))
+    _d = _os.path.join(_os.path.dirname(_qui), 'models')
+    if not _os.path.isdir(_d): _d = _qui
+    return _os.path.join(_d, _os.path.basename(_n))
 import sys
 import json
 import numpy as np
@@ -24,7 +35,7 @@ import mujoco
 
 VERSIONE = '1.2'
 CONFIG_CERT = (14.0, 0.9)    # (comando anche [gradi], frequenza [Hz]) - vedi tabella --test
-XML = 'tx34_v1.xml'
+XML = _MP('tx34_v1.xml')
 K1, K2, XB = 4.0, 0.8, 0.05
 LIMITE_ROLL = 80.0           # Nm, RMD-X8 (TDD par.2.3)
 

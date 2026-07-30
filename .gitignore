@@ -5,3 +5,7 @@ canone_privato.json
 *.zip
 tx34_v1_sedia.xml
 tx34_v1_tacchi*.xml
+tx34_v1_carico.xml
+_e6_toes.py
+*.json
+!config/*.json

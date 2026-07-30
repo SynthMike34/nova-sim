@@ -2,14 +2,31 @@
 # -*- coding: utf-8 -*-
 """confronta_range.py — XML vs joint_limits_v2.json (range SW), tabella discrepanze.
    python confronta_range.py [--test]"""
+import os as _os
+def _MP(_n):
+    if _os.path.isabs(_n) or _os.sep in _n or '/' in _n:
+        if _os.path.exists(_n): return _n
+    _qui = _os.path.dirname(_os.path.abspath(__file__))
+    _base = _os.path.dirname(_qui)
+    for _c in (_n,
+               _os.path.join(_base, 'models', _os.path.basename(_n)),
+               _os.path.join(_base, 'config', _os.path.basename(_n)),
+               _os.path.join(_qui, _os.path.basename(_n))):
+        if _os.path.exists(_c): return _c
+    return _os.path.join(_base, 'models', _os.path.basename(_n))
+def _DER(_n):
+    _qui = _os.path.dirname(_os.path.abspath(__file__))
+    _d = _os.path.join(_os.path.dirname(_qui), 'models')
+    if not _os.path.isdir(_d): _d = _qui
+    return _os.path.join(_d, _os.path.basename(_n))
 import json
 import re
 import sys
 import math
 
 VERSIONE = '1.2'
-XML = '/home/claude/NOVA-SIM/models/tx34_v1.xml'
-JSN = '/home/claude/tdd_rev/joint_limits_v2.json'
+XML = _MP('tx34_v1.xml')
+JSN = _MP('joint_limits_v2.json')
 
 ALIAS = {'waist_yaw': 'waist_rotation', 'toe_pitch': 'toes'}
 def nome_canonico(n):

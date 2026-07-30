@@ -9,15 +9,33 @@ attorno alla prova E3 in avanti (v_des target).
     python e3_rms.py           analisi completa
     python e3_rms.py --test    verifica (RMS>0, duty in (0,1))
 """
+import os as _os
+def _MP(_n):
+    if _os.path.isabs(_n) or _os.sep in _n or '/' in _n:
+        if _os.path.exists(_n): return _n
+    _qui = _os.path.dirname(_os.path.abspath(__file__))
+    _base = _os.path.dirname(_qui)
+    for _c in (_n,
+               _os.path.join(_base, 'models', _os.path.basename(_n)),
+               _os.path.join(_base, 'config', _os.path.basename(_n)),
+               _os.path.join(_qui, _os.path.basename(_n))):
+        if _os.path.exists(_c): return _c
+    return _os.path.join(_base, 'models', _os.path.basename(_n))
+def _DER(_n):
+    _qui = _os.path.dirname(_os.path.abspath(__file__))
+    _d = _os.path.join(_os.path.dirname(_qui), 'models')
+    if not _os.path.isdir(_d): _d = _qui
+    return _os.path.join(_d, _os.path.basename(_n))
 import sys
 import os
 import numpy as np
 
 VERSIONE = '1.4'
 SOGLIA = 43.0
-sys.path.insert(0, '/home/claude/NOVA-SIM/F3_frontiera')
-sys.path.insert(0, '/home/claude/NOVA-SIM/core')
-os.chdir('/home/claude/NOVA-SIM/models')
+_QUI = os.path.dirname(os.path.abspath(__file__))
+_BASE = os.path.dirname(_QUI)
+sys.path.insert(0, _QUI)
+sys.path.insert(0, os.path.join(_BASE, 'core'))
 import mujoco
 
 T, FR, FL = [], [], []

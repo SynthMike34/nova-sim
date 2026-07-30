@@ -15,17 +15,28 @@ Fasi: discesa 3 s -> seduta 2 s -> pendenza avanti 1,5 s -> risalita 3 s -> eret
 """
 import os as _os
 def _MP(_n):
+    if _os.path.isabs(_n) or _os.sep in _n or '/' in _n:
+        if _os.path.exists(_n): return _n
     _qui = _os.path.dirname(_os.path.abspath(__file__))
-    for _c in (_n, _os.path.join(_qui, '..', 'models', _n), _os.path.join(_qui, _n)):
+    _base = _os.path.dirname(_qui)
+    for _c in (_n,
+               _os.path.join(_base, 'models', _os.path.basename(_n)),
+               _os.path.join(_base, 'config', _os.path.basename(_n)),
+               _os.path.join(_qui, _os.path.basename(_n))):
         if _os.path.exists(_c): return _c
-    return _n
+    return _os.path.join(_base, 'models', _os.path.basename(_n))
+def _DER(_n):
+    _qui = _os.path.dirname(_os.path.abspath(__file__))
+    _d = _os.path.join(_os.path.dirname(_qui), 'models')
+    if not _os.path.isdir(_d): _d = _qui
+    return _os.path.join(_d, _os.path.basename(_n))
 import sys
 import json
 import numpy as np
 import mujoco
 
 VERSIONE = '1.5'
-XML = 'tx34_v1.xml'
+XML = _MP('tx34_v1.xml')
 XML_SEDIA = 'tx34_v1_sedia.xml'
 L1, L2 = 0.38, 0.40
 K1, K2, XB = 4.0, 0.8, 0.03
@@ -58,7 +69,7 @@ def genera_sedia():
         assert v in s
         s = s.replace(v, n, 1)
     s = s.replace('TX34_NOVA_v1', 'TX34_NOVA_v1_sedia')
-    open(XML_SEDIA, 'w').write(s)
+    open(_DER(XML_SEDIA), 'w').write(s)
 
 def ik(xa, za):
     D = np.hypot(xa, za)
@@ -119,7 +130,7 @@ def bilancio_chiusura():
 
 def esegui(registra=False):
     genera_sedia()
-    m = mujoco.MjModel.from_xml_path(XML_SEDIA)
+    m = mujoco.MjModel.from_xml_path(_DER(XML_SEDIA))
     total_mass = m.body_mass.sum()
     print(f"[MASSA MODELLO] {total_mass:.3f} kg")
     assert 65.5 < total_mass < 67.0, f"MASSA FUORI RANGE: {total_mass:.3f} kg — verifica XML"
@@ -275,7 +286,7 @@ def demo():
     import mujoco.viewer
     print(__doc__)
     genera_sedia()
-    m = mujoco.MjModel.from_xml_path(XML_SEDIA)
+    m = mujoco.MjModel.from_xml_path(_DER(XML_SEDIA))
     total_mass = m.body_mass.sum()
     print(f"[MASSA MODELLO] {total_mass:.3f} kg")
     assert 65.5 < total_mass < 67.0, f"MASSA FUORI RANGE: {total_mass:.3f} kg — verifica XML"

@@ -17,17 +17,28 @@ Soglie PASS [A, dichiarate]: vel. giunto max <= 10 rad/s; vel. impatto testa
 """
 import os as _os
 def _MP(_n):
+    if _os.path.isabs(_n) or _os.sep in _n or '/' in _n:
+        if _os.path.exists(_n): return _n
     _qui = _os.path.dirname(_os.path.abspath(__file__))
-    for _c in (_n, _os.path.join(_qui, '..', 'models', _n), _os.path.join(_qui, _n)):
+    _base = _os.path.dirname(_qui)
+    for _c in (_n,
+               _os.path.join(_base, 'models', _os.path.basename(_n)),
+               _os.path.join(_base, 'config', _os.path.basename(_n)),
+               _os.path.join(_qui, _os.path.basename(_n))):
         if _os.path.exists(_c): return _c
-    return _n
+    return _os.path.join(_base, 'models', _os.path.basename(_n))
+def _DER(_n):
+    _qui = _os.path.dirname(_os.path.abspath(__file__))
+    _d = _os.path.join(_os.path.dirname(_qui), 'models')
+    if not _os.path.isdir(_d): _d = _qui
+    return _os.path.join(_d, _os.path.basename(_n))
 import sys
 import json
 import numpy as np
 import mujoco
 
 VERSIONE = '1.1'
-XML = 'tx34_v1.xml'
+XML = _MP('tx34_v1.xml')
 K1, K2, XB, KH = 4.0, 0.8, 0.05, 0.4
 T_STAND, T_MAX = 4.0, 15.0
 SOGLIA_QVEL, SOGLIA_TESTA, SOGLIA_PIEDI, SOGLIA_QUIETE = 10.0, 2.0, 0.30, 8.0
