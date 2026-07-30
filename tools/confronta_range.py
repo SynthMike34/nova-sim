@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""confronta_range.py — XML vs joint_limits_v2.json (range SW), tabella discrepanze.
+"""confronta_range.py - XML vs joint_limits_v2.json (range SW), tabella discrepanze.
    python confronta_range.py [--test]"""
 import os as _os
 def _MP(_n):
@@ -88,10 +88,19 @@ def main():
         print('%-26s | %7.1f %7.1f | %7.1f %7.1f | %5.1f%s' % (jn + '/' + xn, jlo, jhi, xlo, xhi, d, flag))
     solo_j = sorted(set(js) - set(xr))
     solo_x = sorted(set(xr) - set(js))
-    if solo_j:
-        print('solo nel JSON (%d): %s' % (len(solo_j), ', '.join(js[c][2] for c in solo_j)))
-    if solo_x:
-        print('solo nell XML (%d): %s' % (len(solo_x), ', '.join(xr[c][2] for c in solo_x)))
+    # Conteggio per NOME di giunto, non per chiave: il caricatore genera le varianti
+    # 'l'/'r' anche per giunti che nel modello sono singoli, e quelle chiavi non
+    # trovano riscontro. Un giunto va dichiarato assente solo se nessuna delle sue
+    # chiavi e' stata confrontata.
+    confrontati = set(js[c][2] for c in comuni)
+    nomi_j = sorted(set(js[c][2] for c in solo_j) - confrontati)
+    nomi_x = sorted(set(xr[c][2] for c in solo_x) - set(xr[c][2] for c in comuni))
+    if nomi_j:
+        print('presenti nel JSON e assenti nel modello (%d): %s'
+              % (len(nomi_j), ', '.join(nomi_j)))
+    if nomi_x:
+        print('presenti nel modello e assenti nel JSON (%d): %s'
+              % (len(nomi_x), ', '.join(nomi_x)))
     print('CONFRONTATI: %d | DISCREPANZE >2 gradi: %d' % (len(comuni), disc))
     if test:
         ok = len(comuni) >= 8
