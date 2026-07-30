@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <robot name="TX34_NOVA">
-  <!-- generato da esporta_urdf.py v1.2 da tx34_v1.xml -->
+  <!-- generato da esporta_urdf.py v1.3 da /tmp/v2/nova-sim/models/tx34_v1.xml -->
   <material name="tx34_grigio"><color rgba="0.72 0.72 0.78 1.0"/></material>
   <link name="base"/>
-  <joint name="base_pelvis" type="fixed">
+  <joint name="base_pelvis" type="floating">
     <origin xyz="0 0 0" rpy="0 0 0"/>
     <parent link="base"/><child link="pelvis"/>
   </joint>

@@ -44,8 +44,8 @@ import mujoco
 
 VERSIONE = '1.3'
 import sys as _sys
-XML = _sys.argv[1] if len(_sys.argv) > 1 and _sys.argv[1].endswith('.xml') else 'tx34_v1.xml'
-OUT = XML.replace('.xml', '.urdf')
+XML = _MP(_sys.argv[1]) if len(_sys.argv) > 1 and _sys.argv[1].endswith('.xml') else _MP('tx34_v1.xml')
+OUT = _DER(_os.path.basename(XML).replace('.xml', '.urdf'))
 
 def quat_rpy(q):
     w, x, y, z = q

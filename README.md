@@ -95,6 +95,9 @@ python F1_statica/f1a_squat.py
 python F1_statica/f1a_squat.py --test
 ```
 
+Modules can be launched from any working directory: model paths are resolved relative to the
+module file, and generated plots and metrics are written to `outputs/`.
+
 Note: the visual mode needs a working OpenGL driver. On a headless machine or over a remote
 session, use `--test`.
 
