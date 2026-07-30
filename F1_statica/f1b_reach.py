@@ -55,7 +55,7 @@ LIM_R = (-1.6, 0.3)
 m = mujoco.MjModel.from_xml_path(XML)
 total_mass = m.body_mass.sum()
 print(f"[MASSA MODELLO] {total_mass:.3f} kg")
-assert 65.5 < total_mass < 67.0, f"MASSA FUORI RANGE: {total_mass:.3f} kg — verifica XML"
+assert 65.5 < total_mass < 67.0, f"MASSA FUORI RANGE: {total_mass:.3f} kg - verifica XML"
 NOMI = [mujoco.mj_id2name(m, mujoco.mjtObj.mjOBJ_JOINT, m.actuator_trnid[i][0])
         for i in range(m.nu)]
 AID = dict((n, i) for i, n in enumerate(NOMI))

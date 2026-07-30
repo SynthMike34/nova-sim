@@ -75,7 +75,7 @@ V_PASSO = 0.45        # sopra questa velocita' si insegue col PASSO pieno
 m = mujoco.MjModel.from_xml_path(XML)
 total_mass = m.body_mass.sum()
 print(f"[MASSA MODELLO] {total_mass:.3f} kg")
-assert 65.5 < total_mass < 67.0, f"MASSA FUORI RANGE: {total_mass:.3f} kg — verifica XML"
+assert 65.5 < total_mass < 67.0, f"MASSA FUORI RANGE: {total_mass:.3f} kg - verifica XML"
 AID = {mujoco.mj_id2name(m, mujoco.mjtObj.mjOBJ_JOINT, m.actuator_trnid[i][0]): i
        for i in range(m.nu)}
 GAMBE = [n for n in AID if n.split('_', 1)[1] in

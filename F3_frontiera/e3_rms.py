@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-e3_rms.py — RMS e duty anca roll sulla camminata E3 a cadenza reale
+e3_rms.py - RMS e duty anca roll sulla camminata E3 a cadenza reale
 (masse definitive 66,23 kg). Il dato per il modello termico di SESTANTE.
 Metodo: monkeypatch di mujoco.mj_step (registra t + coppie hip roll)
 attorno alla prova E3 in avanti (v_des target).

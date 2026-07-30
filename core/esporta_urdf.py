@@ -58,7 +58,7 @@ def genera():
     m = mujoco.MjModel.from_xml_path(XML)
     total_mass = m.body_mass.sum()
     print(f"[MASSA MODELLO] {total_mass:.3f} kg")
-    assert 65.5 < total_mass < 67.0, f"MASSA FUORI RANGE: {total_mass:.3f} kg — verifica XML"
+    assert 65.5 < total_mass < 67.0, f"MASSA FUORI RANGE: {total_mass:.3f} kg - verifica XML"
     nome_b = [mujoco.mj_id2name(m, mujoco.mjtObj.mjOBJ_BODY, i) for i in range(m.nbody)]
     nome_j = [mujoco.mj_id2name(m, mujoco.mjtObj.mjOBJ_JOINT, i) for i in range(m.njnt)]
     effort = {}
@@ -203,7 +203,7 @@ def verifica(m0):
     m2 = mujoco.MjModel.from_xml_path(OUT)
     total_mass = m2.body_mass.sum()
     print(f"[MASSA MODELLO] {total_mass:.3f} kg")
-    assert 65.5 < total_mass < 67.0, f"MASSA FUORI RANGE: {total_mass:.3f} kg — verifica XML"
+    assert 65.5 < total_mass < 67.0, f"MASSA FUORI RANGE: {total_mass:.3f} kg - verifica XML"
     cern2 = sum(1 for j in range(m2.njnt)
                 if m2.jnt_type[j] == mujoco.mjtJoint.mjJNT_HINGE)
     print('giunti hinge ricaricati: %d -> %s' % (cern2, 'OK' if cern2 == attesi_n else 'NO'))

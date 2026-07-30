@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 e2_timing.py v1.0 - CANTIERE E2 (fuori campagna, cartella F3 dichiarata):
-STEP-TIMING ADATTIVO: il passo non dura T_SW fisso — scatta su un
+STEP-TIMING ADATTIVO: il passo non dura T_SW fisso - scatta su un
 EVENTO DI STATO: si atterra quando il capture laterale supera il piede
 d'appoggio verso il lato di swing (il corpo si e' "impegnato" a cadere di la').
 Piazzamento: capture point (da E1, errore 2-4 cm). Obiettivo: >= 10 passi.
@@ -60,7 +60,7 @@ L1, L2 = 0.38, 0.40
 m = mujoco.MjModel.from_xml_path(XML)
 total_mass = m.body_mass.sum()
 print(f"[MASSA MODELLO] {total_mass:.3f} kg")
-assert 65.5 < total_mass < 67.0, f"MASSA FUORI RANGE: {total_mass:.3f} kg — verifica XML"
+assert 65.5 < total_mass < 67.0, f"MASSA FUORI RANGE: {total_mass:.3f} kg - verifica XML"
 AID = {mujoco.mj_id2name(m, mujoco.mjtObj.mjOBJ_JOINT, m.actuator_trnid[i][0]): i
        for i in range(m.nu)}
 BID = {b: mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_BODY, b)

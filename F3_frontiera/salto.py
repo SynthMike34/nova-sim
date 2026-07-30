@@ -68,7 +68,7 @@ class Saltatrice:
         self.m = mujoco.MjModel.from_xml_path(XML)
         total_mass = self.m.body_mass.sum()
         print(f"[MASSA MODELLO] {total_mass:.3f} kg")
-        assert 65.5 < total_mass < 67.0, f"MASSA FUORI RANGE: {total_mass:.3f} kg — verifica XML"
+        assert 65.5 < total_mass < 67.0, f"MASSA FUORI RANGE: {total_mass:.3f} kg - verifica XML"
         self.d = mujoco.MjData(self.m)
         self.aid = {mujoco.mj_id2name(self.m, mujoco.mjtObj.mjOBJ_JOINT,
                                       self.m.actuator_trnid[i][0]): i

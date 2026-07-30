@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-metriche_coppie.py — Categoria J, modulo 1: coppie richieste durante la
+metriche_coppie.py - Categoria J, modulo 1: coppie richieste durante la
 camminata (2 passi) contro le coppie disponibili degli attuatori del TDD.
 
     python metriche_coppie.py            grafico + tabella + metriche.json
@@ -55,7 +55,7 @@ def main():
     m = mujoco.MjModel.from_xml_path(_MP('tx34_v1.xml'))
     total_mass = m.body_mass.sum()
     print(f"[MASSA MODELLO] {total_mass:.3f} kg")
-    assert 65.5 < total_mass < 67.0, f"MASSA FUORI RANGE: {total_mass:.3f} kg — verifica XML"
+    assert 65.5 < total_mass < 67.0, f"MASSA FUORI RANGE: {total_mass:.3f} kg - verifica XML"
     nomi = [mujoco.mj_id2name(m, mujoco.mjtObj.mjOBJ_JOINT, m.actuator_trnid[i][0])
             for i in range(m.nu)]
     T, F, V = [], [], []

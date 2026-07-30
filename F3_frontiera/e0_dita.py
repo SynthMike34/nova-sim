@@ -206,7 +206,7 @@ def genera_toes_xml():
     m = mujoco.MjModel.from_xml_path(XML_TOES)
     total_mass = m.body_mass.sum()
     print(f"[MASSA MODELLO] {total_mass:.3f} kg")
-    assert 65.5 < total_mass < 67.0, f"MASSA FUORI RANGE: {total_mass:.3f} kg — verifica XML"
+    assert 65.5 < total_mass < 67.0, f"MASSA FUORI RANGE: {total_mass:.3f} kg - verifica XML"
     d = mujoco.MjData(m)
     mujoco.mj_resetDataKeyframe(m, d, 0)
     for _ in range(int(2.0/m.opt.timestep)):
@@ -362,7 +362,7 @@ def campagna():
                     fontsize=12, fontweight='bold')
         ax.set_title(tit, fontsize=12, fontweight='bold')
         ax.grid(alpha=0.3, axis='y')
-    fig.suptitle('E0-TOES — le dita si svegliano: confronto [C]', fontsize=13)
+    fig.suptitle('E0-TOES - le dita si svegliano: confronto [C]', fontsize=13)
     fig.tight_layout()
     fig.savefig(_OUT('e0_dita.png'), dpi=150)
     print('Salvato e0_dita.png')

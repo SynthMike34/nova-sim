@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-duty_anca_roll.py — Per SESTANTE (modello termico anca roll).
+duty_anca_roll.py - Per SESTANTE (modello termico anca roll).
 Duty cycle dell'anca roll sopra la coppia nominale continuativa
 dell'RMD-X8 (43 Nm) durante la camminata campione (2 passi).
 
@@ -40,7 +40,7 @@ import os
 import numpy as np
 
 VERSIONE = '1.2'
-SOGLIA = 43.0          # Nm — coppia nominale continuativa RMD-X8 (datasheet)
+SOGLIA = 43.0          # Nm - coppia nominale continuativa RMD-X8 (datasheet)
 BASE = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
 
 
@@ -66,7 +66,7 @@ def esegui():
         m = mujoco.MjModel.from_xml_path(_MP('tx34_v1.xml'))
         total_mass = m.body_mass.sum()
         print(f"[MASSA MODELLO] {total_mass:.3f} kg")
-        assert 65.5 < total_mass < 67.0, f"MASSA FUORI RANGE: {total_mass:.3f} kg — verifica XML"
+        assert 65.5 < total_mass < 67.0, f"MASSA FUORI RANGE: {total_mass:.3f} kg - verifica XML"
     nomi = [mujoco.mj_id2name(m, mujoco.mjtObj.mjOBJ_JOINT,
                               m.actuator_trnid[i][0]) for i in range(m.nu)]
     T = np.array(T)
@@ -132,7 +132,7 @@ def main():
                     color='crimson', alpha=0.25)
     ax.set_xlabel('tempo [s]')
     ax.set_ylabel('|coppia| [Nm]')
-    ax.set_title('Duty anca roll — camminata campione: %.1f%% del ciclo sopra '
+    ax.set_title('Duty anca roll - camminata campione: %.1f%% del ciclo sopra '
                  '%d Nm · media %.1f · picco %.1f (lato %s)'
                  % (100 * o['frazione_sopra'], int(SOGLIA),
                     o['media_sopra_Nm'], o['picco_Nm'], peggio.upper()))

@@ -12,7 +12,7 @@ Per h in {0, 5, 8, 10, 12} cm: massima spinta assorbibile avanti/indietro/
 laterale [m/s], quota CoM, coppie caviglia al limite. Modelli derivati
 tx34_v1_tacchi_hXX.xml rigenerati da tx34_v1.xml (regola piattaforma).
 Leggi di equilibrio: h=0 la legge di riferimento a piedi nudi (XB 0,05, ar 0,20, KH 0,4);
-h>0 la legge di riferimento con tacchi (XB 0,06, ar 0,16, KH 0) — uniforme, cosi' la curva
+h>0 la legge di riferimento con tacchi (XB 0,06, ar 0,16, KH 0) - uniforme, cosi' la curva
 isola l'effetto dell'altezza [discontinuita' di legge a h=0 dichiarata].
 Soglia minima operativa [A] (modalita' accompagnata): 0,30 av / 0,25 ind / 0,15 lat.
 """
@@ -91,7 +91,7 @@ class Banco:
         self.m = mujoco.MjModel.from_xml_path(genera_h(h_cm))
         total_mass = self.m.body_mass.sum()
         print(f"[MASSA MODELLO] {total_mass:.3f} kg")
-        assert 65.5 < total_mass < 67.0, f"MASSA FUORI RANGE: {total_mass:.3f} kg — verifica XML"
+        assert 65.5 < total_mass < 67.0, f"MASSA FUORI RANGE: {total_mass:.3f} kg - verifica XML"
         self.aid = {mujoco.mj_id2name(self.m, mujoco.mjtObj.mjOBJ_JOINT,
                                       self.m.actuator_trnid[i][0]): i
                     for i in range(self.m.nu)}

@@ -126,7 +126,7 @@ def _bilancio_step(m, d):
 def bilancio_chiusura():
     import numpy as _np
     t = _np.array(_BIL['t']); S = _np.array(_BIL['s']); P = _np.array(_BIL['p'])
-    m = (t >= 4.0) & (t < 5.0)     # ultimo secondo della fase seduta — plateau (T_GIU=3, T_SED=2)
+    m = (t >= 4.0) & (t < 5.0)     # ultimo secondo della fase seduta - plateau (T_GIU=3, T_SED=2)
     sed, pie = float(_np.median(S[m])), float(_np.median(P[m]))
     tot, mg = sed + pie, 649.7
     chi = 100.0 * tot / mg
@@ -140,7 +140,7 @@ def esegui(registra=False):
     m = mujoco.MjModel.from_xml_path(_DER(XML_SEDIA))
     total_mass = m.body_mass.sum()
     print(f"[MASSA MODELLO] {total_mass:.3f} kg")
-    assert 65.5 < total_mass < 67.0, f"MASSA FUORI RANGE: {total_mass:.3f} kg — verifica XML"
+    assert 65.5 < total_mass < 67.0, f"MASSA FUORI RANGE: {total_mass:.3f} kg - verifica XML"
     d = mujoco.MjData(m)
     aid = {mujoco.mj_id2name(m, mujoco.mjtObj.mjOBJ_JOINT, m.actuator_trnid[i][0]): i
            for i in range(m.nu)}
@@ -296,7 +296,7 @@ def demo():
     m = mujoco.MjModel.from_xml_path(_DER(XML_SEDIA))
     total_mass = m.body_mass.sum()
     print(f"[MASSA MODELLO] {total_mass:.3f} kg")
-    assert 65.5 < total_mass < 67.0, f"MASSA FUORI RANGE: {total_mass:.3f} kg — verifica XML"
+    assert 65.5 < total_mass < 67.0, f"MASSA FUORI RANGE: {total_mass:.3f} kg - verifica XML"
     d = mujoco.MjData(m)
     aid = {mujoco.mj_id2name(m, mujoco.mjtObj.mjOBJ_JOINT, m.actuator_trnid[i][0]): i
            for i in range(m.nu)}

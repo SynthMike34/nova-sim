@@ -53,7 +53,7 @@ SOGLIA_QVEL, SOGLIA_TESTA, SOGLIA_PIEDI, SOGLIA_QUIETE = 10.0, 2.0, 0.30, 8.0
 m0 = mujoco.MjModel.from_xml_path(XML)
 total_mass = m0.body_mass.sum()
 print(f"[MASSA MODELLO] {total_mass:.3f} kg")
-assert 65.5 < total_mass < 67.0, f"MASSA FUORI RANGE: {total_mass:.3f} kg — verifica XML"
+assert 65.5 < total_mass < 67.0, f"MASSA FUORI RANGE: {total_mass:.3f} kg - verifica XML"
 NOMI = [mujoco.mj_id2name(m0, mujoco.mjtObj.mjOBJ_JOINT, m0.actuator_trnid[i][0])
         for i in range(m0.nu)]
 
