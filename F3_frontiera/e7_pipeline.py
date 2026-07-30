@@ -5,7 +5,7 @@ e7_pipeline.py v0.1 - CANTIERE FINALE: la PILA COMPLETA dell'atterraggio.
 salto -> volo -> timone caviglie (E4) -> volano braccia (E5) -> arbitro con
 passetto (E6) -> TOE-BRAKE (scoperta 30c) come ultimo anello. Punta UNITA
 (scoperta 32), modello base. Richiede e6_supervisore.py ed e0_dita.py in
-cartella (pila e iniettore certificati, qui solo orchestrati).
+cartella (pila e iniettore calcolati in simulazione, qui solo orchestrati).
 
     python e7_pipeline.py            demo 3D: la pipeline completa (loop)
     python e7_pipeline.py --test     confronto nuda / toe-tutti / toe-stance

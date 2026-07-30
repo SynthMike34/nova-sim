@@ -5,7 +5,7 @@ t12_hip_sway.py v1.1 - Test T12 (TDD par.12.2): hip sway, oscillazione del
 bacino +/-8..12 gradi a 0,8-1,0 Hz mantenendo l'equilibrio. (Acustica <42 dB:
 fuori dominio simulazione.)
 
-    python t12_hip_sway.py           demo 3D: NOVA ancheggia alla config certificata
+    python t12_hip_sway.py           demo 3D: ancheggio alla configurazione di riferimento
     python t12_hip_sway.py --test    campagna di misura headless: tabella+PNG+JSON
 
 Interpretazione [A]: "oscillazione bacino" = rollio del bacino attorno all'asse
@@ -132,7 +132,7 @@ def campagna():
     print('ESITO T12-sim: %s' % ('PASS - banda 8-12 gradi raggiungibile a 0,8/0,9/1,0 Hz'
                                  if ok else 'FAIL - vedi tabella'))
     json.dump(dict(versione=VERSIONE, esito=('PASS' if ok else 'FAIL'),
-                   config_certificata=dict(cmd_deg=CONFIG_CERT[0], f_hz=CONFIG_CERT[1]),
+                   config_riferimento_C=dict(cmd_deg=CONFIG_CERT[0], f_hz=CONFIG_CERT[1]),
                    risultati=risultati),
               open(_OUT('t12_hip_sway.json'), 'w'), indent=1)
     print('Salvato t12_hip_sway.json')
@@ -164,7 +164,7 @@ def demo():
     import time
     import mujoco.viewer
     print(__doc__)
-    print('Config certificata: comando %.0f deg @ %.1f Hz' % CONFIG_CERT)
+    print('Configurazione di riferimento [C]: comando %.0f deg @ %.1f Hz' % CONFIG_CERT)
     d = mujoco.MjData(m)
     mujoco.mj_resetDataKeyframe(m, d, 0)
     mujoco.mj_forward(m, d)

@@ -5,7 +5,7 @@ e0_dita.py v0.1 - CANTIERE E0-TOES (proposta di MIKE): le dita si SVEGLIANO.
 Le dita collettive (toe_pitch, 0-45 gradi, 6 Nm) esistono nel modello da
 sempre ma sono state PASSIVE per tutta la campagna. Questo modulo le attiva
 con un INIETTORE universale (intercetta mj_step) SENZA toccare i moduli
-certificati, e confronta SENZA vs CON dita su tre banchi (priorita' MIKE):
+calcolati in simulazione, e confronta SENZA vs CON dita su tre banchi (priorita' MIKE):
   A) camminata E3   B) salto (quota + residuo decollo)   C) atterraggio E6.
 
     python e0_dita.py            demo 3D: il salto CON le dita attive (loop)

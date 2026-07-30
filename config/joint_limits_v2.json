@@ -1,21 +1,15 @@
 {
   "_meta": {
-    "document": "TX-34 NOVA TDD v9.0",
+    "document": "TX-34 NOVA TDD v11.4",
     "author": "Michel Maddalena",
     "note": "Limiti hardware assoluti. Limiti software = 90% del limite hardware.",
     "standard": "ISO 10218-2 + verifica ZMP",
     "v1_note": "Limiti gambe (hip/knee/ankle) applicati direttamente da nova_safeguard su attuatori proprietari TX-34 (MyActuator RMD-X). Nessuna dipendenza da SDK esterni.",
     "safeguard_monitoring": "nova_safeguard monitora velocita' e accelerazione dei giunti gambe (RMD-X, CAN-FD) a 100 Hz, oltre a coppia e forza di contatto.",
     "rev_v695": "A8: ankle_pitch +/-30 gia' coerente (fonte di verita'). Solo bump versione.",
-    "last_updated": "Luglio 2026",
-    "_changelog": "v6.9.5-r1 Giugno 2026: aggiunto shoulder_l_yaw (CAN 20) e shoulder_r_yaw (CAN 23) — erano mancanti nella release originale v6.9.5. Valori da OSS_TX34_NOVA_SEC3_2_RangeAngolari_vFINAL.docx Nota 5. || v6.9.5-r2 Giugno 2026: aggiunti waist_rotation (CAN 50), toes_l (CAN 51), toes_r (CAN 52) — risolve i 3 WARN di nova_json_validator.py (presenti in can_devices_v2.json, assenti qui). Coppie allineate a can_devices_v2.json (waist 2.5 Nm, toes 10 Nm), NON ai valori del prompt di fix (1.26/1.5 Nm) in quanto in conflitto con la fonte di verita'. Aggiunto _meta._dof_explanation. || v8.0 Luglio 2026: rimossi i riferimenti legacy alla base di locomozione esterna (ZERO occorrenze). Aggiunte note attuatori MyActuator RMD-X sui giunti gambe (CAN 6-17). enforcement -> 'nova_safeguard direct'. Valori hw/sw/speed/torque INVARIATI. || v9.1 Luglio 2026: corretta massa RMD-X8-120 nelle note dei giunti anca roll/yaw (1.4->1.2 kg) e caviglia (totale 1.7->1.5 kg, attuatore 1.4->1.2 kg, molla SEA 0.3 invariata) — allineamento a nova_legs.json (fonte di verita, RMD_X8_120.mass_kg=1.2). Corretta unita rigidezza molla SEA caviglia da N/m a Nm/rad (giunto rotazionale).",
-    "_dof_explanation": {
-      "total_dof_declared": 80,
-      "can_servo_count": 60,
-      "hand_mechanical_dof": 40,
-      "hand_servo_count": 10,
-      "explanation": "Gli 80 DOF cinematici attuati NON sono in corrispondenza 1:1 con i 60 canali CAN servo (ID 1-60). Composizione: 60 canali CAN servo  -10 servo mani (CAN 30-39: 5 servo/mano che azionano 40 DOF meccanici tendon-driven via Dyneema, 20 DOF/mano, senza CAN ID individuale)  -10 canali ausiliari dedicati (CAN 40-49, esclusi per convenzione contabile dai DOF cinematici)  +40 DOF meccanici mani  =  60 - 10 - 10 + 40 = 80. Una somma 'ingenua' dei segmenti darebbe ~90 perche' conteggia sia i 10 canali ausiliari sia i 40 DOF mani: e' atteso. Fonti di verita': can_devices_v2.json (totals.total_dof=80, can_ids_used 1-60) e OSS_TX34_NOVA_SEC3_1_MappaDOF_vFINAL Nota 2."
-    }
+    "last_updated": "Luglio 2026 — canone 28/07/2026",
+    "_changelog": "v6.9.5-r1: aggiunti shoulder_l_yaw (CAN 20) e shoulder_r_yaw (CAN 23). || v6.9.5-r2: aggiunti waist_rotation (CAN 50), toes_l (CAN 51), toes_r (CAN 52); coppie allineate a can_devices (waist 2,5 Nm, toes 10 Nm). || v8.0: rimossi riferimenti legacy a base di locomozione esterna; enforcement -> 'nova_safeguard direct'. || v9.1: corretta massa RMD-X8-120 nelle note dei giunti (1,4 -> 1,2 kg); unita rigidezza molla SEA caviglia da N/m a Nm/rad (giunto rotazionale). || v11.4 (28/07/2026): range allineati ai limiti software dopo audit NOVA-SIM; hip_pitch, shoulder_pitch, shoulder_roll, waist e toes portati agli sw; spalla pitch RMD-X8-120 (43 Nm), spalla roll RMD-X6-P20-60 (20 Nm).",
+    "note_perimetro": "File distribuito nel repository pubblico NOVA-SIM (perimetro locomozione e postura). I range e le coppie qui elencati sono i limiti applicati dal safeguard; il modello di simulazione e' allineato a questi valori (verificabile con tools/confronta_range.py)."
   },
   "limits": {
     "neck_yaw": {
@@ -316,7 +310,7 @@
       "speed_max_dps": 20,
       "torque_max_Nm": 2.5,
       "servo": "NEMA 23 stepper",
-      "note": "Rotazione vita NEMA 23 (hip sway, dissociazione fianchi/busto) — attuatore stepper, NON Dynamixel. Driver dedicato, non su bus CAN Dynamixel standard. Coppia 2.5 Nm da can_devices_v2.json (waist_joint.id=50) e confermata da OSS_TX34_NOVA_BLK1B_SistemiSpeciali_vFINAL (NEMA 23, coppia 2.5 Nm). Il prompt di fix indicava 1.26 Nm: scartato perche' in conflitto con le fonti di verita' (che 'fanno fede'). sw=90% hw."
+      "note": "Rotazione vita NEMA 23 (hip sway, dissociazione fianchi/busto) — attuatore stepper, NON Dynamixel. Driver dedicato, non su bus CAN Dynamixel standard. Coppia 2.5 Nm da can_devices_v2.json (waist_joint.id=50) e confermata da documentazione interna TDD (sistemi speciali) (NEMA 23, coppia 2.5 Nm). Il prompt di fix indicava 1.26 Nm: scartato perche' in conflitto con le fonti di verita' (che 'fanno fede'). sw=90% hw."
     },
     "toes_l": {
       "can_id": 51,
@@ -331,7 +325,7 @@
       "speed_max_dps": 60,
       "torque_max_Nm": 10.0,
       "servo": "Dynamixel XL430",
-      "note": "SEA dita piede SX — flessione plantare collettiva (tutte e 5 le dita insieme, 0-45 deg). V1.0 collettivo; V2.0 roadmap: dita indipendenti. Nome canonico in can_devices_v2.json: toes_l_collective (id=51). Coppia 10 Nm da can_devices_v2.json e OSS_TX34_NOVA_SEC3_1_MappaDOF_vFINAL; il prompt indicava 1.5 Nm (scartato, conflitto con fonti di verita'). sw=90% hw, lower bound a 2 deg come gli altri giunti a fondo corsa 0."
+      "note": "SEA dita piede SX — flessione plantare collettiva (tutte e 5 le dita insieme, 0-45 deg). V1.0 collettivo; V2.0 roadmap: dita indipendenti. Nome canonico in can_devices_v2.json: toes_l_collective (id=51). Coppia 10 Nm da can_devices_v2.json e documentazione interna TDD (mappa DOF); il prompt indicava 1.5 Nm (scartato, conflitto con fonti di verita'). sw=90% hw, lower bound a 2 deg come gli altri giunti a fondo corsa 0."
     },
     "toes_r": {
       "can_id": 52,
@@ -392,15 +386,14 @@
     "enforcement": "nova_safeguard node, 100Hz"
   },
   "_nova_sim_campaign_v1": {
-    "_source": "NOVA-SIM campagna virtuale 27/07/2026 - Rapporto v5.1, STATO v4.0 (34 scoperte, [C]=calcolato)",
-    "verifica_range_C": "Range sw verificati in sim su tutta la campagna: ginocchio 2-117 sfruttato al 92% (squat 108 gradi), caviglia +/-27 = vincolo squat (24,2 usati), hip sway 10,7 dentro +/-27 roll. Modello 66,23 kg al decimale.",
-    "DISCREPANZA_D1_ginocchio": "torque_max 100 Nm (v9) vs SALTO misurato: ginocchio satura a 120,0 Nm simultaneo all'anca [C, scoperta 25]. La sim usava i 120 Nm del TDD-ESTRATTO par.2.3. X12-P20-320 (85 nom/320 picco) regge 120: DECISIONE - alzare il cap a 120 per il gesto-salto oppure de-ratare il salto V1.0.",
-    "DISCREPANZA_D2_caviglia": "torque_max 60 Nm (v9) vs MISURE: camminata coi tacchi picco caviglia 73,6 Nm a h=0 [C, curva tacchi]; ferma statica a CoP esteso fino a ~80 Nm [C, scoperta 29-ter]. X8-120 (43 nom/110 picco) regge: DECISIONE - rivedere il cap o de-ratare tacchi/atterraggio.",
-    "DISCREPANZA_D3_spalla": "shoulder_pitch 10 Nm (v9) vs scoperta 8 [A]: reach alto richiede >=40 Nm a vuoto, >=50 con 2 kg. Gap 4x: PROPOSTA gia' nel Rapporto v5.1 par.6.",
-    "PROPOSTA_29ter_caviglia_range": "Atterraggio in piedi da salto: caviglia >=+/-35 gradi (via elegante) OPPURE suola >=13 cm INSIEME a coppia caviglia >=100 Nm. Il tallone da solo NON basta (probe 29-ter).",
-    "toes_verifica_C": "Toe-brake certificato in sim a 6 Nm e 31,5 gradi [C, scoperta 30c: fermo x3,9]: il cap v9 (10 Nm, sw 2-40) lo copre CON MARGINE. Alluce (scoperta 31): soglia utile ~40 gradi = al limite sw superiore; split hallux/toes sconsigliato per il brake (scoperta 32: rigidezza solidale > DOF).",
-    "decisioni_2026_07_27": "D1 ginocchio 100->120 Nm (salto 120,0 [C], sc.25; X12 85/320) · D2 caviglia pitch 60->80 Nm (tacchi h0 73,6 [C]; X8 43/110) — approvate da Michel Maddalena, recepite nel TDD v12",
-    "task_0_1_spalla": "shoulder pitch torque_max 50 Nm (RMD-X10, 28/07/2026)",
-    "canone_rettificato_2026_07_28": "CANONE RETTIFICATO 28/07 @66,23 kg [C]: campione v2 (y_in 0,02, lean 0,15) picco anca roll 72,1 Nm (margine 10%), 98,7 J/passo, 17,7 W, duty 5,1%; za squat 0,60 m; rialzata 3,00 s (piedi tucked KXA 0,15; 61,9/61,0/47,2 Nm); reach 0,48/0,43/0,47/0,47; E3: 11 passi (PASS-limite), RMS 43,1, posturale 25,0, fraz>=70 21,7%, T_sw 0,180; spalla pitch X8-120 43/110, spalla roll X6-P20-60 20/60. Sostituisce i numeri @64,13."
+    "_source": "Campagna virtuale NOVA-SIM, canone 28/07/2026 @66,228 kg — 21 risultati verificati [C], 2 claim ritirati. [C] = calcolato in simulazione, riproducibile con --test.",
+    "verifica_range_C": "Range software verificati in simulazione su tutta la campagna: ginocchio 2-117 sfruttato al 92% (squat 108 gradi), caviglia +/-27 = vincolo dominante dello squat (24,2 usati), hip sway 10,7 dentro +/-27 di roll. Massa del modello 66,228 kg, stampata da ogni modulo.",
+    "canone_28_07_2026": "CANONE @66,228 kg [C]: campione v2 (y_in 0,02, lean 0,15, x=0,352); picco anca roll 72,1 Nm (margine 10% sul limitatore 80); energia 98,7 J/passo e 17,7 W; duty >43 Nm in regime 7,8%; za squat 0,60 m; rialzata 3,00 s con piedi raccolti (KXA 0,15), coppie 61,9/61,0/47,2 Nm, reazione sulla seduta 651 N = 100,1% del peso (bilancio Sigma Fz chiuso); reach 0,48/0,43/0,47/0,47 m; inviluppo di equilibrio 0,60/0,50/0,40 m/s; carico 6 kg da fermo e 2 kg in movimento; salto 210 ms di volo e 3,3 cm di quota, BOM 120/120 Nm simultanei; caduta 2,60 m/s, impulso 274,9 N*s su 150 ms, 17,1 g, preavviso mano-tronco 425 ms; contributo alluce +150%; E1 6 passi, E2 32 cicli, E3 11 passi.",
+    "termico_anca_roll_C": "E3 a cadenza reale (T_sw 0,180 s), finestra di regime: RMS totale 53,7 Nm = 125% del nominale continuativo dell'X8 (43 Nm); componente posturale 38,2 Nm = 89% del nominale su 70,2% del ciclo; transitori di contatto 29,8% del tempo per il 64% della dissipazione. Il picco del transitorio e' governato dalla rigidezza del servo di posizione, non dalla cinematica del passo: con forcerange a +/-200 Nm la domanda satura anche quel limite. Il cap di 80 Nm opera come limitatore di progetto. Obiettivo: picco di touchdown <=53 Nm riporta il totale al 100% del nominale. Nota di metodo: le stesse grandezze calcolate sull'intero run invece che sulla finestra di regime danno 43,1 Nm di RMS e 25,0 di posturale, valori diluiti dalla fase di assestamento e non usati.",
+    "sensibilita_massa_C": "Da 62,8 a 66,228 kg (+5,5%): regime balistico -54% (quota di salto), contatto -100% (pipeline di atterraggio azzerata), quasi-statico invariato (inviluppo di equilibrio, reach). A taratura euristica invariata, +3,3% di massa riduce del 42% i passi raggiunti su E3. La sensibilita si propaga nel bilancio termico: l'aumento di massa ha richiesto lean 0,12 -> 0,15, e il lean genera la componente posturale del carico sull'anca roll.",
+    "claim_ritirati": "Pipeline di atterraggio 0,36 s e moltiplicatore di frenata delle dita x3,9: misurati a 62,8 kg, NON conservati a 66,23 kg. Sono scoperte di sensibilita alla massa, non errori di misura, e rientrerebbero solo con una ritaratura datata. Non vanno usati come risultati.",
+    "decisioni_recepite": "D1 ginocchio 100 -> 120 Nm (salto 120,0 Nm misurati; X12-P20-320, 85 nom / 320 picco). D2 caviglia pitch 60 -> 80 Nm (tacchi a h=0: 73,6 Nm misurati; X8-120, 43 nom / 110 picco). D3 spalla pitch -> RMD-X8-120, 43 Nm; spalla roll -> RMD-X6-P20-60, 20 Nm, back-drive 1,6 Nm. Approvate da Michel Maddalena, recepite nel TDD v11.4. Nota: i valori di coppia sono limitatori di progetto; il metro di verifica termica e' il nominale continuativo del costruttore, valutato in RMS sul ciclo.",
+    "requisito_spalla_C": "Il requisito di coppia della spalla pitch e' 44 Nm statici per 8 kg a 0,45 m dalla spalla (momento del carico 35,3 + contributo del braccio 8,8; pendenza misurata 4,5 Nm/kg). La saturazione osservata a 40 Nm nel reach alto a braccio scarico e' un artefatto della rigidezza del servo di posizione — la statica del braccio scarico richiede circa 9 Nm — e non costituisce un requisito di piattaforma. Requisito della spalla roll: 16,0 Nm sostenuti a 81 gradi di abduzione (gravita del braccio 8,7 piu contatto 15 N a leva 0,48 m), duty continuo, pari all'80% del nominale dell'X6.",
+    "proposte_aperte": "[PROPOSTA] Atterraggio in piedi da salto: caviglia >=+/-35 gradi, oppure suola >=13 cm insieme a coppia di caviglia >=100 Nm. Il tallone da solo non basta (misurato). [PROPOSTA] Dita indipendenti (hallux 0-50 gradi) rinviate a V2.0: in V1.0 la flessione plantare e' collettiva, e la rigidezza solidale risulta preferibile al grado di liberta aggiuntivo."
   }
 }

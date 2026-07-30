@@ -5,7 +5,7 @@ f1a_squat.py v1.0 - Modulo F1-A (campagna par.12 / range par.3.2): squat.
 Discesa da eretta alla massima profondita' raggiungibile, tenuta 2 s, risalita.
 PASS: nessuna caduta e ritorno eretta (bacino >= 0,88 m, assetto < 9 gradi).
 
-    python f1a_squat.py           demo 3D: squat alla profondita' certificata (loop)
+    python f1a_squat.py           demo 3D: squat alla profondita' di riferimento (loop)
     python f1a_squat.py --test    campagna: sweep profondita' + tabella + PNG + JSON
 
 Misure: flessione max ginocchio [deg] vs range TDD par.3.2 (2-117) · dorsiflessione
@@ -49,7 +49,7 @@ KXA = 0.75                    # anche indietro con la profondita': xa = KXA*(0.7
 LEAN0 = 2.0                   # busto avanti in proporzione alla profondita' (rif. assetto)
 KC, KCD = 3.0, 0.5            # correzione del riferimento col baricentro
 KP, KD = 2.5, 0.4             # servo d'assetto sul bacino (via anche)
-ZA_CERT = 0.60                # profondita' certificata v1.1 (sweep fine, senza dita)
+ZA_CERT = 0.60                # profondita' di riferimento v1.1 [C] (sweep fine, senza dita)
 TOE_RAMP = 0.30               # v1.1: rampino plantare (rad, ~17 gr) ultimo quarto
 TID = []                      # pigro: il modello m nasce piu' avanti
 def _tid():
@@ -208,7 +208,7 @@ def campagna():
           % (zs, zc, ('MIGLIORA di %d mm' % round((zs - zc)*1000)) if zc and zs
              and zc < zs else 'RAMPINO BOCCIATO (scoperta 33) - il dato e za=%.2f dal baseline' % (zs or 0)))
     esito_f1a = 'PASS' if zs is not None else 'FAIL'
-    json.dump(dict(versione=VERSIONE, esito=esito_f1a, za_certificata=zs,
+    json.dump(dict(versione=VERSIONE, esito=esito_f1a, za_riferimento_C=zs,
                    za_con_rampino=zc,
                    risultati=tabella['SENZA DITA']['risultati']
                    + tabella['CON RAMPINO']['risultati']),
@@ -235,7 +235,7 @@ def campagna():
     for x, v in enumerate(vs):
         axs[1].text(x, v, '%.2f m' % v, ha='center', va='bottom',
                     fontsize=13, fontweight='bold')
-    axs[1].set_ylabel('za certificata [m] (piu basso = piu giu)')
+    axs[1].set_ylabel('za di riferimento [m] (piu basso = piu giu)')
     axs[1].set_title('F1-A v1.1: il rampino plantare')
     axs[1].grid(alpha=0.3, axis='y')
     fig.tight_layout()
@@ -246,7 +246,7 @@ def demo():
     import time
     import mujoco.viewer
     print(__doc__)
-    print('Squat continuo alla profondita certificata za = %.2f m (loop automatico).' % ZA_CERT)
+    print('Squat continuo alla profondita di riferimento za = %.2f m [C] (loop automatico).' % ZA_CERT)
     d = mujoco.MjData(m)
     mujoco.mj_resetDataKeyframe(m, d, 0)
     mujoco.mj_forward(m, d)

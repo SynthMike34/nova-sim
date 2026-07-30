@@ -225,7 +225,7 @@ def demo():
     import time
     import mujoco.viewer
     print(__doc__)
-    print('Record cantiere E2: 54 passi (ciclo retrogrado). R = ricomincia.')
+    print('Canone E2: 32 cicli sincronizzati (equilibrio retrogrado). R = ricomincia.')
     c = Camminatrice()
     caduta_t = None
     def tasto(k):

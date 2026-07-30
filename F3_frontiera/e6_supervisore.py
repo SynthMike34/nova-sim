@@ -181,7 +181,7 @@ class Atterratrice:
         resto_x = float(com[0] + v[0]/self.om)
         resto_y = float(com[1] + v[1]/self.om)
 
-        # ================= fasi di salto (da E5, certificate) =================
+        # ================= fasi di salto (da E5, calcolate in simulazione) =================
         if self.fase in ('crouch', 'spinta', 'volo'):
             if self.fase == 'crouch':
                 za = 0.78 + (ZA_CR - 0.78)*smooth(self.t_f/T_CR)
@@ -414,7 +414,7 @@ def campagna():
         print('la autorita del tallone (-7 cm, scoperta 5): il confine e')
         print('GEOMETRICO, non di controllo. Porte: tallone piu lungo o caviglia')
         print('>= 35 gradi [PROPOSTE HW gia a registro]. Scoperta 29.')
-        esito = ('MISURATO (arbitro certificato; il confine e il tallone)'
+        esito = ('MISURATO (arbitro calcolato in simulazione; il confine e il tallone)'
                  if r.get('t_volo_ms', 0) > 100 else 'FAIL')
     else:
         print('Volo %.0f ms (+%.1f cm) | passi %d + assestamenti %d | '
