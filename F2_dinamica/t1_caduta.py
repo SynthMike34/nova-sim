@@ -34,6 +34,13 @@ def _DER(_n):
     _d = _os.path.join(_os.path.dirname(_qui), 'models')
     if not _os.path.isdir(_d): _d = _qui
     return _os.path.join(_d, _os.path.basename(_n))
+def _OUT(_n):
+    _qui = _os.path.dirname(_os.path.abspath(__file__))
+    _d = _os.path.join(_os.path.dirname(_qui), 'outputs')
+    if not _os.path.isdir(_d):
+        try: _os.makedirs(_d)
+        except Exception: _d = _qui
+    return _os.path.join(_d, _os.path.basename(_n))
 import sys
 import json
 import numpy as np
@@ -206,7 +213,7 @@ def campagna():
           ris['S2 servizio (spinta+E1)']['t_oltre_150N_ms'])
     json.dump(dict(versione=VERSIONE, esito='MISURATO', com_drop_m=COM_DROP,
                    soglia_E2_N=SOGLIA_E2, preavviso_mano_ms=ris['S2 servizio (spinta+E1)']['t_oltre_150N_ms'],
-                   scenari=ris), open('t1_caduta.json', 'w'), indent=1)
+                   scenari=ris), open(_OUT('t1_caduta.json'), 'w'), indent=1)
     print('Salvato t1_caduta.json')
     import matplotlib
     matplotlib.use('Agg')
@@ -225,7 +232,7 @@ def campagna():
     axs[1].set_xlabel('picco per segmento [N]')
     axs[1].set_title('dove colpisce: segmenti a contatto (S1)')
     fig.tight_layout()
-    fig.savefig('t1_caduta.png', dpi=150)
+    fig.savefig(_OUT('t1_caduta.png'), dpi=150)
     print('Salvato t1_caduta.png')
 
 def demo():

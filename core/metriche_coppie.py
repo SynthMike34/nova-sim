@@ -27,6 +27,13 @@ def _DER(_n):
     _d = _os.path.join(_os.path.dirname(_qui), 'models')
     if not _os.path.isdir(_d): _d = _qui
     return _os.path.join(_d, _os.path.basename(_n))
+def _OUT(_n):
+    _qui = _os.path.dirname(_os.path.abspath(__file__))
+    _d = _os.path.join(_os.path.dirname(_qui), 'outputs')
+    if not _os.path.isdir(_d):
+        try: _os.makedirs(_d)
+        except Exception: _d = _qui
+    return _os.path.join(_d, _os.path.basename(_n))
 import sys
 import json
 import numpy as np
@@ -95,7 +102,7 @@ def main():
 
     json.dump(dict(versione=VERSIONE, passi=passi, avanzamento_m=round(x, 3),
                    energia_mecc_J=round(E, 1), tabella=tab),
-              open('metriche_coppie.json', 'w'), indent=1)
+              open(_OUT('metriche_coppie.json'), 'w'), indent=1)
     print('Salvato metriche_coppie.json')
 
     if '--test' in sys.argv:
@@ -123,7 +130,7 @@ def main():
     axs[-1].set_xlabel('tempo [s]')
     fig.suptitle('TX-34 - coppie richieste nella camminata (2 passi) vs coppie RMD disponibili')
     fig.tight_layout()
-    fig.savefig('coppie_camminata_v1.png', dpi=150)
+    fig.savefig(_OUT('coppie_camminata_v1.png'), dpi=150)
     print('Salvato coppie_camminata_v1.png')
 
 if __name__ == '__main__':

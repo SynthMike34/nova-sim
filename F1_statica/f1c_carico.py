@@ -30,6 +30,13 @@ def _DER(_n):
     _d = _os.path.join(_os.path.dirname(_qui), 'models')
     if not _os.path.isdir(_d): _d = _qui
     return _os.path.join(_d, _os.path.basename(_n))
+def _OUT(_n):
+    _qui = _os.path.dirname(_os.path.abspath(__file__))
+    _d = _os.path.join(_os.path.dirname(_qui), 'outputs')
+    if not _os.path.isdir(_d):
+        try: _os.makedirs(_d)
+        except Exception: _d = _qui
+    return _os.path.join(_d, _os.path.basename(_n))
 import os
 import sys
 import sys
@@ -211,7 +218,7 @@ def campagna():
                    marcia_roll_Nm_per_kg=round(slope_roll, 2),
                    marcia_caviglia_Nm_per_kg=round(slope_ank, 2),
                    risultati=ris),
-              open('f1c_carico.json', 'w'), indent=1)
+              open(_OUT('f1c_carico.json'), 'w'), indent=1)
     print('Salvato f1c_carico.json')
 
     import matplotlib
@@ -241,7 +248,7 @@ def campagna():
     if len(roll):
         axs[1].legend(fontsize=8)
     fig.tight_layout()
-    fig.savefig('f1c_carico.png', dpi=150)
+    fig.savefig(_OUT('f1c_carico.png'), dpi=150)
     print('Salvato f1c_carico.png')
 
 def demo():

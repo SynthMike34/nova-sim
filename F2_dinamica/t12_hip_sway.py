@@ -28,6 +28,13 @@ def _DER(_n):
     _d = _os.path.join(_os.path.dirname(_qui), 'models')
     if not _os.path.isdir(_d): _d = _qui
     return _os.path.join(_d, _os.path.basename(_n))
+def _OUT(_n):
+    _qui = _os.path.dirname(_os.path.abspath(__file__))
+    _d = _os.path.join(_os.path.dirname(_qui), 'outputs')
+    if not _os.path.isdir(_d):
+        try: _os.makedirs(_d)
+        except Exception: _d = _qui
+    return _os.path.join(_d, _os.path.basename(_n))
 import sys
 import json
 import numpy as np
@@ -127,7 +134,7 @@ def campagna():
     json.dump(dict(versione=VERSIONE, esito=('PASS' if ok else 'FAIL'),
                    config_certificata=dict(cmd_deg=CONFIG_CERT[0], f_hz=CONFIG_CERT[1]),
                    risultati=risultati),
-              open('t12_hip_sway.json', 'w'), indent=1)
+              open(_OUT('t12_hip_sway.json'), 'w'), indent=1)
     print('Salvato t12_hip_sway.json')
     r = esegui(CONFIG_CERT[0], CONFIG_CERT[1], registra=True)
     if not r['caduta']:
@@ -150,7 +157,7 @@ def campagna():
         axs[1].set_xlabel('tempo [s]')
         axs[1].legend(fontsize=8)
         fig.tight_layout()
-        fig.savefig('t12_hip_sway.png', dpi=150)
+        fig.savefig(_OUT('t12_hip_sway.png'), dpi=150)
         print('Salvato t12_hip_sway.png')
 
 def demo():

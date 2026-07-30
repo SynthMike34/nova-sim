@@ -32,6 +32,13 @@ def _DER(_n):
     _d = _os.path.join(_os.path.dirname(_qui), 'models')
     if not _os.path.isdir(_d): _d = _qui
     return _os.path.join(_d, _os.path.basename(_n))
+def _OUT(_n):
+    _qui = _os.path.dirname(_os.path.abspath(__file__))
+    _d = _os.path.join(_os.path.dirname(_qui), 'outputs')
+    if not _os.path.isdir(_d):
+        try: _os.makedirs(_d)
+        except Exception: _d = _qui
+    return _os.path.join(_d, _os.path.basename(_n))
 import sys
 import json
 import numpy as np
@@ -422,7 +429,7 @@ def campagna():
                   'per %.1f s ***' % r['t_fermo_s'])
     print('ESITO E6: ' + esito)
     json.dump(dict(versione=VERSIONE, esito=esito, **r),
-              open('e6_supervisore.json', 'w'), indent=1)
+              open(_OUT('e6_supervisore.json'), 'w'), indent=1)
     print('Salvato e6_supervisore.json')
 
 def demo():

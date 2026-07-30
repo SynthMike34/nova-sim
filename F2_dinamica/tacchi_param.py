@@ -33,6 +33,13 @@ def _DER(_n):
     _d = _os.path.join(_os.path.dirname(_qui), 'models')
     if not _os.path.isdir(_d): _d = _qui
     return _os.path.join(_d, _os.path.basename(_n))
+def _OUT(_n):
+    _qui = _os.path.dirname(_os.path.abspath(__file__))
+    _d = _os.path.join(_os.path.dirname(_qui), 'outputs')
+    if not _os.path.isdir(_d):
+        try: _os.makedirs(_d)
+        except Exception: _d = _qui
+    return _os.path.join(_d, _os.path.basename(_n))
 import sys
 import re
 import json
@@ -185,7 +192,7 @@ def campagna():
     esito = 'PASS' if all(r['pass_soglia'] for r in ris) else 'PARZIALE'
     print('ESITO tacchi parametrici: %s (curva completa nel PNG/JSON)' % esito)
     json.dump(dict(versione=VERSIONE, esito=esito, soglia_A=SOGLIA, curva=ris),
-              open('tacchi_param.json', 'w'), indent=1)
+              open(_OUT('tacchi_param.json'), 'w'), indent=1)
     print('Salvato tacchi_param.json')
     import matplotlib
     matplotlib.use('Agg')
@@ -209,7 +216,7 @@ def campagna():
     axs[1].set_ylabel('coppia al limite inviluppo [Nm]')
     axs[1].legend()
     fig.tight_layout()
-    fig.savefig('tacchi_param.png', dpi=150)
+    fig.savefig(_OUT('tacchi_param.png'), dpi=150)
     print('Salvato tacchi_param.png')
 
 def demo(h):

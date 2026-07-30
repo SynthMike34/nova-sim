@@ -32,6 +32,13 @@ def _DER(_n):
     _d = _os.path.join(_os.path.dirname(_qui), 'models')
     if not _os.path.isdir(_d): _d = _qui
     return _os.path.join(_d, _os.path.basename(_n))
+def _OUT(_n):
+    _qui = _os.path.dirname(_os.path.abspath(__file__))
+    _d = _os.path.join(_os.path.dirname(_qui), 'outputs')
+    if not _os.path.isdir(_d):
+        try: _os.makedirs(_d)
+        except Exception: _d = _qui
+    return _os.path.join(_d, _os.path.basename(_n))
 import sys
 import json
 import numpy as np
@@ -182,7 +189,7 @@ def campagna():
                    soglie_A=dict(vel_rad_s=SOGLIA_QVEL, testa_m_s=SOGLIA_TESTA,
                                  piedi_m=SOGLIA_PIEDI, quiete_s=SOGLIA_QUIETE),
                    risultati=salva),
-              open('t18_power_loss.json', 'w'), indent=1)
+              open(_OUT('t18_power_loss.json'), 'w'), indent=1)
     print('Salvato t18_power_loss.json')
     import matplotlib
     matplotlib.use('Agg')
@@ -205,7 +212,7 @@ def campagna():
     axs[0].legend(fontsize=8)
     axs[1].legend(fontsize=8)
     fig.tight_layout()
-    fig.savefig('t18_power_loss.png', dpi=150)
+    fig.savefig(_OUT('t18_power_loss.png'), dpi=150)
     print('Salvato t18_power_loss.png')
 
 def demo():

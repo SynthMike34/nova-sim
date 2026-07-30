@@ -30,6 +30,13 @@ def _DER(_n):
     _d = _os.path.join(_os.path.dirname(_qui), 'models')
     if not _os.path.isdir(_d): _d = _qui
     return _os.path.join(_d, _os.path.basename(_n))
+def _OUT(_n):
+    _qui = _os.path.dirname(_os.path.abspath(__file__))
+    _d = _os.path.join(_os.path.dirname(_qui), 'outputs')
+    if not _os.path.isdir(_d):
+        try: _os.makedirs(_d)
+        except Exception: _d = _qui
+    return _os.path.join(_d, _os.path.basename(_n))
 import sys
 import json
 import importlib
@@ -332,7 +339,7 @@ def campagna():
     print('ATTERRAGGIO: fermo %.2f -> %.2f s | in piedi a fine: %s -> %s'
           % (a['fermo_s'], b['fermo_s'], a['in_piedi'], b['in_piedi']))
     json.dump(dict(versione=VERSIONE, toe_push=TOE_PUSH, risultati=ris),
-              open('e0_dita.json', 'w'), indent=1)
+              open(_OUT('e0_dita.json'), 'w'), indent=1)
     print('Salvato e0_dita.json')
     import matplotlib
     matplotlib.use('Agg')
@@ -357,7 +364,7 @@ def campagna():
         ax.grid(alpha=0.3, axis='y')
     fig.suptitle('E0-TOES — le dita si svegliano: confronto [C]', fontsize=13)
     fig.tight_layout()
-    fig.savefig('e0_dita.png', dpi=150)
+    fig.savefig(_OUT('e0_dita.png'), dpi=150)
     print('Salvato e0_dita.png')
 
 def demo():

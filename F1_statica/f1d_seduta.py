@@ -30,6 +30,13 @@ def _DER(_n):
     _d = _os.path.join(_os.path.dirname(_qui), 'models')
     if not _os.path.isdir(_d): _d = _qui
     return _os.path.join(_d, _os.path.basename(_n))
+def _OUT(_n):
+    _qui = _os.path.dirname(_os.path.abspath(__file__))
+    _d = _os.path.join(_os.path.dirname(_qui), 'outputs')
+    if not _os.path.isdir(_d):
+        try: _os.makedirs(_d)
+        except Exception: _d = _qui
+    return _os.path.join(_d, _os.path.basename(_n))
 import sys
 import json
 import numpy as np
@@ -236,7 +243,7 @@ def campagna():
         print('CADUTA a %.1f s -> FAIL' % r['t_caduta'])
         esito = 'FAIL'
         json.dump(dict(versione=VERSIONE, esito=esito, caduta_s=r['t_caduta']),
-                  open('f1d_seduta.json', 'w'), indent=1)
+                  open(_OUT('f1d_seduta.json'), 'w'), indent=1)
         return
     ok = (r['seduta_verificata'] and r['tornata_eretta']
           and r['picco_ginocchio_Nm'] < 120 and r['picco_anca_Nm'] < 120
@@ -254,7 +261,7 @@ def campagna():
     print('ESITO F1-D: ' + esito)
     json.dump(dict(versione=VERSIONE, esito=esito,
                    **dict((k, v) for k, v in r.items() if k != 'tracce')),
-              open('f1d_seduta.json', 'w'), indent=1)
+              open(_OUT('f1d_seduta.json'), 'w'), indent=1)
     print('Salvato f1d_seduta.json')
     tr = r['tracce']
     import matplotlib
@@ -278,7 +285,7 @@ def campagna():
     axs[2].set_xlabel('tempo [s]')
     axs[2].legend(fontsize=8)
     fig.tight_layout()
-    fig.savefig('f1d_seduta.png', dpi=150)
+    fig.savefig(_OUT('f1d_seduta.png'), dpi=150)
     print('Salvato f1d_seduta.png')
 
 def demo():

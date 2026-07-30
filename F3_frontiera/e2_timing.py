@@ -29,6 +29,13 @@ def _DER(_n):
     _d = _os.path.join(_os.path.dirname(_qui), 'models')
     if not _os.path.isdir(_d): _d = _qui
     return _os.path.join(_d, _os.path.basename(_n))
+def _OUT(_n):
+    _qui = _os.path.dirname(_os.path.abspath(__file__))
+    _d = _os.path.join(_os.path.dirname(_qui), 'outputs')
+    if not _os.path.isdir(_d):
+        try: _os.makedirs(_d)
+        except Exception: _d = _qui
+    return _os.path.join(_d, _os.path.basename(_n))
 import sys
 import json
 import numpy as np
@@ -211,7 +218,7 @@ def campagna():
     json.dump(dict(versione=VERSIONE, esito=esito, passi=p,
                    t_caduta_s=(round(tc, 1) if tc else None), x_m=round(x, 2),
                    tsw_medio_s=round(float(tl.mean()), 3)),
-              open('e2_timing.json', 'w'), indent=1)
+              open(_OUT('e2_timing.json'), 'w'), indent=1)
     print('Salvato e2_timing.json')
 
 def demo():

@@ -29,6 +29,13 @@ def _DER(_n):
     _d = _os.path.join(_os.path.dirname(_qui), 'models')
     if not _os.path.isdir(_d): _d = _qui
     return _os.path.join(_d, _os.path.basename(_n))
+def _OUT(_n):
+    _qui = _os.path.dirname(_os.path.abspath(__file__))
+    _d = _os.path.join(_os.path.dirname(_qui), 'outputs')
+    if not _os.path.isdir(_d):
+        try: _os.makedirs(_d)
+        except Exception: _d = _qui
+    return _os.path.join(_d, _os.path.basename(_n))
 import sys
 import json
 import importlib
@@ -112,7 +119,7 @@ def campagna():
              'MISURATO (guadagno %+.2f s; target 0,35 non superato)' % guadagno)
     print('ESITO E7: ' + esito)
     json.dump(dict(versione=VERSIONE, esito=esito, migliore=best, **ris),
-              open('e7_pipeline.json', 'w'), indent=1)
+              open(_OUT('e7_pipeline.json'), 'w'), indent=1)
     print('Salvato e7_pipeline.json')
     import matplotlib
     matplotlib.use('Agg')
@@ -132,7 +139,7 @@ def campagna():
     ax.legend(fontsize=11)
     ax.grid(alpha=0.3, axis='y')
     fig.tight_layout()
-    fig.savefig('e7_pipeline.png', dpi=150)
+    fig.savefig(_OUT('e7_pipeline.png'), dpi=150)
     print('Salvato e7_pipeline.png')
 
 def demo():

@@ -29,6 +29,13 @@ def _DER(_n):
     _d = _os.path.join(_os.path.dirname(_qui), 'models')
     if not _os.path.isdir(_d): _d = _qui
     return _os.path.join(_d, _os.path.basename(_n))
+def _OUT(_n):
+    _qui = _os.path.dirname(_os.path.abspath(__file__))
+    _d = _os.path.join(_os.path.dirname(_qui), 'outputs')
+    if not _os.path.isdir(_d):
+        try: _os.makedirs(_d)
+        except Exception: _d = _qui
+    return _os.path.join(_d, _os.path.basename(_n))
 import sys
 import json
 import numpy as np
@@ -274,7 +281,7 @@ def campagna():
                    envelope=dict((k, (v['dist_spalla_m'] if v else None))
                                  for k, v in ris.items()),
                    risultati=tab),
-              open('f1b_reach.json', 'w'), indent=1)
+              open(_OUT('f1b_reach.json'), 'w'), indent=1)
     print('Salvato f1b_reach.json')
     r = esegui('alto', (sh[0]+0.10, sh[1], sh[2]+0.43), T=4.5, registra=True)
     if not r['caduta']:
@@ -298,7 +305,7 @@ def campagna():
         axs[2].set_xlabel('tempo [s]')
         axs[2].legend(fontsize=8)
         fig.tight_layout()
-        fig.savefig('f1b_reach.png', dpi=150)
+        fig.savefig(_OUT('f1b_reach.png'), dpi=150)
         print('Salvato f1b_reach.png')
 
 def demo():

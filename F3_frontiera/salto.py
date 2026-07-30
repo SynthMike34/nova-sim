@@ -30,6 +30,13 @@ def _DER(_n):
     _d = _os.path.join(_os.path.dirname(_qui), 'models')
     if not _os.path.isdir(_d): _d = _qui
     return _os.path.join(_d, _os.path.basename(_n))
+def _OUT(_n):
+    _qui = _os.path.dirname(_os.path.abspath(__file__))
+    _d = _os.path.join(_os.path.dirname(_qui), 'outputs')
+    if not _os.path.isdir(_d):
+        try: _os.makedirs(_d)
+        except Exception: _d = _qui
+    return _os.path.join(_d, _os.path.basename(_n))
 import sys
 import json
 import numpy as np
@@ -264,7 +271,7 @@ def campagna():
         print('ESITO SALTO: ' + esito)
         json.dump(dict(versione=VERSIONE, esito=esito,
                        **dict((k, v) for k, v in r.items() if k != 'tracce')),
-                  open('salto.json', 'w'), indent=1)
+                  open(_OUT('salto.json'), 'w'), indent=1)
         print('Salvato salto.json')
         tr = r.get('tracce')
         if tr:
@@ -284,7 +291,7 @@ def campagna():
             axs[1].set_xlabel('tempo [s]')
             axs[1].legend(fontsize=8)
             fig.tight_layout()
-            fig.savefig('salto.png', dpi=150)
+            fig.savefig(_OUT('salto.png'), dpi=150)
             print('Salvato salto.png')
         return
     ok = r['volo'] and r['eretta']
@@ -302,7 +309,7 @@ def campagna():
     print('ESITO SALTO: ' + esito)
     json.dump(dict(versione=VERSIONE, esito=esito,
                    **dict((k, v) for k, v in r.items() if k != 'tracce')),
-              open('salto.json', 'w'), indent=1)
+              open(_OUT('salto.json'), 'w'), indent=1)
     print('Salvato salto.json')
     tr = r['tracce']
     import matplotlib
@@ -323,7 +330,7 @@ def campagna():
     axs[2].set_xlabel('tempo [s]')
     axs[2].legend(fontsize=8)
     fig.tight_layout()
-    fig.savefig('salto.png', dpi=150)
+    fig.savefig(_OUT('salto.png'), dpi=150)
     print('Salvato salto.png')
 
 def demo():

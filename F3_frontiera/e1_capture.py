@@ -27,6 +27,13 @@ def _DER(_n):
     _d = _os.path.join(_os.path.dirname(_qui), 'models')
     if not _os.path.isdir(_d): _d = _qui
     return _os.path.join(_d, _os.path.basename(_n))
+def _OUT(_n):
+    _qui = _os.path.dirname(_os.path.abspath(__file__))
+    _d = _os.path.join(_os.path.dirname(_qui), 'outputs')
+    if not _os.path.isdir(_d):
+        try: _os.makedirs(_d)
+        except Exception: _d = _qui
+    return _os.path.join(_d, _os.path.basename(_n))
 import sys
 import json
 import numpy as np
@@ -203,7 +210,7 @@ def campagna():
     esito = 'PASS' if (p >= 4 and tc is None) else ('PARZIALE' if p >= 4 else 'FAIL')
     print('ESITO E1: %s (%d passi con spinta 0,3)' % (esito, p))
     json.dump(dict(versione=VERSIONE, esito=esito, passi=p, x_m=round(x, 2)),
-              open('e1_capture.json', 'w'), indent=1)
+              open(_OUT('e1_capture.json'), 'w'), indent=1)
 
 def demo():
     import time
