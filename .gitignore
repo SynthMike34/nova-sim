@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+canone_privato.json
+*.docx
+*.zip
+tx34_v1_sedia.xml
+tx34_v1_tacchi*.xml
