@@ -340,8 +340,8 @@ def demo():
     s = Saltatrice()
     dt = s.m.opt.timestep
     t_tot = 0.0
-    print('Ogni ciclo: stacco+volo OK · atterraggio in piedi APERTO (ricade:')
-    print('limite documentato, scoperta 25 — vedi Rapporto/handoff).')
+    print('Ogni ciclo: stacco+volo OK | atterraggio in piedi APERTO (ricade:')
+    print('limite documentato, scoperta 25 - vedi Rapporto/handoff).')
     with mujoco.viewer.launch_passive(s.m, s.d) as v:
         while v.is_running():
             t0 = time.time()

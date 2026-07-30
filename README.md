@@ -67,6 +67,13 @@ Takes 2–5 minutes. It should end with `Successfully installed...`.
 python core/metriche_coppie.py --test
 ```
 
+On Windows, if `python` is not recognised, use the `py` launcher instead — it is installed with
+Python and does not depend on PATH:
+
+```
+py core\metriche_coppie.py --test
+```
+
 Expected first line:
 
 ```
@@ -166,6 +173,10 @@ session, use `--test`.
 | Sit-to-stand: seat reaction | 651 N = 100.1% of weight, Σ Fz balance closed | [C] |
 
 `[C]` computed in simulation, reproducible with `--test`.
+
+**Cross-platform reproducibility.** The torque metrics have been run on Linux (Python 3.12)
+and on Windows 10 (Python 3.10) and return identical figures to the last digit, including the
+sample count. The solver is deterministic and no result depends on the platform.
 
 ---
 
@@ -325,8 +336,19 @@ Formulated as questions, not requests. If you have data on any of these, it woul
 
 ## Troubleshooting
 
-**`python: command not found`**
-Python is not on PATH. Reinstall and check *Add Python to PATH*.
+**`python: command not found`**, or on Windows *"Python was not found; run without arguments
+to install from the Microsoft Store"*
+
+Python is installed but not on PATH — that message comes from the Microsoft Store alias, not
+from Python. Use the `py` launcher, which is installed alongside Python:
+
+```
+py --version
+py core\metriche_coppie.py --test
+```
+
+If `py` works, use it in place of `python` in every command on this page. Alternatively,
+reinstall Python and check *Add Python to PATH*.
 
 **`No module named 'mujoco'`**
 Run `pip install mujoco`.
@@ -336,6 +358,16 @@ No OpenGL context available. Use `--test`, which needs no graphics.
 
 **The window opens and closes immediately**
 Normal in `--test` mode. Drop `--test` for the visual.
+
+**`UnicodeEncodeError` when redirecting output to a file**
+The Windows console code page is not UTF-8. Run:
+
+```
+set PYTHONUTF8=1
+```
+
+and repeat the command. If this is needed, please report it — the modules are meant to print
+plain ASCII.
 
 **A number does not match this README**
 First check the first line of output: it must read `[MASSA MODELLO] 66.228 kg`. If it does and

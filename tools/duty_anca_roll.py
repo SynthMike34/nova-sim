@@ -92,7 +92,7 @@ def esegui():
 
 def main():
     test = '--test' in sys.argv
-    print('duty_anca_roll VERSIONE ' + VERSIONE + ' — soglia %.0f Nm' % SOGLIA)
+    print('duty_anca_roll VERSIONE ' + VERSIONE + ' - soglia %.0f Nm' % SOGLIA)
     out, T = esegui()
     print('camminata campione: %d passi, caduta=%s, t_tot=%.2f s, '
           'ciclo di passo=%.2f s' % (out['passi'], out['caduta'],
@@ -106,7 +106,7 @@ def main():
                  o['s_sopra_per_passo']))
     peggio = max(('r', 'l'), key=lambda k: out[k]['frazione_sopra'])
     o = out[peggio]
-    print('LATO PEGGIORE (%s): %.1f%% del ciclo sopra soglia · media %.1f Nm '
+    print('LATO PEGGIORE (%s): %.1f%% del ciclo sopra soglia | media %.1f Nm '
           '· picco %.1f Nm · %.2f s/passo'
           % (peggio.upper(), 100 * o['frazione_sopra'], o['media_sopra_Nm'],
              o['picco_Nm'], o['s_sopra_per_passo']))

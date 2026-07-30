@@ -64,7 +64,7 @@ def _step_registrato(m, d, *a, **k):
 
 def main():
     test = '--test' in sys.argv
-    print('e3_rms VERSIONE %s — soglia %.0f Nm — E3 a cadenza reale' % (VERSIONE, SOGLIA))
+    print('e3_rms VERSIONE %s - soglia %.0f Nm - E3 a cadenza reale' % (VERSIONE, SOGLIA))
     mujoco.mj_step = _step_registrato
     import e3_accoppiato as E3
     r = E3.prova(T=30.0)   # produzione: P0 come manopola (config campagna)
@@ -98,7 +98,7 @@ def main():
             sotto = F < 70.0  # (finestra regime)
             rms70 = float(np.sqrt(np.sum(F[sotto]**2*dt[sotto])/np.sum(dt[sotto])))
             fr70 = 100*float(np.sum(dt[~sotto])/np.sum(dt))
-            print('Run: %.1f s · RMS <70 Nm: %.1f Nm · Frazione >=70 Nm: %.1f%%'
+            print('Run: %.1f s | RMS <70 Nm: %.1f Nm | Frazione >=70 Nm: %.1f%%'
                   % (t[-1]-t[0], rms70, fr70))
     # T_sw effettivo: dalla lista passi di E3 (fonte vera; lo zero-crossing
     # v1.0 misurava le oscillazioni della coppia, non i passi: scartato)
