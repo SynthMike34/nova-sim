@@ -1,0 +1,405 @@
+<?xml version="1.0"?>
+<robot name="TX34_NOVA">
+  <!-- generato da esporta_urdf.py v1.2 da tx34_v1_toes.xml -->
+  <material name="tx34_grigio"><color rgba="0.72 0.72 0.78 1.0"/></material>
+  <link name="base"/>
+  <joint name="base_pelvis" type="fixed">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <parent link="base"/><child link="pelvis"/>
+  </joint>
+  <link name="pelvis">
+    <inertial>
+      <origin xyz="0.00000 0.00000 0.00000" rpy="0.00000 0.00000 0.00000"/>
+      <mass value="5.4000"/>
+      <inertia ixx="0.036900" iyy="0.024480" izz="0.048420" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+    <visual><origin xyz="0.00000 0.00000 0.00000" rpy="0.00000 0.00000 0.00000"/><geometry><box size="0.2000 0.2600 0.1200"/></geometry><material name="tx34_grigio"/></visual>
+    <collision><origin xyz="0.00000 0.00000 0.00000" rpy="0.00000 0.00000 0.00000"/><geometry><box size="0.2000 0.2600 0.1200"/></geometry></collision>
+  </link>
+  <link name="torso">
+    <inertial>
+      <origin xyz="0.00000 0.00000 0.17296" rpy="0.00000 0.00000 0.00000"/>
+      <mass value="19.3940"/>
+      <inertia ixx="0.382910" iyy="0.299150" izz="0.150647" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+    <visual><origin xyz="0.00000 -0.20000 0.28000" rpy="0.00000 0.00000 0.00000"/><geometry><sphere radius="0.0350"/></geometry><material name="tx34_grigio"/></visual>
+    <collision><origin xyz="0.00000 -0.20000 0.28000" rpy="0.00000 0.00000 0.00000"/><geometry><sphere radius="0.0350"/></geometry></collision>
+    <visual><origin xyz="0.00000 0.20000 0.28000" rpy="0.00000 0.00000 0.00000"/><geometry><sphere radius="0.0350"/></geometry><material name="tx34_grigio"/></visual>
+    <collision><origin xyz="0.00000 0.20000 0.28000" rpy="0.00000 0.00000 0.00000"/><geometry><sphere radius="0.0350"/></geometry></collision>
+    <visual><origin xyz="0.00000 0.00000 0.16000" rpy="3.14159 0.00000 0.00000"/><geometry><cylinder radius="0.0900" length="0.2800"/></geometry><material name="tx34_grigio"/></visual>
+    <collision><origin xyz="0.00000 0.00000 0.16000" rpy="3.14159 0.00000 0.00000"/><geometry><cylinder radius="0.0900" length="0.2800"/></geometry></collision>
+  </link>
+  <joint name="waist_yaw" type="revolute">
+    <origin xyz="0.00000 0.00000 0.10000" rpy="0 0 0"/>
+    <parent link="pelvis"/><child link="torso"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-0.2793" upper="0.2793" effort="30.0" velocity="10.0"/>
+    <dynamics damping="2.000" friction="0.0"/>
+  </joint>
+  <link name="head">
+    <inertial>
+      <origin xyz="0.00000 0.00000 0.09000" rpy="0.00000 0.00000 0.00000"/>
+      <mass value="2.8000"/>
+      <inertia ixx="0.008092" iyy="0.008092" izz="0.008092" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+    <visual><origin xyz="0.00000 0.00000 0.09000" rpy="0.00000 0.00000 0.00000"/><geometry><sphere radius="0.0850"/></geometry><material name="tx34_grigio"/></visual>
+    <collision><origin xyz="0.00000 0.00000 0.09000" rpy="0.00000 0.00000 0.00000"/><geometry><sphere radius="0.0850"/></geometry></collision>
+  </link>
+  <link name="head_int1">
+    <inertial><mass value="0.001"/><inertia ixx="1e-6" iyy="1e-6" izz="1e-6" ixy="0" ixz="0" iyz="0"/></inertial>
+  </link>
+  <joint name="neck_yaw" type="revolute">
+    <origin xyz="0.00000 0.00000 0.40000" rpy="0 0 0"/>
+    <parent link="torso"/><child link="head_int1"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-1.0000" upper="1.0000" effort="10.0" velocity="10.0"/>
+    <dynamics damping="2.000" friction="0.0"/>
+  </joint>
+  <joint name="neck_pitch" type="revolute">
+    <origin xyz="0.00000 0.00000 0.00000" rpy="0 0 0"/>
+    <parent link="head_int1"/><child link="head"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-0.6000" upper="0.6000" effort="10.0" velocity="10.0"/>
+    <dynamics damping="2.000" friction="0.0"/>
+  </joint>
+  <link name="r_upper_arm">
+    <inertial>
+      <origin xyz="0.00000 0.00000 -0.08306" rpy="0.00000 0.00000 0.00000"/>
+      <mass value="2.1670"/>
+      <inertia ixx="0.017706" iyy="0.017706" izz="0.001129" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+    <visual><origin xyz="0.00000 0.00000 0.00000" rpy="0.00000 0.00000 0.00000"/><geometry><sphere radius="0.0300"/></geometry><material name="tx34_grigio"/></visual>
+    <collision><origin xyz="0.00000 0.00000 0.00000" rpy="0.00000 0.00000 0.00000"/><geometry><sphere radius="0.0300"/></geometry></collision>
+    <visual><origin xyz="0.00000 0.00000 -0.12000" rpy="0.00000 0.00000 0.00000"/><geometry><cylinder radius="0.0350" length="0.2400"/></geometry><material name="tx34_grigio"/></visual>
+    <collision><origin xyz="0.00000 0.00000 -0.12000" rpy="0.00000 0.00000 0.00000"/><geometry><cylinder radius="0.0350" length="0.2400"/></geometry></collision>
+  </link>
+  <link name="r_upper_arm_int1">
+    <inertial><mass value="0.001"/><inertia ixx="1e-6" iyy="1e-6" izz="1e-6" ixy="0" ixz="0" iyz="0"/></inertial>
+  </link>
+  <joint name="r_shoulder_pitch" type="revolute">
+    <origin xyz="0.00000 -0.20000 0.28000" rpy="0 0 0"/>
+    <parent link="torso"/><child link="r_upper_arm_int1"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-2.8274" upper="0.9425" effort="43.0" velocity="10.0"/>
+    <dynamics damping="2.000" friction="0.0"/>
+  </joint>
+  <joint name="r_shoulder_roll" type="revolute">
+    <origin xyz="0.00000 0.00000 0.00000" rpy="0 0 0"/>
+    <parent link="r_upper_arm_int1"/><child link="r_upper_arm"/>
+    <axis xyz="1 0 0"/>
+    <limit lower="-1.4140" upper="1.4140" effort="20.0" velocity="10.0"/>
+    <dynamics damping="2.000" friction="0.0"/>
+  </joint>
+  <link name="r_forearm">
+    <inertial>
+      <origin xyz="0.00000 0.00000 -0.11000" rpy="0.00000 0.00000 0.00000"/>
+      <mass value="1.0000"/>
+      <inertia ixx="0.005901" iyy="0.005901" izz="0.000436" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+    <visual><origin xyz="0.00000 0.00000 -0.11000" rpy="0.00000 0.00000 0.00000"/><geometry><cylinder radius="0.0300" length="0.2200"/></geometry><material name="tx34_grigio"/></visual>
+    <collision><origin xyz="0.00000 0.00000 -0.11000" rpy="0.00000 0.00000 0.00000"/><geometry><cylinder radius="0.0300" length="0.2200"/></geometry></collision>
+  </link>
+  <joint name="r_elbow" type="revolute">
+    <origin xyz="0.00000 0.00000 -0.24000" rpy="0 0 0"/>
+    <parent link="r_upper_arm"/><child link="r_forearm"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-2.3000" upper="0.0000" effort="30.0" velocity="10.0"/>
+    <dynamics damping="2.000" friction="0.0"/>
+  </joint>
+  <link name="r_hand">
+    <inertial>
+      <origin xyz="0.00000 0.00000 0.00000" rpy="0.00000 0.00000 0.00000"/>
+      <mass value="0.7500"/>
+      <inertia ixx="0.000480" iyy="0.000480" izz="0.000480" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+    <visual><origin xyz="0.00000 0.00000 0.00000" rpy="0.00000 0.00000 0.00000"/><geometry><sphere radius="0.0400"/></geometry><material name="tx34_grigio"/></visual>
+    <collision><origin xyz="0.00000 0.00000 0.00000" rpy="0.00000 0.00000 0.00000"/><geometry><sphere radius="0.0400"/></geometry></collision>
+  </link>
+  <joint name="r_wrist_pitch" type="revolute">
+    <origin xyz="0.00000 0.00000 -0.25000" rpy="0 0 0"/>
+    <parent link="r_forearm"/><child link="r_hand"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-0.8000" upper="0.8000" effort="10.0" velocity="10.0"/>
+    <dynamics damping="2.000" friction="0.0"/>
+  </joint>
+  <link name="l_upper_arm">
+    <inertial>
+      <origin xyz="0.00000 0.00000 -0.08306" rpy="0.00000 0.00000 0.00000"/>
+      <mass value="2.1670"/>
+      <inertia ixx="0.017706" iyy="0.017706" izz="0.001129" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+    <visual><origin xyz="0.00000 0.00000 0.00000" rpy="0.00000 0.00000 0.00000"/><geometry><sphere radius="0.0300"/></geometry><material name="tx34_grigio"/></visual>
+    <collision><origin xyz="0.00000 0.00000 0.00000" rpy="0.00000 0.00000 0.00000"/><geometry><sphere radius="0.0300"/></geometry></collision>
+    <visual><origin xyz="0.00000 0.00000 -0.12000" rpy="0.00000 0.00000 0.00000"/><geometry><cylinder radius="0.0350" length="0.2400"/></geometry><material name="tx34_grigio"/></visual>
+    <collision><origin xyz="0.00000 0.00000 -0.12000" rpy="0.00000 0.00000 0.00000"/><geometry><cylinder radius="0.0350" length="0.2400"/></geometry></collision>
+  </link>
+  <link name="l_upper_arm_int1">
+    <inertial><mass value="0.001"/><inertia ixx="1e-6" iyy="1e-6" izz="1e-6" ixy="0" ixz="0" iyz="0"/></inertial>
+  </link>
+  <joint name="l_shoulder_pitch" type="revolute">
+    <origin xyz="0.00000 0.20000 0.28000" rpy="0 0 0"/>
+    <parent link="torso"/><child link="l_upper_arm_int1"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-2.8274" upper="0.9425" effort="43.0" velocity="10.0"/>
+    <dynamics damping="2.000" friction="0.0"/>
+  </joint>
+  <joint name="l_shoulder_roll" type="revolute">
+    <origin xyz="0.00000 0.00000 0.00000" rpy="0 0 0"/>
+    <parent link="l_upper_arm_int1"/><child link="l_upper_arm"/>
+    <axis xyz="1 0 0"/>
+    <limit lower="-1.4140" upper="1.4140" effort="20.0" velocity="10.0"/>
+    <dynamics damping="2.000" friction="0.0"/>
+  </joint>
+  <link name="l_forearm">
+    <inertial>
+      <origin xyz="0.00000 0.00000 -0.11000" rpy="0.00000 0.00000 0.00000"/>
+      <mass value="1.0000"/>
+      <inertia ixx="0.005901" iyy="0.005901" izz="0.000436" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+    <visual><origin xyz="0.00000 0.00000 -0.11000" rpy="0.00000 0.00000 0.00000"/><geometry><cylinder radius="0.0300" length="0.2200"/></geometry><material name="tx34_grigio"/></visual>
+    <collision><origin xyz="0.00000 0.00000 -0.11000" rpy="0.00000 0.00000 0.00000"/><geometry><cylinder radius="0.0300" length="0.2200"/></geometry></collision>
+  </link>
+  <joint name="l_elbow" type="revolute">
+    <origin xyz="0.00000 0.00000 -0.24000" rpy="0 0 0"/>
+    <parent link="l_upper_arm"/><child link="l_forearm"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-2.3000" upper="0.0000" effort="30.0" velocity="10.0"/>
+    <dynamics damping="2.000" friction="0.0"/>
+  </joint>
+  <link name="l_hand">
+    <inertial>
+      <origin xyz="0.00000 0.00000 0.00000" rpy="0.00000 0.00000 0.00000"/>
+      <mass value="0.7500"/>
+      <inertia ixx="0.000480" iyy="0.000480" izz="0.000480" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+    <visual><origin xyz="0.00000 0.00000 0.00000" rpy="0.00000 0.00000 0.00000"/><geometry><sphere radius="0.0400"/></geometry><material name="tx34_grigio"/></visual>
+    <collision><origin xyz="0.00000 0.00000 0.00000" rpy="0.00000 0.00000 0.00000"/><geometry><sphere radius="0.0400"/></geometry></collision>
+  </link>
+  <joint name="l_wrist_pitch" type="revolute">
+    <origin xyz="0.00000 0.00000 -0.25000" rpy="0 0 0"/>
+    <parent link="l_forearm"/><child link="l_hand"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-0.8000" upper="0.8000" effort="10.0" velocity="10.0"/>
+    <dynamics damping="2.000" friction="0.0"/>
+  </joint>
+  <link name="r_thigh">
+    <inertial>
+      <origin xyz="0.00000 0.00000 -0.19000" rpy="0.00000 0.00000 0.00000"/>
+      <mass value="6.8000"/>
+      <inertia ixx="0.122563" iyy="0.122563" izz="0.009952" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+    <visual><origin xyz="0.00000 0.00000 -0.19000" rpy="0.00000 0.00000 0.00000"/><geometry><cylinder radius="0.0550" length="0.3800"/></geometry><material name="tx34_grigio"/></visual>
+    <collision><origin xyz="0.00000 0.00000 -0.19000" rpy="0.00000 0.00000 0.00000"/><geometry><cylinder radius="0.0550" length="0.3800"/></geometry></collision>
+  </link>
+  <link name="r_thigh_int1">
+    <inertial><mass value="0.001"/><inertia ixx="1e-6" iyy="1e-6" izz="1e-6" ixy="0" ixz="0" iyz="0"/></inertial>
+  </link>
+  <joint name="r_hip_yaw" type="revolute">
+    <origin xyz="0.00000 -0.09000 -0.06000" rpy="0 0 0"/>
+    <parent link="pelvis"/><child link="r_thigh_int1"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-0.7000" upper="0.7000" effort="80.0" velocity="10.0"/>
+    <dynamics damping="2.000" friction="0.0"/>
+  </joint>
+  <link name="r_thigh_int2">
+    <inertial><mass value="0.001"/><inertia ixx="1e-6" iyy="1e-6" izz="1e-6" ixy="0" ixz="0" iyz="0"/></inertial>
+  </link>
+  <joint name="r_hip_roll" type="revolute">
+    <origin xyz="0.00000 0.00000 0.00000" rpy="0 0 0"/>
+    <parent link="r_thigh_int1"/><child link="r_thigh_int2"/>
+    <axis xyz="1 0 0"/>
+    <limit lower="-0.4700" upper="0.4700" effort="80.0" velocity="10.0"/>
+    <dynamics damping="2.000" friction="0.0"/>
+  </joint>
+  <joint name="r_hip_pitch" type="revolute">
+    <origin xyz="0.00000 0.00000 0.00000" rpy="0 0 0"/>
+    <parent link="r_thigh_int2"/><child link="r_thigh"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-1.8850" upper="0.4712" effort="120.0" velocity="10.0"/>
+    <dynamics damping="2.000" friction="0.0"/>
+  </joint>
+  <link name="r_shank">
+    <inertial>
+      <origin xyz="0.00000 0.00000 -0.19000" rpy="0.00000 0.00000 0.00000"/>
+      <mass value="4.0000"/>
+      <inertia ixx="0.066949" iyy="0.066949" izz="0.003940" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+    <visual><origin xyz="0.00000 0.00000 -0.19000" rpy="0.00000 0.00000 0.00000"/><geometry><cylinder radius="0.0450" length="0.3800"/></geometry><material name="tx34_grigio"/></visual>
+    <collision><origin xyz="0.00000 0.00000 -0.19000" rpy="0.00000 0.00000 0.00000"/><geometry><cylinder radius="0.0450" length="0.3800"/></geometry></collision>
+  </link>
+  <joint name="r_knee" type="revolute">
+    <origin xyz="0.00000 0.00000 -0.38000" rpy="0 0 0"/>
+    <parent link="r_thigh"/><child link="r_shank"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="0.0000" upper="2.0500" effort="120.0" velocity="10.0"/>
+    <dynamics damping="2.000" friction="0.0"/>
+  </joint>
+  <link name="r_foot">
+    <inertial>
+      <origin xyz="0.04000 0.00000 -0.05000" rpy="0.00000 0.00000 0.00000"/>
+      <mass value="4.3000"/>
+      <inertia ixx="0.003476" iyy="0.017917" izz="0.020246" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+    <visual><origin xyz="0.04000 0.00000 -0.05000" rpy="0.00000 0.00000 0.00000"/><geometry><box size="0.2200 0.0900 0.0400"/></geometry><material name="tx34_grigio"/></visual>
+    <collision><origin xyz="0.04000 0.00000 -0.05000" rpy="0.00000 0.00000 0.00000"/><geometry><box size="0.2200 0.0900 0.0400"/></geometry></collision>
+  </link>
+  <link name="r_foot_int1">
+    <inertial><mass value="0.001"/><inertia ixx="1e-6" iyy="1e-6" izz="1e-6" ixy="0" ixz="0" iyz="0"/></inertial>
+  </link>
+  <joint name="r_ankle_pitch" type="revolute">
+    <origin xyz="0.00000 0.00000 -0.40000" rpy="0 0 0"/>
+    <parent link="r_shank"/><child link="r_foot_int1"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-0.4700" upper="0.4700" effort="80.0" velocity="10.0"/>
+    <dynamics damping="2.000" friction="0.0"/>
+  </joint>
+  <joint name="r_ankle_roll" type="revolute">
+    <origin xyz="0.00000 0.00000 0.00000" rpy="0 0 0"/>
+    <parent link="r_foot_int1"/><child link="r_foot"/>
+    <axis xyz="1 0 0"/>
+    <limit lower="-0.2300" upper="0.2300" effort="80.0" velocity="10.0"/>
+    <dynamics damping="2.000" friction="0.0"/>
+  </joint>
+  <link name="r_hallux">
+    <inertial>
+      <origin xyz="0.03000 0.02925 0.00000" rpy="0.00000 0.00000 0.00000"/>
+      <mass value="0.1050"/>
+      <inertia ixx="0.000020" iyy="0.000054" izz="0.000052" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+    <visual><origin xyz="0.03000 0.02925 0.00000" rpy="0.00000 0.00000 0.00000"/><geometry><box size="0.0700 0.0315 0.0360"/></geometry><material name="tx34_grigio"/></visual>
+    <collision><origin xyz="0.03000 0.02925 0.00000" rpy="0.00000 0.00000 0.00000"/><geometry><box size="0.0700 0.0315 0.0360"/></geometry></collision>
+  </link>
+  <joint name="r_hallux_pitch" type="revolute">
+    <origin xyz="0.16000 0.00000 -0.05000" rpy="0 0 0"/>
+    <parent link="r_foot"/><child link="r_hallux"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="0.0000" upper="0.8730" effort="4.0" velocity="10.0"/>
+    <dynamics damping="2.000" friction="0.0"/>
+  </joint>
+  <link name="r_toes">
+    <inertial>
+      <origin xyz="0.03000 -0.01575 0.00000" rpy="0.00000 0.00000 0.00000"/>
+      <mass value="0.1950"/>
+      <inertia ixx="0.000077" iyy="0.000101" izz="0.000135" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+    <visual><origin xyz="0.03000 -0.01575 0.00000" rpy="0.00000 0.00000 0.00000"/><geometry><box size="0.0700 0.0585 0.0360"/></geometry><material name="tx34_grigio"/></visual>
+    <collision><origin xyz="0.03000 -0.01575 0.00000" rpy="0.00000 0.00000 0.00000"/><geometry><box size="0.0700 0.0585 0.0360"/></geometry></collision>
+  </link>
+  <joint name="r_toes_pitch" type="revolute">
+    <origin xyz="0.16000 0.00000 -0.05000" rpy="0 0 0"/>
+    <parent link="r_foot"/><child link="r_toes"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="0.0349" upper="0.6981" effort="3.0" velocity="10.0"/>
+    <dynamics damping="2.000" friction="0.0"/>
+  </joint>
+  <link name="l_thigh">
+    <inertial>
+      <origin xyz="0.00000 0.00000 -0.19000" rpy="0.00000 0.00000 0.00000"/>
+      <mass value="6.8000"/>
+      <inertia ixx="0.122563" iyy="0.122563" izz="0.009952" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+    <visual><origin xyz="0.00000 0.00000 -0.19000" rpy="0.00000 0.00000 0.00000"/><geometry><cylinder radius="0.0550" length="0.3800"/></geometry><material name="tx34_grigio"/></visual>
+    <collision><origin xyz="0.00000 0.00000 -0.19000" rpy="0.00000 0.00000 0.00000"/><geometry><cylinder radius="0.0550" length="0.3800"/></geometry></collision>
+  </link>
+  <link name="l_thigh_int1">
+    <inertial><mass value="0.001"/><inertia ixx="1e-6" iyy="1e-6" izz="1e-6" ixy="0" ixz="0" iyz="0"/></inertial>
+  </link>
+  <joint name="l_hip_yaw" type="revolute">
+    <origin xyz="0.00000 0.09000 -0.06000" rpy="0 0 0"/>
+    <parent link="pelvis"/><child link="l_thigh_int1"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-0.7000" upper="0.7000" effort="80.0" velocity="10.0"/>
+    <dynamics damping="2.000" friction="0.0"/>
+  </joint>
+  <link name="l_thigh_int2">
+    <inertial><mass value="0.001"/><inertia ixx="1e-6" iyy="1e-6" izz="1e-6" ixy="0" ixz="0" iyz="0"/></inertial>
+  </link>
+  <joint name="l_hip_roll" type="revolute">
+    <origin xyz="0.00000 0.00000 0.00000" rpy="0 0 0"/>
+    <parent link="l_thigh_int1"/><child link="l_thigh_int2"/>
+    <axis xyz="1 0 0"/>
+    <limit lower="-0.4700" upper="0.4700" effort="80.0" velocity="10.0"/>
+    <dynamics damping="2.000" friction="0.0"/>
+  </joint>
+  <joint name="l_hip_pitch" type="revolute">
+    <origin xyz="0.00000 0.00000 0.00000" rpy="0 0 0"/>
+    <parent link="l_thigh_int2"/><child link="l_thigh"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-1.8850" upper="0.4712" effort="120.0" velocity="10.0"/>
+    <dynamics damping="2.000" friction="0.0"/>
+  </joint>
+  <link name="l_shank">
+    <inertial>
+      <origin xyz="0.00000 0.00000 -0.19000" rpy="0.00000 0.00000 0.00000"/>
+      <mass value="4.0000"/>
+      <inertia ixx="0.066949" iyy="0.066949" izz="0.003940" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+    <visual><origin xyz="0.00000 0.00000 -0.19000" rpy="0.00000 0.00000 0.00000"/><geometry><cylinder radius="0.0450" length="0.3800"/></geometry><material name="tx34_grigio"/></visual>
+    <collision><origin xyz="0.00000 0.00000 -0.19000" rpy="0.00000 0.00000 0.00000"/><geometry><cylinder radius="0.0450" length="0.3800"/></geometry></collision>
+  </link>
+  <joint name="l_knee" type="revolute">
+    <origin xyz="0.00000 0.00000 -0.38000" rpy="0 0 0"/>
+    <parent link="l_thigh"/><child link="l_shank"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="0.0000" upper="2.0500" effort="120.0" velocity="10.0"/>
+    <dynamics damping="2.000" friction="0.0"/>
+  </joint>
+  <link name="l_foot">
+    <inertial>
+      <origin xyz="0.04000 0.00000 -0.05000" rpy="0.00000 0.00000 0.00000"/>
+      <mass value="4.3000"/>
+      <inertia ixx="0.003476" iyy="0.017917" izz="0.020246" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+    <visual><origin xyz="0.04000 0.00000 -0.05000" rpy="0.00000 0.00000 0.00000"/><geometry><box size="0.2200 0.0900 0.0400"/></geometry><material name="tx34_grigio"/></visual>
+    <collision><origin xyz="0.04000 0.00000 -0.05000" rpy="0.00000 0.00000 0.00000"/><geometry><box size="0.2200 0.0900 0.0400"/></geometry></collision>
+  </link>
+  <link name="l_foot_int1">
+    <inertial><mass value="0.001"/><inertia ixx="1e-6" iyy="1e-6" izz="1e-6" ixy="0" ixz="0" iyz="0"/></inertial>
+  </link>
+  <joint name="l_ankle_pitch" type="revolute">
+    <origin xyz="0.00000 0.00000 -0.40000" rpy="0 0 0"/>
+    <parent link="l_shank"/><child link="l_foot_int1"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-0.4700" upper="0.4700" effort="80.0" velocity="10.0"/>
+    <dynamics damping="2.000" friction="0.0"/>
+  </joint>
+  <joint name="l_ankle_roll" type="revolute">
+    <origin xyz="0.00000 0.00000 0.00000" rpy="0 0 0"/>
+    <parent link="l_foot_int1"/><child link="l_foot"/>
+    <axis xyz="1 0 0"/>
+    <limit lower="-0.2300" upper="0.2300" effort="80.0" velocity="10.0"/>
+    <dynamics damping="2.000" friction="0.0"/>
+  </joint>
+  <link name="l_hallux">
+    <inertial>
+      <origin xyz="0.03000 -0.02925 0.00000" rpy="0.00000 0.00000 0.00000"/>
+      <mass value="0.1050"/>
+      <inertia ixx="0.000020" iyy="0.000054" izz="0.000052" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+    <visual><origin xyz="0.03000 -0.02925 0.00000" rpy="0.00000 0.00000 0.00000"/><geometry><box size="0.0700 0.0315 0.0360"/></geometry><material name="tx34_grigio"/></visual>
+    <collision><origin xyz="0.03000 -0.02925 0.00000" rpy="0.00000 0.00000 0.00000"/><geometry><box size="0.0700 0.0315 0.0360"/></geometry></collision>
+  </link>
+  <joint name="l_hallux_pitch" type="revolute">
+    <origin xyz="0.16000 0.00000 -0.05000" rpy="0 0 0"/>
+    <parent link="l_foot"/><child link="l_hallux"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="0.0000" upper="0.8730" effort="4.0" velocity="10.0"/>
+    <dynamics damping="2.000" friction="0.0"/>
+  </joint>
+  <link name="l_toes">
+    <inertial>
+      <origin xyz="0.03000 0.01575 0.00000" rpy="0.00000 0.00000 0.00000"/>
+      <mass value="0.1950"/>
+      <inertia ixx="0.000077" iyy="0.000101" izz="0.000135" ixy="0" ixz="0" iyz="0"/>
+    </inertial>
+    <visual><origin xyz="0.03000 0.01575 0.00000" rpy="0.00000 0.00000 0.00000"/><geometry><box size="0.0700 0.0585 0.0360"/></geometry><material name="tx34_grigio"/></visual>
+    <collision><origin xyz="0.03000 0.01575 0.00000" rpy="0.00000 0.00000 0.00000"/><geometry><box size="0.0700 0.0585 0.0360"/></geometry></collision>
+  </link>
+  <joint name="l_toes_pitch" type="revolute">
+    <origin xyz="0.16000 0.00000 -0.05000" rpy="0 0 0"/>
+    <parent link="l_foot"/><child link="l_toes"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="0.0349" upper="0.6981" effort="3.0" velocity="10.0"/>
+    <dynamics damping="2.000" friction="0.0"/>
+  </joint>
+</robot>

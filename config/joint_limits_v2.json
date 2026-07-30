@@ -1,0 +1,406 @@
+{
+  "_meta": {
+    "document": "TX-34 NOVA TDD v9.0",
+    "author": "Michel Maddalena",
+    "note": "Limiti hardware assoluti. Limiti software = 90% del limite hardware.",
+    "standard": "ISO 10218-2 + verifica ZMP",
+    "v1_note": "Limiti gambe (hip/knee/ankle) applicati direttamente da nova_safeguard su attuatori proprietari TX-34 (MyActuator RMD-X). Nessuna dipendenza da SDK esterni.",
+    "safeguard_monitoring": "nova_safeguard monitora velocita' e accelerazione dei giunti gambe (RMD-X, CAN-FD) a 100 Hz, oltre a coppia e forza di contatto.",
+    "rev_v695": "A8: ankle_pitch +/-30 gia' coerente (fonte di verita'). Solo bump versione.",
+    "last_updated": "Luglio 2026",
+    "_changelog": "v6.9.5-r1 Giugno 2026: aggiunto shoulder_l_yaw (CAN 20) e shoulder_r_yaw (CAN 23) — erano mancanti nella release originale v6.9.5. Valori da OSS_TX34_NOVA_SEC3_2_RangeAngolari_vFINAL.docx Nota 5. || v6.9.5-r2 Giugno 2026: aggiunti waist_rotation (CAN 50), toes_l (CAN 51), toes_r (CAN 52) — risolve i 3 WARN di nova_json_validator.py (presenti in can_devices_v2.json, assenti qui). Coppie allineate a can_devices_v2.json (waist 2.5 Nm, toes 10 Nm), NON ai valori del prompt di fix (1.26/1.5 Nm) in quanto in conflitto con la fonte di verita'. Aggiunto _meta._dof_explanation. || v8.0 Luglio 2026: rimossi i riferimenti legacy alla base di locomozione esterna (ZERO occorrenze). Aggiunte note attuatori MyActuator RMD-X sui giunti gambe (CAN 6-17). enforcement -> 'nova_safeguard direct'. Valori hw/sw/speed/torque INVARIATI. || v9.1 Luglio 2026: corretta massa RMD-X8-120 nelle note dei giunti anca roll/yaw (1.4->1.2 kg) e caviglia (totale 1.7->1.5 kg, attuatore 1.4->1.2 kg, molla SEA 0.3 invariata) — allineamento a nova_legs.json (fonte di verita, RMD_X8_120.mass_kg=1.2). Corretta unita rigidezza molla SEA caviglia da N/m a Nm/rad (giunto rotazionale).",
+    "_dof_explanation": {
+      "total_dof_declared": 80,
+      "can_servo_count": 60,
+      "hand_mechanical_dof": 40,
+      "hand_servo_count": 10,
+      "explanation": "Gli 80 DOF cinematici attuati NON sono in corrispondenza 1:1 con i 60 canali CAN servo (ID 1-60). Composizione: 60 canali CAN servo  -10 servo mani (CAN 30-39: 5 servo/mano che azionano 40 DOF meccanici tendon-driven via Dyneema, 20 DOF/mano, senza CAN ID individuale)  -10 canali ausiliari dedicati (CAN 40-49, esclusi per convenzione contabile dai DOF cinematici)  +40 DOF meccanici mani  =  60 - 10 - 10 + 40 = 80. Una somma 'ingenua' dei segmenti darebbe ~90 perche' conteggia sia i 10 canali ausiliari sia i 40 DOF mani: e' atteso. Fonti di verita': can_devices_v2.json (totals.total_dof=80, can_ids_used 1-60) e OSS_TX34_NOVA_SEC3_1_MappaDOF_vFINAL Nota 2."
+    }
+  },
+  "limits": {
+    "neck_yaw": {
+      "hw_deg": [
+        -90,
+        90
+      ],
+      "sw_deg": [
+        -81,
+        81
+      ],
+      "speed_max_dps": 90,
+      "torque_max_Nm": 10.0
+    },
+    "neck_pitch": {
+      "hw_deg": [
+        -45,
+        45
+      ],
+      "sw_deg": [
+        -40,
+        40
+      ],
+      "speed_max_dps": 60,
+      "torque_max_Nm": 10.0
+    },
+    "neck_roll": {
+      "hw_deg": [
+        -30,
+        30
+      ],
+      "sw_deg": [
+        -27,
+        27
+      ],
+      "speed_max_dps": 60,
+      "torque_max_Nm": 8.0
+    },
+    "torso_pitch": {
+      "hw_deg": [
+        -30,
+        30
+      ],
+      "sw_deg": [
+        -27,
+        27
+      ],
+      "speed_max_dps": 45,
+      "torque_max_Nm": 15.0
+    },
+    "torso_roll": {
+      "hw_deg": [
+        -20,
+        20
+      ],
+      "sw_deg": [
+        -18,
+        18
+      ],
+      "speed_max_dps": 45,
+      "torque_max_Nm": 15.0
+    },
+    "hip_l_yaw": {
+      "hw_deg": [
+        -45,
+        45
+      ],
+      "sw_deg": [
+        -40,
+        40
+      ],
+      "speed_max_dps": 40,
+      "torque_max_Nm": 80.0,
+      "enforcement": "nova_safeguard direct (CAN-FD)",
+      "note": "MyActuator RMD-X8-120 — 43 Nm nom / 110 Nm picco / 1.2 kg — verificato datasheet luglio 2026"
+    },
+    "hip_l_roll": {
+      "hw_deg": [
+        -30,
+        30
+      ],
+      "sw_deg": [
+        -27,
+        27
+      ],
+      "speed_max_dps": 40,
+      "torque_max_Nm": 80.0,
+      "enforcement": "nova_safeguard direct (CAN-FD)",
+      "note": "MyActuator RMD-X8-120 — 43 Nm nom / 110 Nm picco / 1.2 kg — verificato datasheet luglio 2026"
+    },
+    "hip_l_pitch": {
+      "hw_deg": [
+        -120,
+        30
+      ],
+      "sw_deg": [
+        -108,
+        27
+      ],
+      "speed_max_dps": 60,
+      "torque_max_Nm": 120.0,
+      "enforcement": "nova_safeguard direct (CAN-FD)",
+      "note": "MyActuator RMD-X12-P20-320 — 85 Nm nom / 320 Nm picco / 2.4 kg — verificato datasheet OpenELAB luglio 2026"
+    },
+    "hip_r_yaw": {
+      "hw_deg": [
+        -45,
+        45
+      ],
+      "sw_deg": [
+        -40,
+        40
+      ],
+      "speed_max_dps": 40,
+      "torque_max_Nm": 80.0,
+      "enforcement": "nova_safeguard direct (CAN-FD)",
+      "note": "MyActuator RMD-X8-120 — 43 Nm nom / 110 Nm picco / 1.2 kg — verificato datasheet luglio 2026"
+    },
+    "hip_r_roll": {
+      "hw_deg": [
+        -30,
+        30
+      ],
+      "sw_deg": [
+        -27,
+        27
+      ],
+      "speed_max_dps": 40,
+      "torque_max_Nm": 80.0,
+      "enforcement": "nova_safeguard direct (CAN-FD)",
+      "note": "MyActuator RMD-X8-120 — 43 Nm nom / 110 Nm picco / 1.2 kg — verificato datasheet luglio 2026"
+    },
+    "hip_r_pitch": {
+      "hw_deg": [
+        -120,
+        30
+      ],
+      "sw_deg": [
+        -108,
+        27
+      ],
+      "speed_max_dps": 60,
+      "torque_max_Nm": 120.0,
+      "enforcement": "nova_safeguard direct (CAN-FD)",
+      "note": "MyActuator RMD-X12-P20-320 — 85 Nm nom / 320 Nm picco / 2.4 kg — verificato datasheet OpenELAB luglio 2026"
+    },
+    "knee_l": {
+      "hw_deg": [
+        0,
+        130
+      ],
+      "sw_deg": [
+        2,
+        117
+      ],
+      "speed_max_dps": 90,
+      "torque_max_Nm": 120,
+      "enforcement": "nova_safeguard direct (CAN-FD)",
+      "note": "MyActuator RMD-X12-P20-320 — 85 Nm nom / 320 Nm picco / 2.4 kg — verificato datasheet OpenELAB luglio 2026"
+    },
+    "knee_r": {
+      "hw_deg": [
+        0,
+        130
+      ],
+      "sw_deg": [
+        2,
+        117
+      ],
+      "speed_max_dps": 90,
+      "torque_max_Nm": 120,
+      "enforcement": "nova_safeguard direct (CAN-FD)",
+      "note": "MyActuator RMD-X12-P20-320 — 85 Nm nom / 320 Nm picco / 2.4 kg — verificato datasheet OpenELAB luglio 2026"
+    },
+    "ankle_l_pitch": {
+      "hw_deg": [
+        -30,
+        30
+      ],
+      "sw_deg": [
+        -27,
+        27
+      ],
+      "speed_max_dps": 120,
+      "torque_max_Nm": 80,
+      "enforcement": "nova_safeguard direct (CAN-FD)",
+      "note": "MyActuator RMD-X8-120 + SEA molla Ti-6Al-4V (K=800 Nm/rad) — 43 Nm nom / 110 Nm picco / 1.5 kg (attuatore 1.2 + molla 0.3) — verificato datasheet luglio 2026"
+    },
+    "ankle_l_roll": {
+      "hw_deg": [
+        -15,
+        15
+      ],
+      "sw_deg": [
+        -13,
+        13
+      ],
+      "speed_max_dps": 120,
+      "torque_max_Nm": 40.0,
+      "enforcement": "nova_safeguard direct (CAN-FD)",
+      "note": "MyActuator RMD-X8-120 + SEA molla Ti-6Al-4V (K=800 Nm/rad) — 43 Nm nom / 110 Nm picco / 1.5 kg (attuatore 1.2 + molla 0.3) — verificato datasheet luglio 2026"
+    },
+    "ankle_r_pitch": {
+      "hw_deg": [
+        -30,
+        30
+      ],
+      "sw_deg": [
+        -27,
+        27
+      ],
+      "speed_max_dps": 120,
+      "torque_max_Nm": 80,
+      "enforcement": "nova_safeguard direct (CAN-FD)",
+      "note": "MyActuator RMD-X8-120 + SEA molla Ti-6Al-4V (K=800 Nm/rad) — 43 Nm nom / 110 Nm picco / 1.5 kg (attuatore 1.2 + molla 0.3) — verificato datasheet luglio 2026"
+    },
+    "ankle_r_roll": {
+      "hw_deg": [
+        -15,
+        15
+      ],
+      "sw_deg": [
+        -13,
+        13
+      ],
+      "speed_max_dps": 120,
+      "torque_max_Nm": 40.0,
+      "enforcement": "nova_safeguard direct (CAN-FD)",
+      "note": "MyActuator RMD-X8-120 + SEA molla Ti-6Al-4V (K=800 Nm/rad) — 43 Nm nom / 110 Nm picco / 1.5 kg (attuatore 1.2 + molla 0.3) — verificato datasheet luglio 2026"
+    },
+    "shoulder_pitch": {
+      "hw_deg": [
+        -180,
+        60
+      ],
+      "sw_deg": [
+        -162,
+        54
+      ],
+      "speed_max_dps": 90,
+      "torque_max_Nm": 43,
+      "nota_0_1": "RMD-X8-120 (decisione MIKE, 0.1-ter)"
+    },
+    "shoulder_roll": {
+      "hw_deg": [
+        -90,
+        90
+      ],
+      "sw_deg": [
+        -81,
+        81
+      ],
+      "speed_max_dps": 90,
+      "torque_max_Nm": 20
+    },
+    "shoulder_l_yaw": {
+      "can_id": 20,
+      "hw_deg": [
+        -90,
+        90
+      ],
+      "sw_deg": [
+        -81,
+        81
+      ],
+      "speed_max_dps": 90,
+      "torque_max_Nm": 8.0,
+      "servo": "Dynamixel MX-106T",
+      "gear_ratio": "da verificare in prototipo",
+      "note": "Aggiunto in revisione Giugno 2026 — era mancante in v6.9.5 originale (Nota 5 §3.2 vFINAL)"
+    },
+    "shoulder_r_yaw": {
+      "can_id": 23,
+      "hw_deg": [
+        -90,
+        90
+      ],
+      "sw_deg": [
+        -81,
+        81
+      ],
+      "speed_max_dps": 90,
+      "torque_max_Nm": 8.0,
+      "servo": "Dynamixel MX-106T",
+      "gear_ratio": "da verificare in prototipo",
+      "note": "Aggiunto in revisione Giugno 2026 — era mancante in v6.9.5 originale (Nota 5 §3.2 vFINAL)"
+    },
+    "waist_rotation": {
+      "can_id": 50,
+      "hw_deg": [
+        -18,
+        18
+      ],
+      "sw_deg": [
+        -16,
+        16
+      ],
+      "speed_max_dps": 20,
+      "torque_max_Nm": 2.5,
+      "servo": "NEMA 23 stepper",
+      "note": "Rotazione vita NEMA 23 (hip sway, dissociazione fianchi/busto) — attuatore stepper, NON Dynamixel. Driver dedicato, non su bus CAN Dynamixel standard. Coppia 2.5 Nm da can_devices_v2.json (waist_joint.id=50) e confermata da OSS_TX34_NOVA_BLK1B_SistemiSpeciali_vFINAL (NEMA 23, coppia 2.5 Nm). Il prompt di fix indicava 1.26 Nm: scartato perche' in conflitto con le fonti di verita' (che 'fanno fede'). sw=90% hw."
+    },
+    "toes_l": {
+      "can_id": 51,
+      "hw_deg": [
+        0,
+        45
+      ],
+      "sw_deg": [
+        2,
+        40
+      ],
+      "speed_max_dps": 60,
+      "torque_max_Nm": 10.0,
+      "servo": "Dynamixel XL430",
+      "note": "SEA dita piede SX — flessione plantare collettiva (tutte e 5 le dita insieme, 0-45 deg). V1.0 collettivo; V2.0 roadmap: dita indipendenti. Nome canonico in can_devices_v2.json: toes_l_collective (id=51). Coppia 10 Nm da can_devices_v2.json e OSS_TX34_NOVA_SEC3_1_MappaDOF_vFINAL; il prompt indicava 1.5 Nm (scartato, conflitto con fonti di verita'). sw=90% hw, lower bound a 2 deg come gli altri giunti a fondo corsa 0."
+    },
+    "toes_r": {
+      "can_id": 52,
+      "hw_deg": [
+        0,
+        45
+      ],
+      "sw_deg": [
+        2,
+        40
+      ],
+      "speed_max_dps": 60,
+      "torque_max_Nm": 10.0,
+      "servo": "Dynamixel XL430",
+      "note": "SEA dita piede DX — specifica identica a toes_l. Nome canonico in can_devices_v2.json: toes_r_collective (id=52). Coppia 10 Nm (fonte di verita')."
+    },
+    "elbow": {
+      "hw_deg": [
+        0,
+        145
+      ],
+      "sw_deg": [
+        2,
+        130
+      ],
+      "speed_max_dps": 120,
+      "torque_max_Nm": 8.0
+    },
+    "wrist_pitch": {
+      "hw_deg": [
+        -60,
+        60
+      ],
+      "sw_deg": [
+        -54,
+        54
+      ],
+      "speed_max_dps": 180,
+      "torque_max_Nm": 1.4
+    },
+    "wrist_yaw": {
+      "hw_deg": [
+        -90,
+        90
+      ],
+      "sw_deg": [
+        -81,
+        81
+      ],
+      "speed_max_dps": 180,
+      "torque_max_Nm": 1.4
+    }
+  },
+  "safety_contact": {
+    "max_force_N": 150,
+    "max_pressure_Ncm2": 75,
+    "standard": "ISO 10218-2 + ISO 15066",
+    "enforcement": "nova_safeguard node, 100Hz"
+  },
+  "_nova_sim_campaign_v1": {
+    "_source": "NOVA-SIM campagna virtuale 27/07/2026 - Rapporto v5.1, STATO v4.0 (34 scoperte, [C]=calcolato)",
+    "verifica_range_C": "Range sw verificati in sim su tutta la campagna: ginocchio 2-117 sfruttato al 92% (squat 108 gradi), caviglia +/-27 = vincolo squat (24,2 usati), hip sway 10,7 dentro +/-27 roll. Modello 66,23 kg al decimale.",
+    "DISCREPANZA_D1_ginocchio": "torque_max 100 Nm (v9) vs SALTO misurato: ginocchio satura a 120,0 Nm simultaneo all'anca [C, scoperta 25]. La sim usava i 120 Nm del TDD-ESTRATTO par.2.3. X12-P20-320 (85 nom/320 picco) regge 120: DECISIONE - alzare il cap a 120 per il gesto-salto oppure de-ratare il salto V1.0.",
+    "DISCREPANZA_D2_caviglia": "torque_max 60 Nm (v9) vs MISURE: camminata coi tacchi picco caviglia 73,6 Nm a h=0 [C, curva tacchi]; ferma statica a CoP esteso fino a ~80 Nm [C, scoperta 29-ter]. X8-120 (43 nom/110 picco) regge: DECISIONE - rivedere il cap o de-ratare tacchi/atterraggio.",
+    "DISCREPANZA_D3_spalla": "shoulder_pitch 10 Nm (v9) vs scoperta 8 [A]: reach alto richiede >=40 Nm a vuoto, >=50 con 2 kg. Gap 4x: PROPOSTA gia' nel Rapporto v5.1 par.6.",
+    "PROPOSTA_29ter_caviglia_range": "Atterraggio in piedi da salto: caviglia >=+/-35 gradi (via elegante) OPPURE suola >=13 cm INSIEME a coppia caviglia >=100 Nm. Il tallone da solo NON basta (probe 29-ter).",
+    "toes_verifica_C": "Toe-brake certificato in sim a 6 Nm e 31,5 gradi [C, scoperta 30c: fermo x3,9]: il cap v9 (10 Nm, sw 2-40) lo copre CON MARGINE. Alluce (scoperta 31): soglia utile ~40 gradi = al limite sw superiore; split hallux/toes sconsigliato per il brake (scoperta 32: rigidezza solidale > DOF).",
+    "decisioni_2026_07_27": "D1 ginocchio 100->120 Nm (salto 120,0 [C], sc.25; X12 85/320) · D2 caviglia pitch 60->80 Nm (tacchi h0 73,6 [C]; X8 43/110) — approvate da Michel Maddalena, recepite nel TDD v12",
+    "task_0_1_spalla": "shoulder pitch torque_max 50 Nm (RMD-X10, 28/07/2026)",
+    "canone_rettificato_2026_07_28": "CANONE RETTIFICATO 28/07 @66,23 kg [C]: campione v2 (y_in 0,02, lean 0,15) picco anca roll 72,1 Nm (margine 10%), 98,7 J/passo, 17,7 W, duty 5,1%; za squat 0,60 m; rialzata 3,00 s (piedi tucked KXA 0,15; 61,9/61,0/47,2 Nm); reach 0,48/0,43/0,47/0,47; E3: 11 passi (PASS-limite), RMS 43,1, posturale 25,0, fraz>=70 21,7%, T_sw 0,180; spalla pitch X8-120 43/110, spalla roll X6-P20-60 20/60. Sostituisce i numeri @64,13."
+  }
+}
