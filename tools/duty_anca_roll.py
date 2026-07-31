@@ -39,8 +39,9 @@ import sys
 import os
 import numpy as np
 
-VERSIONE = '1.2'
-SOGLIA = 43.0          # Nm - coppia nominale continuativa RMD-X8 (datasheet)
+VERSIONE = '1.3'
+SOGLIA = 43.0
+SOGLIA_PRESA = 40.0   # inizio finestra di regime (come e3_rms)          # Nm - coppia nominale continuativa RMD-X8 (datasheet)
 BASE = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
 
 
@@ -71,7 +72,24 @@ def esegui():
                               m.actuator_trnid[i][0]) for i in range(m.nu)]
     T = np.array(T)
     F = np.array(F)
-    out = {'passi': passi, 'caduta': bool(caduta), 't_tot': float(T[-1] - T[0])}
+
+    # FINESTRA DI REGIME - il run contiene una fase di quiete/assestamento
+    # iniziale che diluisce il denominatore e rende il duty ottimistico.
+    # Inizio = primo evento di presa oltre SOGLIA_PRESA su UNO QUALSIASI dei due
+    # lati: nel campione la presa parte a sinistra, quindi il solo lato R
+    # (convenzione di e3_rms su E3) qui farebbe partire la finestra alla fine.
+    # Duty e picco sono riportati come CASO PEGGIORE, con il lato dichiarato.
+    jr = nomi.index('r_hip_roll')
+    jl = nomi.index('l_hip_roll')
+    _pres = np.maximum(np.abs(F[:, jr]), np.abs(F[:, jl])) > SOGLIA_PRESA
+    i0 = int(np.argmax(_pres)) if _pres.any() else 0
+    T_full = T
+    T = T[i0:]
+    F = F[i0:]
+
+    out = {'passi': passi, 'caduta': bool(caduta), 't_tot': float(T[-1] - T[0]),
+           'finestra_regime_s': [round(float(T[0]), 2), round(float(T[-1]), 2)],
+           't_run_intero_s': round(float(T_full[-1] - T_full[0]), 2)}
     out['t_ciclo_passo'] = out['t_tot'] / 2.0  # 2 passi campione
 
     for lato in ('r', 'l'):
@@ -105,11 +123,15 @@ def main():
                  100 * o['frazione_sopra'], o['media_sopra_Nm'],
                  o['s_sopra_per_passo']))
     peggio = max(('r', 'l'), key=lambda k: out[k]['frazione_sopra'])
+    pk_lato = max(('r', 'l'), key=lambda k: out[k]['picco_Nm'])
     o = out[peggio]
-    print('LATO PEGGIORE (%s): %.1f%% of cycle above soglia | media %.1f Nm '
-          '· picco %.1f Nm · %.2f s/passo'
-          % (peggio.upper(), 100 * o['frazione_sopra'], o['media_sopra_Nm'],
-             o['picco_Nm'], o['s_sopra_per_passo']))
+    print('finestra di regime: [%.2f, %.2f] s su un run di %.2f s'
+          % (out['finestra_regime_s'][0], out['finestra_regime_s'][1],
+             out['t_run_intero_s']))
+    print('DUTY PEGGIORE (%s): %.1f%% del ciclo sopra soglia | media %.1f Nm '
+          '· %.2f s/passo' % (peggio.upper(), 100 * o['frazione_sopra'],
+                              o['media_sopra_Nm'], o['s_sopra_per_passo']))
+    print('PICCO PEGGIORE (%s): %.1f Nm' % (pk_lato.upper(), out[pk_lato]['picco_Nm']))
 
     if test:
         ok = (not out['caduta'] and out['passi'] == 2
@@ -132,10 +154,12 @@ def main():
                     color='crimson', alpha=0.25)
     ax.set_xlabel('time [s]')
     ax.set_ylabel('|torque| [N·m]')
-    ax.set_title('Hip roll duty - sample gait: %.1f%% of cycle above '
-                 '%d Nm · media %.1f · picco %.1f (lato %s)'
+    ax.set_title('Hip roll duty - sample gait, steady-state window: '
+                 '%.1f%% of cycle above %d N·m · worst peak %.1f N·m (side %s)'
                  % (100 * o['frazione_sopra'], int(SOGLIA),
-                    o['media_sopra_Nm'], o['picco_Nm'], peggio.upper()))
+                    out[pk_lato]['picco_Nm'], pk_lato.upper()),
+                 fontsize=11, fontweight='bold')
+    ax.set_xlim(T[0], T[-1])
     ax.legend(loc='upper right', fontsize=8)
     ax.grid(alpha=0.3)
     fig.tight_layout()
