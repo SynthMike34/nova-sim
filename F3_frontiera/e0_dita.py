@@ -345,15 +345,15 @@ def campagna():
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
     fig, axs = plt.subplots(1, 3, figsize=(12, 4.5))
-    coppie = [('camminata_E3', 'passi', 'passi E3'),
-              ('salto', 'quota_cm', 'quota salto [cm]'),
-              ('atterraggio_E6', 'fermo_s', 'fermo eretta [s]')]
+    coppie = [('camminata_E3', 'passi', 'E3 steps - passive vs active toes'),
+              ('salto', 'quota_cm', 'jump height [cm]'),
+              ('atterraggio_E6', 'fermo_s', 'time to upright rest [s] - claim withdrawn')]
     for ax, (k, campo, tit) in zip(axs, coppie):
         eti = ['passive\ntoes', 'ACTIVE\ntoes']
         vals = [ris[k]['senza'][campo], ris[k]['con'][campo]]
         col = ['tab:gray', 'tab:green']
         if 'alluce' in ris[k]:
-            eti.append('ALLUCE\nindip.')
+            eti.append('HALLUX\nindep.')
             vals.append(ris[k]['alluce'][campo])
             col.append('tab:purple')
         ax.bar(eti, vals, color=col, width=0.55)
