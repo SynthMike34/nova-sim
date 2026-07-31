@@ -126,7 +126,7 @@ session, use `--test`.
 | Module | What it does | Result |
 |---|---|---|
 | `F2_dinamica/t1_caduta.py` | Fall from 60 cm | 2.60 m/s · 425 ms early warning |
-| `F2_dinamica/t12_hip_sway.py` | Lateral hip sway | 10.7° @ 0.9 Hz |
+| `F2_dinamica/t12_hip_sway.py` | Lateral hip sway | 11.1° @ 0.9 Hz |
 | `F2_dinamica/t18_power_loss.py` | Power loss strategies | coast is the least damaging |
 | `F2_dinamica/tacchi_param.py` | Heel height 0–12 cm | cost is the contact width, not the height |
 
