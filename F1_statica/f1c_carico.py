@@ -162,7 +162,7 @@ def campagna():
         print('      (modulo campione custodito da MIKE - vedi F0_fondamenta/README)')
     else:
         print('%5s | %6s %8s | %10s %9s %12s' %
-              ('kg', 'passi', 'caduta', 'anca pitch', 'anca roll', 'cavig. pitch'))
+              ('kg', 'passi', 'caduta', 'hip pitch', 'anca roll', 'cavig. pitch'))
         for kg in carichi:
             r = marcia(kg)
             ris['B'].append(r)
@@ -227,23 +227,23 @@ def campagna():
     fig, axs = plt.subplots(2, 1, figsize=(9, 7))
     spA_all = [r['spalla_Nm'] for r in ris['A'] if not r.get('caduta')]
     sp2 = [r['spalla_Nm'] for r in ris['A2'] if not r.get('caduta')]
-    axs[0].plot(kgv[:len(spA_all)], spA_all, 'o-', color='tab:blue', label='braccio teso 0,45 m')
-    axs[0].plot(kgv[:len(sp2)], sp2, 's-', color='tab:green', label='postura raccolta')
-    axs[0].axhline(43, color='r', ls='--', lw=1, label='forcerange spalla 43 Nm (X8-120)')
-    axs[0].set_xlabel('carico in mano [kg]')
-    axs[0].set_ylabel('picco coppia spalla [Nm]')
-    axs[0].set_title('F1-C: coppia spalla vs carico (%.1f Nm/kg a braccio teso)' % slope_sp)
+    axs[0].plot(kgv[:len(spA_all)], spA_all, 'o-', color='tab:blue', label='extended arm 0.45 m')
+    axs[0].plot(kgv[:len(sp2)], sp2, 's-', color='tab:green', label='tucked posture')
+    axs[0].axhline(43, color='r', ls='--', lw=1, label='shoulder forcerange 43 N·m (X8-120)')
+    axs[0].set_xlabel('hand payload [kg]')
+    axs[0].set_ylabel('peak shoulder torque [N·m]')
+    axs[0].set_title('F1-C: shoulder torque vs payload (%.1f N·m/kg, extended arm)' % slope_sp)
     axs[0].legend(fontsize=8)
     if len(roll):
-        axs[1].plot(kgv, roll, 'o-', color='tab:orange', label='anca roll (marcia)')
-        axs[1].plot(kgv, ank, 's-', color='tab:purple', label='caviglia pitch (marcia)')
-        axs[1].axhline(80, color='r', ls='--', lw=1, label='limite RMD-X8')
+        axs[1].plot(kgv, roll, 'o-', color='tab:orange', label='hip roll (walking)')
+        axs[1].plot(kgv, ank, 's-', color='tab:purple', label='ankle pitch (walking)')
+        axs[1].axhline(80, color='r', ls='--', lw=1, label='RMD-X8 limit')
     else:
-        axs[1].text(0.5, 0.5, 'parte B non eseguibile senza core/gait_core.py',
+        axs[1].text(0.5, 0.5, 'part B not runnable without core/gait_core.py',
                     ha='center', va='center', transform=axs[1].transAxes)
-    axs[1].set_xlabel('carico in mano [kg]')
-    axs[1].set_ylabel('picco coppia [Nm]')
-    axs[1].set_title('marcia sul posto: %+.2f Nm/kg roll, %+.2f Nm/kg caviglia' %
+    axs[1].set_xlabel('hand payload [kg]')
+    axs[1].set_ylabel('peak torque [N·m]')
+    axs[1].set_title('walking in place: %+.2f N·m/kg roll, %+.2f N·m/kg ankle' %
                      (slope_roll, slope_ank))
     if len(roll):
         axs[1].legend(fontsize=8)

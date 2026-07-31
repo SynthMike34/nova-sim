@@ -134,9 +134,9 @@ class Banco:
         for i in range(int(8.0/dt)):
             t = i*dt
             if abs(t - 3.0) < dt/2:
-                if direzione == 'avanti':
+                if direzione == 'forward':
                     d.qvel[0] += vel
-                elif direzione == 'indietro':
+                elif direzione == 'backward':
                     d.qvel[0] -= vel
                 else:
                     d.qvel[1] += vel
@@ -155,7 +155,7 @@ class Banco:
 
     def inviluppo(self):
         out = dict(h_cm=self.h, com_z_m=round(self.com_z, 3))
-        for direzione in ('avanti', 'indietro', 'laterale'):
+        for direzione in ('forward', 'backward', 'lateral'):
             vmax = 0.0
             pk = dict(pitch=0.0, roll=0.0)
             v = 0.05
@@ -177,8 +177,8 @@ def campagna():
     print('Inviluppo di equilibrio vs altezza tacco. Soglia minima [A]: '
           '0,30 av / 0,25 ind / 0,15 lat (accompagnata).')
     print('%4s | %7s | %7s %8s %9s | %10s %9s | %s' %
-          ('h', 'CoM [m]', 'avanti', 'indietro', 'laterale',
-           'cav.pitch', 'cav.roll', 'soglia'))
+          ('h', 'CoM [m]', 'forward', 'backward', 'lateral',
+           'cav.pitch', 'cav.roll', 'threshold'))
     ris = []
     for h in ALTEZZE:
         b = Banco(h)
@@ -199,21 +199,21 @@ def campagna():
     import matplotlib.pyplot as plt
     H = [r['h_cm'] for r in ris]
     fig, axs = plt.subplots(2, 1, figsize=(9, 7), sharex=True)
-    for k, col in (('avanti', 'tab:blue'), ('indietro', 'tab:green'),
-                   ('laterale', 'tab:red')):
+    for k, col in (('forward', 'tab:blue'), ('backward', 'tab:green'),
+                   ('lateral', 'tab:red')):
         axs[0].plot(H, [r['v_' + k] for r in ris], 'o-', color=col, label=k)
         axs[0].axhline(SOGLIA[k], color=col, ls=':', lw=0.8)
-    axs[0].set_ylabel('spinta massima assorbita [m/s]')
-    axs[0].set_title('TX-34: inviluppo di equilibrio vs altezza tacco '
+    axs[0].set_ylabel('max absorbed push [m/s]')
+    axs[0].set_title('TX-34: balance envelope vs heel height '
                      '(punteggiate = soglie minime [A])')
     axs[0].legend()
     axs[1].plot(H, [max(r['Nm_cav_avanti']['pitch'], r['Nm_cav_indietro']['pitch'])
-                    for r in ris], 's-', color='tab:purple', label='caviglia pitch')
+                    for r in ris], 's-', color='tab:purple', label='ankle pitch')
     axs[1].plot(H, [max(r['Nm_cav_laterale']['roll'], r['Nm_cav_avanti']['roll'])
-                    for r in ris], 'd-', color='tab:orange', label='caviglia roll')
-    axs[1].axhline(80, color='r', ls='--', lw=1, label='limite RMD-X8')
-    axs[1].set_xlabel('altezza tacco [cm]')
-    axs[1].set_ylabel('coppia al limite inviluppo [Nm]')
+                    for r in ris], 'd-', color='tab:orange', label='ankle roll')
+    axs[1].axhline(80, color='r', ls='--', lw=1, label='RMD-X8 limit')
+    axs[1].set_xlabel('heel height [cm]')
+    axs[1].set_ylabel('torque at envelope limit [N·m]')
     axs[1].legend()
     fig.tight_layout()
     fig.savefig(_OUT('tacchi_param.png'), dpi=150)

@@ -226,17 +226,17 @@ def campagna():
         tr = r['tracce']
         axs[0].plot(tr['t'], tr['z'], color=col, lw=2,
                     label='%s (za %.2f)' % (eti, zpick))
-    axs[0].set_xlabel('tempo [s]'); axs[0].set_ylabel('quota bacino [m]')
-    axs[0].set_title('discesa piu profonda certificabile'); axs[0].legend()
+    axs[0].set_xlabel('time [s]'); axs[0].set_ylabel('pelvis height [m]')
+    axs[0].set_title('deepest squat depth [C]'); axs[0].legend()
     axs[0].grid(alpha=0.3)
     vs = [zs or 0, zc or 0]
-    axs[1].bar(['senza\ndita', 'con\nRAMPINO'], vs,
-               color=['tab:gray', 'tab:green'], width=0.5)
+    axs[1].bar(['no\ntoes', 'with\nHOOK'], vs,
+               color=['#4a4a4a', '#a03030'], width=0.5)
     for x, v in enumerate(vs):
         axs[1].text(x, v, '%.2f m' % v, ha='center', va='bottom',
                     fontsize=13, fontweight='bold')
-    axs[1].set_ylabel('za di riferimento [m] (piu basso = piu giu)')
-    axs[1].set_title('F1-A v1.1: il rampino plantare')
+    axs[1].set_ylabel('reference za [m] (lower = deeper)')
+    axs[1].set_title('F1-A: plantar hook - rejected (shallower, not deeper)')
     axs[1].grid(alpha=0.3, axis='y')
     fig.tight_layout()
     fig.savefig(_OUT('f1a_squat.png'), dpi=150)

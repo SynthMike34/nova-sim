@@ -280,15 +280,15 @@ def campagna():
             import matplotlib.pyplot as plt
             fig, axs = plt.subplots(2, 1, figsize=(9, 6), sharex=True)
             axs[0].plot(tr['t'], [z*100 for z in tr['zp']], color='tab:purple', lw=1.3)
-            axs[0].set_ylabel('quota piedi [cm]')
-            axs[0].set_title('SALTO: volo %.0f ms, piedi +%.1f cm, ginocchio %.0f/120 Nm'
+            axs[0].set_ylabel('foot clearance [cm]')
+            axs[0].set_title('JUMP: flight %.0f ms, feet +%.1f cm, knee %.0f/120 N·m'
                              % (r['t_volo_ms'], r['clearance_piedi_cm'],
                                 r['picchi_spinta_Nm']['knee']))
             axs[1].plot(tr['t'], tr['tk'], color='tab:blue', lw=1.0)
             axs[1].axhline(120, color='r', ls='--', lw=1)
-            axs[1].axhline(-120, color='r', ls='--', lw=1, label='limite RMD-X12')
-            axs[1].set_ylabel('coppia ginocchio [Nm]')
-            axs[1].set_xlabel('tempo [s]')
+            axs[1].axhline(-120, color='r', ls='--', lw=1, label='RMD-X12 limit')
+            axs[1].set_ylabel('knee torque [N·m]')
+            axs[1].set_xlabel('time [s]')
             axs[1].legend(fontsize=8)
             fig.tight_layout()
             fig.savefig(_OUT('salto.png'), dpi=150)
@@ -317,17 +317,17 @@ def campagna():
     import matplotlib.pyplot as plt
     fig, axs = plt.subplots(3, 1, figsize=(9, 8), sharex=True)
     axs[0].plot(tr['t'], [z*100 for z in tr['zp']], color='tab:purple', lw=1.3)
-    axs[0].set_ylabel('quota piedi [cm]')
-    axs[0].set_title('SALTO: volo %.0f ms, piedi +%.1f cm, ginocchio %.0f/120 Nm -> %s'
+    axs[0].set_ylabel('foot clearance [cm]')
+    axs[0].set_title('JUMP: flight %.0f ms, feet +%.1f cm, knee %.0f/120 N·m -> %s'
                      % (r['t_volo_ms'], r['clearance_piedi_cm'],
                         r['picchi_spinta_Nm']['knee'], esito))
     axs[1].plot(tr['t'], tr['fs'], color='tab:red', lw=1.0)
-    axs[1].set_ylabel('forza al suolo [N]')
+    axs[1].set_ylabel('ground force [N]')
     axs[2].plot(tr['t'], tr['tk'], color='tab:blue', lw=1.0)
     axs[2].axhline(120, color='r', ls='--', lw=1)
-    axs[2].axhline(-120, color='r', ls='--', lw=1, label='limite RMD-X12')
-    axs[2].set_ylabel('coppia ginocchio [Nm]')
-    axs[2].set_xlabel('tempo [s]')
+    axs[2].axhline(-120, color='r', ls='--', lw=1, label='RMD-X12 limit')
+    axs[2].set_ylabel('knee torque [N·m]')
+    axs[2].set_xlabel('time [s]')
     axs[2].legend(fontsize=8)
     fig.tight_layout()
     fig.savefig(_OUT('salto.png'), dpi=150)

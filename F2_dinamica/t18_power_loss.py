@@ -169,7 +169,7 @@ def campagna():
     esiti = {}
     salva = {}
     tracce_all = {}
-    for nome, fren in (('COAST', 1.0), ('FRENATA x5', 5.0), ('FRENATA x20', 20.0)):
+    for nome, fren in (('COAST', 1.0), ('BRAKING x5', 5.0), ('BRAKING x20', 20.0)):
         r = esegui(frenata=fren, registra=True)
         esiti[nome] = valuta(r)
         salva[nome] = dict((k, v) for k, v in r.items() if k != 'tracce')
@@ -195,20 +195,20 @@ def campagna():
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
     fig, axs = plt.subplots(2, 1, figsize=(9, 6), sharex=True)
-    colori = {'COAST': 'tab:blue', 'FRENATA x5': 'tab:green', 'FRENATA x20': 'tab:orange'}
+    colori = {'COAST': 'tab:blue', 'BRAKING x5': 'tab:green', 'BRAKING x20': 'tab:orange'}
     for nome, tr in tracce_all.items():
         col = colori[nome]
-        axs[0].plot(tr['t'], tr['z'], color=col, lw=1.2, label='bacino - ' + nome)
+        axs[0].plot(tr['t'], tr['z'], color=col, lw=1.2, label='pelvis - ' + nome)
         axs[0].plot(tr['t'], tr['zt'], color=col, lw=0.8, ls=':',
-                    label='testa - ' + nome)
+                    label='head - ' + nome)
         axs[1].plot(tr['t'], tr['qv'], color=col, lw=1.2, label=nome)
     axs[0].axvline(T_STAND, color='r', ls='--', lw=1)
-    axs[1].axvline(T_STAND, color='r', ls='--', lw=1, label='taglio alimentazione')
-    axs[1].axhline(SOGLIA_QVEL, color='r', ls=':', lw=1, label='soglia [A]')
-    axs[0].set_ylabel('quota [m]')
-    axs[1].set_ylabel('max |vel giunto| [rad/s]')
-    axs[1].set_xlabel('tempo [s]')
-    axs[0].set_title('T18 power-loss: cedimento da posizione eretta')
+    axs[1].axvline(T_STAND, color='r', ls='--', lw=1, label='power cut')
+    axs[1].axhline(SOGLIA_QVEL, color='r', ls=':', lw=1, label='threshold [A]')
+    axs[0].set_ylabel('height [m]')
+    axs[1].set_ylabel('max |joint vel| [rad/s]')
+    axs[1].set_xlabel('time [s]')
+    axs[0].set_title('T18 power-loss: collapse from upright stance')
     axs[0].legend(fontsize=8)
     axs[1].legend(fontsize=8)
     fig.tight_layout()

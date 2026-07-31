@@ -220,17 +220,17 @@ def campagna():
     import matplotlib.pyplot as plt
     fig, axs = plt.subplots(2, 1, figsize=(9, 7))
     axs[0].plot(tr['t'], tr['F'], color='tab:red', lw=1.0)
-    axs[0].axhline(SOGLIA_E2, color='g', ls='--', lw=1, label='soglia E2 150 N')
-    axs[0].set_xlabel('tempo [s]')
-    axs[0].set_ylabel('forza totale al suolo [N]')
-    axs[0].set_title('T1-sim S1: drop laterale CoM 60 cm - v %.2f m/s, picco %.0f N [A rigidezza]'
+    axs[0].axhline(SOGLIA_E2, color='g', ls='--', lw=1, label='E2 threshold 150 N')
+    axs[0].set_xlabel('time [s]')
+    axs[0].set_ylabel('total ground force [N]')
+    axs[0].set_title('T1-sim S1: lateral CoM drop 60 cm - v %.2f m/s, peak %.0f N [A stiffness]'
                      % (ris['S1 drop 60 cm']['v_impatto_m_s'],
                         ris['S1 drop 60 cm']['F_picco_tot_N']))
     axs[0].legend(fontsize=8)
     zone = ris['S1 drop 60 cm']['forze_per_segmento']
     axs[1].barh(list(zone.keys())[::-1], list(zone.values())[::-1], color='tab:orange')
-    axs[1].set_xlabel('picco per segmento [N]')
-    axs[1].set_title('dove colpisce: segmenti a contatto (S1)')
+    axs[1].set_xlabel('peak per segment [N]')
+    axs[1].set_title('impact map: segments in contact (S1)')
     fig.tight_layout()
     fig.savefig(_OUT('t1_caduta.png'), dpi=150)
     print('Salvato t1_caduta.png')

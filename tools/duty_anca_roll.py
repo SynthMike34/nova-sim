@@ -106,7 +106,7 @@ def main():
                  o['s_sopra_per_passo']))
     peggio = max(('r', 'l'), key=lambda k: out[k]['frazione_sopra'])
     o = out[peggio]
-    print('LATO PEGGIORE (%s): %.1f%% del ciclo sopra soglia | media %.1f Nm '
+    print('LATO PEGGIORE (%s): %.1f%% of cycle above soglia | media %.1f Nm '
           '· picco %.1f Nm · %.2f s/passo'
           % (peggio.upper(), 100 * o['frazione_sopra'], o['media_sopra_Nm'],
              o['picco_Nm'], o['s_sopra_per_passo']))
@@ -124,15 +124,15 @@ def main():
     fig, ax = plt.subplots(figsize=(10, 4.2))
     for lato, col in (('r', '#1f77b4'), ('l', '#2ca02c')):
         ax.plot(T, out[lato]['tau'], color=col, lw=1.1,
-                label='|coppia| anca roll ' + lato.upper())
+                label='hip roll |torque| ' + lato.upper())
     ax.axhline(SOGLIA, color='crimson', ls='--', lw=1.4,
-               label='nominale continuativo X8 = %.0f Nm' % SOGLIA)
+               label='X8 continuous rating = %.0f N·m' % SOGLIA)
     tp = out[peggio]['tau']
     ax.fill_between(T, SOGLIA, tp, where=tp > SOGLIA,
                     color='crimson', alpha=0.25)
-    ax.set_xlabel('tempo [s]')
-    ax.set_ylabel('|coppia| [Nm]')
-    ax.set_title('Duty anca roll - camminata campione: %.1f%% del ciclo sopra '
+    ax.set_xlabel('time [s]')
+    ax.set_ylabel('|torque| [N·m]')
+    ax.set_title('Hip roll duty - sample gait: %.1f%% of cycle above '
                  '%d Nm · media %.1f · picco %.1f (lato %s)'
                  % (100 * o['frazione_sopra'], int(SOGLIA),
                     o['media_sopra_Nm'], o['picco_Nm'], peggio.upper()))

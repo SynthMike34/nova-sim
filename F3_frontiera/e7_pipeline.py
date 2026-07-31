@@ -133,8 +133,8 @@ def campagna():
         ax.text(x, v, '%.2f s' % v, ha='center', va='bottom',
                 fontsize=14, fontweight='bold')
     ax.axhline(0.35, color='r', ls='--', lw=1.5, label='target TERA 0,35 s')
-    ax.set_ylabel('fermo eretta dopo il salto [s]', fontsize=12)
-    ax.set_title('E7 - PILA COMPLETA con toe-brake (scoperte 30c+34)',
+    ax.set_ylabel('time to upright rest after jump [s]', fontsize=12)
+    ax.set_title('E7 landing stack - claim withdrawn at 66.23 kg',
                  fontsize=13, fontweight='bold')
     ax.legend(fontsize=11)
     ax.grid(alpha=0.3, axis='y')

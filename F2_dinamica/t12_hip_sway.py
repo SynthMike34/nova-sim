@@ -146,15 +146,15 @@ def campagna():
         axs[0].plot(t, phi, color='tab:purple', lw=1)
         for yv in (8, 12, -8, -12):
             axs[0].axhline(yv, color=('g' if abs(yv) == 8 else 'r'), ls='--', lw=0.8)
-        axs[0].set_ylabel('rollio bacino [deg]')
-        axs[0].set_title('T12 hip sway - cmd %.0f deg @ %.1f Hz -> bacino %.1f deg, picco %.1f Nm'
+        axs[0].set_ylabel('pelvis roll [deg]')
+        axs[0].set_title('T12 hip sway - cmd %.0f deg @ %.1f Hz -> pelvis %.1f deg, peak %.1f N·m'
                          % (CONFIG_CERT[0], CONFIG_CERT[1], r['amp_mis'], r['picco_Nm']))
-        axs[1].plot(t, fr, color='tab:blue', lw=1, label='anca roll dx')
-        axs[1].plot(t, fl, color='tab:green', lw=1, label='anca roll sx')
+        axs[1].plot(t, fr, color='tab:blue', lw=1, label='hip roll R')
+        axs[1].plot(t, fl, color='tab:green', lw=1, label='hip roll L')
         axs[1].axhline(LIMITE_ROLL, color='r', ls='--', lw=1)
-        axs[1].axhline(-LIMITE_ROLL, color='r', ls='--', lw=1, label='limite RMD-X8')
-        axs[1].set_ylabel('coppia [Nm]')
-        axs[1].set_xlabel('tempo [s]')
+        axs[1].axhline(-LIMITE_ROLL, color='r', ls='--', lw=1, label='RMD-X8 limit')
+        axs[1].set_ylabel('torque [N·m]')
+        axs[1].set_xlabel('time [s]')
         axs[1].legend(fontsize=8)
         fig.tight_layout()
         fig.savefig(_OUT('t12_hip_sway.png'), dpi=150)

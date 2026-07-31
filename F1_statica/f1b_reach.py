@@ -9,7 +9,7 @@ PASS: target raggiunto entro 5 cm, equilibrio mantenuto, coppie sotto forcerange
     python f1b_reach.py --test    campagna: envelope + tabella + PNG + JSON
 
 Misure per direzione: distanza massima dalla spalla [m] · errore finale [mm] ·
-spostamento CoM [mm] · picchi coppia spalla/gomito vs forcerange XML (40/40/30 Nm)
+spostamento CoM [mm] · picchi coppia spalla/gomito vs forcerange XML (43/43/30 Nm)
 · angoli articolari usati vs range. Braccio: L1=0,24 + L2=0,25 (spalla->mano).
 """
 import os as _os
@@ -223,7 +223,7 @@ def campagna():
                 caduta = True
                 break
         dy = abs(float(d2.xpos[BH][1]) - y0)
-        r = dict(direzione='laterale', qr_cmd_deg=round(np.degrees(qr), 1),
+        r = dict(direzione='lateral', qr_cmd_deg=round(np.degrees(qr), 1),
                  caduta=caduta, escursione_y_m=round(dy, 3),
                  picco_roll_Nm=round(pic, 1))
         tab.append(r)
@@ -231,7 +231,7 @@ def campagna():
               (np.degrees(qr), dy, pic, 'CADUTA' if caduta else 'in equilibrio'))
         if not caduta:
             best_lat = dict(dist_spalla_m=dy)
-    ris['laterale'] = best_lat
+    ris['lateral'] = best_lat
     print('%9s %7s | %5s %9s %7s %8s %8s %8s  %s' %
           ('direz.', 'd [m]', 'ok', 'err [mm]', 'dCoM', 'Nm spal', 'Nm gom', 'ang sp',
            'esito'))
@@ -291,18 +291,18 @@ def campagna():
         tr = r['tracce']
         fig, axs = plt.subplots(3, 1, figsize=(9, 8), sharex=True)
         axs[0].plot(tr['t'], tr['err'], color='tab:purple', lw=1.2)
-        axs[0].axhline(50, color='g', ls='--', lw=1, label='tolleranza 50 mm')
-        axs[0].set_ylabel('errore mano-target [mm]')
-        axs[0].set_title('F1-B reach ALTO 0,43 m: err fin %.0f mm - spalla SATURA a %.0f Nm' %
+        axs[0].axhline(50, color='g', ls='--', lw=1, label='50 mm tolerance')
+        axs[0].set_ylabel('hand-target error [mm]')
+        axs[0].set_title('F1-B HIGH reach 0.43 m: final err %.0f mm - shoulder SATURATED at %.0f N·m' %
                          (r['err_finale_mm'], r['picco_spalla_Nm']))
         axs[0].legend(fontsize=8)
         axs[1].plot(tr['t'], tr['pitch'], color='tab:orange', lw=1.2)
-        axs[1].set_ylabel('inclinazione busto [deg]')
+        axs[1].set_ylabel('torso lean [deg]')
         axs[2].plot(tr['t'], tr['ts'], color='tab:blue', lw=1.2)
-        axs[2].axhline(40, color='r', ls='--', lw=1, label='forcerange spalla')
-        axs[2].axhline(-40, color='r', ls='--', lw=1)
-        axs[2].set_ylabel('coppia spalla [Nm]')
-        axs[2].set_xlabel('tempo [s]')
+        axs[2].axhline(43, color='r', ls='--', lw=1, label='shoulder forcerange (X8-120)')
+        axs[2].axhline(-43, color='r', ls='--', lw=1)
+        axs[2].set_ylabel('shoulder torque [N·m]')
+        axs[2].set_xlabel('time [s]')
         axs[2].legend(fontsize=8)
         fig.tight_layout()
         fig.savefig(_OUT('f1b_reach.png'), dpi=150)
@@ -313,7 +313,7 @@ def demo():
     import mujoco.viewer
     print(__doc__)
     sh = _spalla0()
-    seq = [('avanti', (sh[0]+0.45, sh[1], sh[2]), None),
+    seq = [('forward', (sh[0]+0.45, sh[1], sh[2]), None),
            ('alto', (sh[0]+0.10, sh[1], sh[2]+0.42), None),
            ('basso', (sh[0]+0.15, sh[1], sh[2]-0.42), None),
            ('laterale (abduzione)', None, -1.4)]

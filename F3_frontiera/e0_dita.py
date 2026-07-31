@@ -349,7 +349,7 @@ def campagna():
               ('salto', 'quota_cm', 'quota salto [cm]'),
               ('atterraggio_E6', 'fermo_s', 'fermo eretta [s]')]
     for ax, (k, campo, tit) in zip(axs, coppie):
-        eti = ['dita\npassive', 'dita\nATTIVE']
+        eti = ['passive\ntoes', 'ACTIVE\ntoes']
         vals = [ris[k]['senza'][campo], ris[k]['con'][campo]]
         col = ['tab:gray', 'tab:green']
         if 'alluce' in ris[k]:
@@ -362,7 +362,7 @@ def campagna():
                     fontsize=12, fontweight='bold')
         ax.set_title(tit, fontsize=12, fontweight='bold')
         ax.grid(alpha=0.3, axis='y')
-    fig.suptitle('E0-TOES - le dita si svegliano: confronto [C]', fontsize=13)
+    fig.suptitle('E0 toes - canon @66.23 kg, computed in simulation', fontsize=13)
     fig.tight_layout()
     fig.savefig(_OUT('e0_dita.png'), dpi=150)
     print('Salvato e0_dita.png')
