@@ -134,9 +134,9 @@ class Banco:
         for i in range(int(8.0/dt)):
             t = i*dt
             if abs(t - 3.0) < dt/2:
-                if direzione == 'forward':
+                if direzione == 'avanti':
                     d.qvel[0] += vel
-                elif direzione == 'backward':
+                elif direzione == 'indietro':
                     d.qvel[0] -= vel
                 else:
                     d.qvel[1] += vel
@@ -155,7 +155,7 @@ class Banco:
 
     def inviluppo(self):
         out = dict(h_cm=self.h, com_z_m=round(self.com_z, 3))
-        for direzione in ('forward', 'backward', 'lateral'):
+        for direzione in ('avanti', 'indietro', 'laterale'):
             vmax = 0.0
             pk = dict(pitch=0.0, roll=0.0)
             v = 0.05
@@ -199,9 +199,11 @@ def campagna():
     import matplotlib.pyplot as plt
     H = [r['h_cm'] for r in ris]
     fig, axs = plt.subplots(2, 1, figsize=(9, 7), sharex=True)
-    for k, col in (('forward', 'tab:blue'), ('backward', 'tab:green'),
-                   ('lateral', 'tab:red')):
-        axs[0].plot(H, [r['v_' + k] for r in ris], 'o-', color=col, label=k)
+    for k, col in (('avanti', 'tab:blue'), ('indietro', 'tab:green'),
+                   ('laterale', 'tab:red')):
+        axs[0].plot(H, [r['v_' + k] for r in ris], 'o-', color=col,
+                    label={'avanti': 'forward', 'indietro': 'backward',
+                           'laterale': 'lateral'}[k])
         axs[0].axhline(SOGLIA[k], color=col, ls=':', lw=0.8)
     axs[0].set_ylabel('max absorbed push [m/s]')
     axs[0].set_title('TX-34: balance envelope vs heel height '
