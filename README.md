@@ -6,6 +6,12 @@
 MuJoCo 3.x simulation campaign for the TX-34 NOVA bipedal robot.
 66.23 kg · 25 DOF · Python 3.10 · ROS2-compatible URDF
 
+> **The model walks.** It starts from rest in 2.4 s, walks forward for 120 s
+> (654 support events, +2.5 m, reproduced on four MuJoCo builds and two operating
+> systems) and stops standing. Five of six gait criteria met. What it does not do —
+> carry a payload while walking, land a jump, walk sideways — is measured and
+> declared below.
+
 ---
 
 **Scope.** This repository contains the **locomotion and posture** simulation campaign only:
@@ -120,7 +126,7 @@ session, use `--test`.
 |---|---|---|
 | `F1_statica/f1a_squat.py` | Deep squat | za = 0.60 m |
 | `F1_statica/f1b_reach.py` | Reach envelope | 0.48 / 0.43 / 0.47 / 0.47 m |
-| `F1_statica/f1c_carico.py` | Load carrying | 6 kg static · 2 kg walking |
+| `F1_statica/f1c_carico.py` | Load carrying | 6 kg static; **walking payload retracted** — the canon gait falls under 100 g (see Key results) |
 | `F1_statica/f1d_seduta.py` | Sit and stand up | 3.00 s · seat reaction 649 N · hip 73.4 Nm (size-36 foot) |
 
 ### F2 — Dynamic tests
@@ -139,12 +145,12 @@ session, use `--test`.
 | `F3_frontiera/e1_capture.py` | Capture-point stepping | 6 support events · 2–4 cm placement error |
 | `F3_frontiera/e2_timing.py` | Event-triggered timing | 32 synchronised cycles |
 | `F3_frontiera/e3_accoppiato.py` | Commanded forward walking (historical bench, kp 600) | 11 support events · progress figure retired |
-| `F3_frontiera/camminata_avanti.py` | **Forward walking - Canon C (plateau)** | **654 supports · 120 s alive · +2.49/+2.62/+2.58 m on 3 builds** (max measured +9.6956) |
+| `F3_frontiera/camminata_avanti.py` | **Forward walking - Canon C (plateau)** | **654 supports · 120 s alive · +2.49 / +2.62 / +2.66 / +2.58 m on 4 builds** (3.11.0 / 3.2.7 / 3.10.0 / 3.1.6; max measured +9.6956) |
 | `F3_frontiera/camminata_indietro.py` | Long mode (0.28 s support) | 420 supports · −25.93 m · 12.3 cm stride (roll −0.035) |
-| `F3_frontiera/partenza_arresto.py` | Start from rest / stop | first support 2.41 s · standing after stop · −1.76 cm inertia (roll −0.035) |
+| `F3_frontiera/partenza_arresto.py` | Start from rest / stop | first support 2.41 s · standing after stop · inertia −1.8…−3.6 cm by build (−1.76 on 3.11.0) |
 | `F3_frontiera/e3_rms.py` | Hip roll thermal load | 53.7 Nm RMS in regime |
 | `F3_frontiera/salto.py` | Jump | 250 ms flight · feet +8.2 cm · CoM +5.3 cm from take-off (B44) |
-| `F3_frontiera/e0_dita.py` | Toe mechanics | hallux +150% jump height |
+| `F3_frontiera/e0_dita.py` | Toe mechanics | hallux extension at take-off: no effect on the size-36 foot (250→245 ms, 8.2→8.1 cm) — B45: 6 N·m cap, lever arm halved by the short forefoot; the +150% was the old 29.5 cm foot, retracted |
 | `F3_frontiera/e4_atterra.py` `e5_volano.py` `e6_supervisore.py` `e7_pipeline.py` | Landing pipeline stages | claim withdrawn — see Limitations |
 
 ### Core and tools
@@ -163,14 +169,14 @@ session, use `--test`.
 
 | Result | Value | Class |
 |---|---|---|
-| Static balance envelope (fwd / back / lat) | 0.60 / 0.50 / 0.40 m/s | [C] |
+| Static balance envelope (fwd / back / lat) | 0.35 / 0.50 / 0.35 m/s on the size-36 foot (B46: the forefoot governs the front, −42%; the old 29.5 cm foot measured 0.60/0.50/0.40) | [C] |
 | Squat depth | 0.60 m | [C] at software limits |
 | Sit-to-stand | 3.00 s, feet-tucked strategy | [C] |
 | Reach envelope (fwd / up / down / lat) | 0.48 / 0.43 / 0.47 / 0.47 m | [C] |
-| Payload (static / walking) | 6 kg / 2 kg | [C] |
+| Payload (static / walking) | **6 kg static.** **Walking: retracted** — the 2 kg figure was the old 29.5 cm foot. On the canon configuration (size-36 foot, E2 gait) **100 g on the torso brings it down** (12.9 s), 250 g in one hand halves its life, flip-flops end it in 6 s. The frontal hip is at its 80 N·m cap in every row — unloaded included — and no larger actuator fixes it (60→140 N·m tried). Standing it absorbs a 0.35 m/s push; walking it cannot carry 100 g: different limits — standing, the CoM sits over the support polygon; walking, it rides 8.1 cm outside it | [C] |
 | Hip roll, postural thermal demand | 38.2 Nm RMS = 89% of nominal | [C] |
 | Jump: flight time / clearance / CoM rise | 250 ms / +8.2 cm / +5.3 cm from take-off (PUNTA 0.15, size-36 foot) | [C] |
-| Hallux contribution to jump height | +150% | [C] |
+| Hallux contribution to jump height | none on the size-36 foot (B45: 6 N·m cap, halved lever); the +150% was measured on the old 29.5 cm foot — retracted | [C] |
 | E1 capture-point support events | 6 | [C] |
 | E2 event-triggered cycles | 32 | [C] |
 | E3 commanded forward walking | 11 support events (threshold ≥ 10; measured flight 15 ms over 11.2 s — no flight phase) | [C] |
@@ -180,8 +186,8 @@ session, use `--test`.
 `[C]` computed in simulation, reproducible with `--test`.
 
 **Cross-platform reproducibility.** The torque metrics have been run on Linux (Python 3.12)
-and on Windows 10 (Python 3.10) and return identical figures to the last digit, including the
-sample count. The solver is deterministic and no result depends on the platform.
+and on Windows 10 (Python 3.10) and agree **within 0.5%**, with an **identical sample count (2232)**. The residual
+differences belong to the solver build, as with walking.
 
 ---
 
@@ -205,6 +211,8 @@ because the code and the negative result are both part of the record.
 > **Canon C — the plateau.** The walking canon is **654 supports, 120 s alive, +2.49 / +2.62 / +2.58 m on MuJoCo 3.1.6, 3.2.7 and 3.11.0, +2.66 on 3.10.0** (roll term −0.035, support imposed by clock at 0.180 s, leg kp ×2 = 400 with the feed-forward table left at ×3 — the quirk is part of the canon). Direction and order of magnitude agree across **four** solver builds (three identical runs per build) and across operating systems: on 3.10.0 the same run gives **+2.655481 m on Linux and +2.656692 m on Windows - one millimetre apart**. **+9.695622 m remains the measured maximum**, obtained at roll −0.05 on MuJoCo 3.11.0 + numpy 2.4.4 and declared for what it is: outside the −0.037…−0.034 plateau the direction of travel **alternates every ~3 thousandths of roll** (a comb, not a threshold) and depends on the numpy build as well. Event-triggered support (T_MAX 0.60) is *not* equivalent to the clock outside the campaign machine.
 >
 > **Model note.** `tx34_piedevero.xml` is the canon model **verbatim as measured**: it predates the safeguard torque alignment (C7) and actuator naming (B7) — realigning it would re-measure the canon. Its URDF carries the same pre-safeguard efforts. Declared, open item.
+>
+> **`gait_core` canary:** **(2, 0.330576)** with `tx34_v1` **as published** (C7, `waist_yaw` 2.5 N·m). The value **0.330795** is pre-C7 and is the one whose invariance was verified across three builds: **both are correct, each on its own model.**
 
 **Sensitivity is high.** A 3.3% mass change reduced the achieved forward support-event count by 42% at
 unchanged controller tuning. Any result here is conditional on a mass that has no CAD behind it.
@@ -219,7 +227,7 @@ Going from 62.8 to 66.23 kg (+5.5%):
 |---|---|
 | Ballistic (jump height) | **−54%** |
 | Contact (landing pipeline) | **−100%**, withdrawn |
-| Walking payload | **−67%** |
+| Walking payload | **retracted** — see Key results |
 | Quasi-static (balance envelope, reach) | **unchanged** |
 
 The ballistic regime is mass-sensitive; the geometry of the quasi-static support polygon is
@@ -237,6 +245,9 @@ Hip roll actuator (MyActuator RMD-X8-P20, 43 N·m continuous rating), at real wa
 | Postural (< 70 N·m) | 38.2 N·m RMS = **89% of nominal** | 70.2% | 26% |
 | Contact transients | ≈79 N·m, at the 80 N·m cap | **29.8%** | **64%** |
 | **Total, continuous walking** | **53.7 N·m = 125% of nominal** | — | — |
+
+> All thermal figures in this section are measured at leg `kp` = 200 [A] — the historical
+> sample gait. The walking canon runs at `kp` 400 (C11); stiffness is not free.
 
 **The transient peak is governed by position servo stiffness, not by gait kinematics.** With
 `forcerange` raised to ±200 N·m the demand rises to 200 and saturates that limit too, and the
