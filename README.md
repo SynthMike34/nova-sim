@@ -126,7 +126,7 @@ session, use `--test`.
 |---|---|---|
 | `F1_statica/f1a_squat.py` | Deep squat | za = 0.60 m |
 | `F1_statica/f1b_reach.py` | Reach envelope | 0.48 / 0.43 / 0.47 / 0.47 m |
-| `F1_statica/f1c_carico.py` | Load carrying | 6 kg static; **walking payload retracted** — the canon gait falls under 100 g (see Key results) |
+| `F1_statica/f1c_carico.py` | Load carrying | **2 kg** static, arm extended or tucked (elbow at its 8 N·m cap — C7 safeguard alignment); **walking payload retracted** — the canon gait falls under 100 g (see Key results) |
 | `F1_statica/f1d_seduta.py` | Sit and stand up | 3.00 s · seat reaction 649 N · hip 73.4 Nm (size-36 foot) |
 
 ### F2 — Dynamic tests
@@ -161,7 +161,7 @@ session, use `--test`.
 | `core/metriche_coppie.py` | Torque metrics against the actuator ratings |
 | `core/esporta_urdf.py` | URDF export for ROS2 |
 | `tools/duty_anca_roll.py` | Hip roll duty cycle above nominal torque |
-| `tools/confronta_range.py` | Compares model joint ranges against the software limits |
+| `tools/confronta_range.py` | Compares model joint ranges against the software limits — reports **6 known discrepancies** (elbow sign convention, wrist, knee), listed in its own output |
 
 ---
 
@@ -172,8 +172,8 @@ session, use `--test`.
 | Static balance envelope (fwd / back / lat) | 0.35 / 0.50 / 0.35 m/s on the size-36 foot (B46: the forefoot governs the front, −42%; the old 29.5 cm foot measured 0.60/0.50/0.40) | [C] |
 | Squat depth | 0.60 m | [C] at software limits |
 | Sit-to-stand | 3.00 s, feet-tucked strategy | [C] |
-| Reach envelope (fwd / up / down / lat) | 0.48 / 0.43 / 0.47 / 0.47 m | [C] |
-| Payload (static / walking) | **6 kg static.** **Walking: retracted** — the 2 kg figure was the old 29.5 cm foot. On the canon configuration (size-36 foot, E2 gait) **100 g on the torso brings it down** (12.9 s), 250 g in one hand halves its life, flip-flops end it in 6 s. The frontal hip is at its 80 N·m cap in every row — unloaded included — and no larger actuator fixes it (60→140 N·m tried). Standing it absorbs a 0.35 m/s push; walking it cannot carry 100 g: different limits — standing, the CoM sits over the support polygon; walking, it rides 8.1 cm outside it | [C] |
+| Reach envelope (fwd / up / down / lat) | 0.48 / 0.43 / 0.47 / 0.47 m (`tx34_v1` model, 29.5 cm foot — the reach envelope is set by the arm and the CoM, not by the foot) | [C] |
+| Payload (static / walking) | **2 kg static** (`f1c_carico.py`, tx34_v1 model: extended, tucked and marching all cap at 2 kg — the limiter is the **elbow at 8 N·m** after the C7 safeguard alignment; the earlier 6 kg figure predates C7). **Walking: retracted** — the 2 kg figure was the old 29.5 cm foot. On the canon configuration (size-36 foot, E2 gait) **100 g on the torso brings it down** (12.9 s), 250 g in one hand halves its life, flip-flops end it in 6 s. The frontal hip is at its 80 N·m cap in every row — unloaded included — and no larger actuator fixes it (60→140 N·m tried). Standing it absorbs a 0.35 m/s push; walking it cannot carry 100 g: different limits — standing, the CoM sits over the support polygon; walking, it rides 8.1 cm outside it | [C] |
 | Hip roll, postural thermal demand | 38.2 Nm RMS = 89% of nominal | [C] |
 | Jump: flight time / clearance / CoM rise | 250 ms / +8.2 cm / +5.3 cm from take-off (PUNTA 0.15, size-36 foot) | [C] |
 | Hallux contribution to jump height | none on the size-36 foot (B45: 6 N·m cap, halved lever); the +150% was measured on the old 29.5 cm foot — retracted | [C] |
@@ -228,10 +228,11 @@ Going from 62.8 to 66.23 kg (+5.5%):
 | Ballistic (jump height) | **−54%** |
 | Contact (landing pipeline) | **−100%**, withdrawn |
 | Walking payload | **retracted** — see Key results |
-| Quasi-static (balance envelope, reach) | **unchanged** |
+| Quasi-static (balance envelope, reach) | **unchanged with mass** — but the balance envelope changed **−42% forward** with the foot geometry, see Key results |
 
-The ballistic regime is mass-sensitive; the geometry of the quasi-static support polygon is
-not. The sensitivity also propagates into the thermal budget: the added mass required the
+The ballistic regime is mass-sensitive; the quasi-static support polygon is insensitive **to
+mass**. It is not insensitive to its own geometry: shortening the forefoot from 22.5 to 16.5 cm
+cost 42% of the forward balance envelope. The sensitivity also propagates into the thermal budget: the added mass required the
 lateral lean to go from 0.12 to 0.15 rad to keep stability, and that lean generates the
 postural component of the hip roll load below.
 
