@@ -42,8 +42,8 @@ import json
 import numpy as np
 import mujoco
 
-VERSIONE = '1.2'
-XML = _MP('tx34_v1.xml')
+VERSIONE = '1.3'
+XML = _MP('tx34_piedevero.xml')   # CANONE C (04/08): piede 16,5/6,0; il v1 (29,5) e' storia
 K1, K2, XB = 4.0, 0.8, 0.03
 KXA = 0.75                    # anche indietro con la profondita': xa = KXA*(0.78-za)
 LEAN0 = 2.0                   # busto avanti in proporzione alla profondita' (rif. assetto)

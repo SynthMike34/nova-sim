@@ -45,7 +45,7 @@ import numpy as np
 import mujoco
 import f1b_reach as R          # riuso certificato: passo(), braccio_verso(), smooth()
 
-VERSIONE = '1.3'
+VERSIONE = '1.4'
 XML = _MP('tx34_v1.xml')
 RIGA_MANO_DX = '<geom type="sphere" size="0.04" mass="0.75"/>'
 
@@ -102,7 +102,7 @@ def tieni(kg, target_rel, T=4.5, registra=False):
                 polso_Nm=round(pic['po'], 1), dCoM_mm=round(dcom*1000, 1))
 
 def marcia(kg, n_passi=2):
-    """Camminata v2 con carico: passi completati + picchi coppia gambe."""
+    """Camminata v2 con carico: appoggi completati + picchi coppia gambe."""
     from gait_core import gait
     xml_tmp = _DER('tx34_v1_carico.xml')
     open(xml_tmp, 'w').write(xml_con_carico(kg))
@@ -162,7 +162,7 @@ def campagna():
         print('      (modulo campione custodito da MIKE - vedi F0_fondamenta/README)')
     else:
         print('%5s | %6s %8s | %10s %9s %12s' %
-              ('kg', 'passi', 'caduta', 'hip pitch', 'anca roll', 'cavig. pitch'))
+              ('kg', 'appoggi', 'caduta', 'hip pitch', 'anca roll', 'cavig. pitch'))
         for kg in carichi:
             r = marcia(kg)
             ris['B'].append(r)
@@ -188,6 +188,13 @@ def campagna():
         if (not r.get('caduta')) and r['tenuto'] and r['spalla_Nm'] < 39.5:
             max_teso = r['kg']
     ok_racc = all((not r.get('caduta')) and r['tenuto'] for r in ris['A2'])
+    max_racc = 0.0
+    for r in ris['A2']:
+        if (not r.get('caduta')) and r['tenuto']:
+            max_racc = r['kg']
+    gom_sat = [r['kg'] for r in ris['A'] + ris['A2']
+               if (not r.get('caduta')) and r.get('gomito_Nm', 0.0) >= 7.95]
+    kg_gom = min(gom_sat) if gom_sat else None
     ok_marcia = (all(r['passi'] >= 2 and r['caduta'] is None for r in ris['B'])
                  if ris['B'] else False)
     print('SINTESI: spalla %.1f Nm/kg (teso) -> requisito 8 kg tesi: %.0f Nm.' %
@@ -206,11 +213,14 @@ def campagna():
         esito = 'PASS-A (B non eseguibile senza gait_core)' if ok_racc else 'PARZIALE'
     else:
         esito = 'PASS' if (ok_racc and max_marcia >= 6.0) else 'PARZIALE'
-    print('ESITO F1-C: %s - claim "8 kg" (par.3.1): raccolta max 6 kg [C];'
-          ' in marcia max %.0f kg (anca roll satura); a braccio teso richiede'
-          ' %.0f Nm di spalla (oltre i 43 (X8) del modello).' %
-          (esito, max_marcia, ris['A'][0]['spalla_Nm'] + slope_sp*8))
+    print('ESITO F1-C: %s - claim "8 kg" (par.3.1): teso max %.0f / raccolta max %.0f /'
+          ' marcia max %.0f kg [C]%s; estrapolazione spalla per 8 kg tesi: %.0f Nm.' %
+          (esito, max_teso, max_racc, max_marcia,
+           ('; limitatore: gomito al cap 8 Nm (safeguard) da %.0f kg' % kg_gom)
+           if kg_gom is not None else '',
+           ris['A'][0]['spalla_Nm'] + slope_sp*8))
     json.dump(dict(versione=VERSIONE, esito=esito,
+                   carico_max_raccolta_kg=max_racc,
                    spalla_Nm_per_kg=round(slope_sp, 2),
                    requisito_spalla_8kg_tesi_Nm=round(ris['A'][0]['spalla_Nm']+slope_sp*8, 1),
                    carico_max_teso_43Nm_kg=max_teso, carico_max_marcia_kg=max_marcia,

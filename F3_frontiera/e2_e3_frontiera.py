@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 e2_e3_frontiera.py - figura della frontiera E2 vs E3.
-Confronta i passi del ciclo a evento (E2) con quelli della marcia avanti
+Confronta gli appoggi del ciclo a evento (E2) con quelli della marcia avanti
 comandata (E3). I due conteggi sono letti dalla chiave canone_rettificato di
 config/joint_limits_v2.json, non scritti a mano.
 
@@ -47,7 +47,7 @@ def dal_canone():
     d = json.load(open(_MP('joint_limits_v2.json'), encoding='utf-8'))
     testo = json.dumps(d.get('_nova_sim_campaign_v1', {}), ensure_ascii=False)
     e2 = re.search(r'E2\s+(\d+)\s+cicli', testo)
-    e3 = re.search(r'E3\s+(\d+)\s+passi', testo)
+    e3 = re.search(r'E3\s+(\d+)\s+appoggi', testo)
     if not (e2 and e3):
         raise SystemExit('conteggi E2/E3 non trovati nella chiave di canone')
     return int(e2.group(1)), int(e3.group(1))
@@ -59,7 +59,7 @@ def main():
 
     n2, n3 = dal_canone()
     rap = n2 / float(n3)
-    print(' E2 %d cycles | E3 %d steps | ratio %.1f' % (n2, n3, rap))
+    print(' E2 %d cycles | E3 %d support events | ratio %.1f' % (n2, n3, rap))
 
     fig, ax = plt.subplots(figsize=(7.2, 5.2))
     barre = ax.bar(['E2\nevent-triggered timing,\nretrograde equilibrium',
@@ -82,7 +82,7 @@ def main():
     fig.savefig(_OUT('e2_e3_frontiera.png'), dpi=150)
     print('Salvato e2_e3_frontiera.png')
 
-    json.dump(dict(versione=VERSIONE, E2_cicli=n2, E3_passi=n3,
+    json.dump(dict(versione=VERSIONE, E2_cicli=n2, E3_appoggi=n3,
                    rapporto=round(rap, 1)),
               open(_OUT('e2_e3_frontiera.json'), 'w'), indent=1)
 

@@ -43,7 +43,7 @@ import importlib
 import numpy as np
 import mujoco
 
-VERSIONE = '0.6'
+VERSIONE = '0.7'
 TOE_PUSH = 0.45        # rad di flessione nella spinta (solo tratto FINALE)
 H_PUSH, T_PUSH2 = 0.70, 0.42   # Step 2: alluce profondo (40 gr), dita 2-5 leggere (24)
 H_BRAKE, T_BRAKE, T_RITARDO = 0.50, 0.50, 0.025  # brake asimmetrico (toes +25 ms)
@@ -196,12 +196,14 @@ def genera_toes_xml():
         blocco = BODY_R.replace('r_', lato + '_')
         assert blocco in s, 'blocco toe %s non trovato' % lato
         s = s.replace(blocco, _blocco_split(lato), 1)
-        att = '<position joint="%s_toe_pitch" kp="30" forcerange="-6 6"/>' % lato
-        assert att in s
-        s = s.replace(att,
-            '<position joint="%s_hallux_pitch" kp="30" forcerange="-4 4"/>\n'
-            '    <position joint="%s_toes_pitch" kp="30" forcerange="-3 3"/>'
-            % (lato, lato), 1)
+        import re as _re
+        patt = _re.compile(r'<position (?:name="%s_toe_pitch" )?joint="%s_toe_pitch"'
+                           r' kp="30" forcerange="-6 6"/>' % (lato, lato))
+        assert len(patt.findall(s)) == 1, 'attuatore toe %s: attese 1 riga' % lato
+        s = patt.sub(
+            '<position name="%s_hallux_pitch" joint="%s_hallux_pitch" kp="30" forcerange="-4 4"/>\n'
+            '    <position name="%s_toes_pitch" joint="%s_toes_pitch" kp="30" forcerange="-3 3"/>'
+            % (lato, lato, lato, lato), s, count=1)
     open(_DER(XML_TOES), 'w').write(s)
     m = mujoco.MjModel.from_xml_path(XML_TOES)
     total_mass = m.body_mass.sum()

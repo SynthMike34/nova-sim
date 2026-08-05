@@ -1,9 +1,9 @@
 <mujoco model="TX34_NOVA_v1">
-  <!-- TX-34 NOVA - modello semplificato v0
-       Statura ~1,55 m, ~38 kg. 25 DOF attuati + base libera.
-       Gambe 7 DOF/lato (anca sferica 3 + ginocchio + caviglia 2 + dita collettive 1)
-       come da TDD par.3.1. Masse e proporzioni = segnaposto da allineare a par.3.12.
-       Avvio:  python -m mujoco.viewer - -mjcf tx34_v0.xml   (togliere lo spazio tra i due trattini) -->
+  <!-- TX-34 NOVA - modello locomozione v1
+       Statura ~1,55 m, massa 66,228 kg (canone 28/07/2026: chiave in config/joint_limits_v2.json).
+       25 DOF attuati + base libera. Gambe 7 DOF/lato (anca sferica 3 + ginocchio +
+       caviglia 2 + dita collettive 1).
+       Avvio:  python -m mujoco.viewer - -mjcf models/tx34_v1.xml   (togliere lo spazio tra i due trattini) -->
   <compiler angle="radian" autolimits="true"/>
   <option timestep="0.005"/>
 
@@ -120,33 +120,38 @@
   </worldbody>
 
   <actuator>
-    <position joint="waist_yaw" kp="100" forcerange="-30 30"/>
-    <position joint="neck_yaw" kp="30" forcerange="-10 10"/>
-    <position joint="neck_pitch" kp="30" forcerange="-10 10"/>
-    <position joint="r_shoulder_pitch" kp="60" forcerange="-43 43"/>
-    <position joint="r_shoulder_roll" kp="60" forcerange="-20 20"/>
-    <position joint="r_elbow" kp="40" forcerange="-30 30"/>
-    <position joint="r_wrist_pitch" kp="20" forcerange="-10 10"/>
-    <position joint="l_shoulder_pitch" kp="60" forcerange="-43 43"/>
-    <position joint="l_shoulder_roll" kp="60" forcerange="-20 20"/>
-    <position joint="l_elbow" kp="40" forcerange="-30 30"/>
-    <position joint="l_wrist_pitch" kp="20" forcerange="-10 10"/>
-    <position joint="r_hip_yaw" kp="200" forcerange="-80 80"/>
-    <position joint="r_hip_roll" kp="200" forcerange="-80 80"/>
-    <position joint="r_hip_pitch" kp="200" forcerange="-120 120"/>
-    <position joint="r_knee" kp="200" forcerange="-120 120"/>
-    <position joint="r_ankle_pitch" kp="130" forcerange="-80 80"/>
-    <position joint="r_ankle_roll" kp="130" forcerange="-80 80"/>
-    <position joint="r_hallux_pitch" kp="30" forcerange="-4 4"/>
-    <position joint="r_toes_pitch" kp="30" forcerange="-3 3"/>
-    <position joint="l_hip_yaw" kp="200" forcerange="-80 80"/>
-    <position joint="l_hip_roll" kp="200" forcerange="-80 80"/>
-    <position joint="l_hip_pitch" kp="200" forcerange="-120 120"/>
-    <position joint="l_knee" kp="200" forcerange="-120 120"/>
-    <position joint="l_ankle_pitch" kp="130" forcerange="-80 80"/>
-    <position joint="l_ankle_roll" kp="130" forcerange="-80 80"/>
-    <position joint="l_hallux_pitch" kp="30" forcerange="-4 4"/>
-    <position joint="l_toes_pitch" kp="30" forcerange="-3 3"/>
+    <!-- NOTA attuatori (03/08/2026): i name sono stati AGGIUNTI dopo un incidente
+         d'analisi: prima erano anonimi, mj_name2id restituiva -1 e numpy con -1
+         leggeva IN SILENZIO l'ultimo attuatore della lista (falso positivo pulito).
+         La risoluzione giunto->attuatore via model.actuator_trnid (dizionario 'aid'
+         in core/gait_core.py) resta la via robusta: funziona con e senza name. -->
+    <position name="waist_yaw" joint="waist_yaw" kp="100" forcerange="-2.5 2.5"/>
+    <position name="neck_yaw" joint="neck_yaw" kp="30" forcerange="-10 10"/>
+    <position name="neck_pitch" joint="neck_pitch" kp="30" forcerange="-10 10"/>
+    <position name="r_shoulder_pitch" joint="r_shoulder_pitch" kp="60" forcerange="-43 43"/>
+    <position name="r_shoulder_roll" joint="r_shoulder_roll" kp="60" forcerange="-20 20"/>
+    <position name="r_elbow" joint="r_elbow" kp="40" forcerange="-8 8"/>
+    <position name="r_wrist_pitch" joint="r_wrist_pitch" kp="20" forcerange="-1.4 1.4"/>
+    <position name="l_shoulder_pitch" joint="l_shoulder_pitch" kp="60" forcerange="-43 43"/>
+    <position name="l_shoulder_roll" joint="l_shoulder_roll" kp="60" forcerange="-20 20"/>
+    <position name="l_elbow" joint="l_elbow" kp="40" forcerange="-8 8"/>
+    <position name="l_wrist_pitch" joint="l_wrist_pitch" kp="20" forcerange="-1.4 1.4"/>
+    <position name="r_hip_yaw" joint="r_hip_yaw" kp="200" forcerange="-80 80"/>
+    <position name="r_hip_roll" joint="r_hip_roll" kp="200" forcerange="-80 80"/>
+    <position name="r_hip_pitch" joint="r_hip_pitch" kp="200" forcerange="-120 120"/>
+    <position name="r_knee" joint="r_knee" kp="200" forcerange="-120 120"/>
+    <position name="r_ankle_pitch" joint="r_ankle_pitch" kp="130" forcerange="-80 80"/>
+    <position name="r_ankle_roll" joint="r_ankle_roll" kp="130" forcerange="-40 40"/>
+    <position name="r_hallux_pitch" joint="r_hallux_pitch" kp="30" forcerange="-4 4"/>
+    <position name="r_toes_pitch" joint="r_toes_pitch" kp="30" forcerange="-3 3"/>
+    <position name="l_hip_yaw" joint="l_hip_yaw" kp="200" forcerange="-80 80"/>
+    <position name="l_hip_roll" joint="l_hip_roll" kp="200" forcerange="-80 80"/>
+    <position name="l_hip_pitch" joint="l_hip_pitch" kp="200" forcerange="-120 120"/>
+    <position name="l_knee" joint="l_knee" kp="200" forcerange="-120 120"/>
+    <position name="l_ankle_pitch" joint="l_ankle_pitch" kp="130" forcerange="-80 80"/>
+    <position name="l_ankle_roll" joint="l_ankle_roll" kp="130" forcerange="-40 40"/>
+    <position name="l_hallux_pitch" joint="l_hallux_pitch" kp="30" forcerange="-4 4"/>
+    <position name="l_toes_pitch" joint="l_toes_pitch" kp="30" forcerange="-3 3"/>
   </actuator>
 
   <keyframe>

@@ -119,7 +119,7 @@ session, use `--test`.
 | `F1_statica/f1a_squat.py` | Deep squat | za = 0.60 m |
 | `F1_statica/f1b_reach.py` | Reach envelope | 0.48 / 0.43 / 0.47 / 0.47 m |
 | `F1_statica/f1c_carico.py` | Load carrying | 6 kg static · 2 kg walking |
-| `F1_statica/f1d_seduta.py` | Sit and stand up | 3.00 s · seat reaction 651 N |
+| `F1_statica/f1d_seduta.py` | Sit and stand up | 3.00 s · seat reaction 649 N · hip 73.4 Nm (size-36 foot) |
 
 ### F2 — Dynamic tests
 
@@ -134,11 +134,14 @@ session, use `--test`.
 
 | Module | What it does | Result |
 |---|---|---|
-| `F3_frontiera/e1_capture.py` | Capture-point stepping | 6 steps · 2–4 cm placement error |
+| `F3_frontiera/e1_capture.py` | Capture-point stepping | 6 support events · 2–4 cm placement error |
 | `F3_frontiera/e2_timing.py` | Event-triggered timing | 32 synchronised cycles |
-| `F3_frontiera/e3_accoppiato.py` | Commanded forward walking | 11 steps · +0.76 m |
+| `F3_frontiera/e3_accoppiato.py` | Commanded forward walking (historical bench, kp 600) | 11 support events · progress figure retired |
+| `F3_frontiera/camminata_avanti.py` | **Forward walking - Canon C (plateau)** | **654 supports · 120 s alive · +2.49/+2.62/+2.58 m on 3 builds** (max measured +9.6956) |
+| `F3_frontiera/camminata_indietro.py` | Long mode (0.28 s support) | 420 supports · −25.93 m · 12.3 cm stride (roll −0.035) |
+| `F3_frontiera/partenza_arresto.py` | Start from rest / stop | first support 2.41 s · standing after stop · −1.76 cm inertia (roll −0.035) |
 | `F3_frontiera/e3_rms.py` | Hip roll thermal load | 53.7 Nm RMS in regime |
-| `F3_frontiera/salto.py` | Jump | 210 ms flight · 120/120 Nm simultaneous |
+| `F3_frontiera/salto.py` | Jump | 250 ms flight · feet +8.2 cm · CoM +5.3 cm from take-off (B44) |
 | `F3_frontiera/e0_dita.py` | Toe mechanics | hallux +150% jump height |
 | `F3_frontiera/e4_atterra.py` `e5_volano.py` `e6_supervisore.py` `e7_pipeline.py` | Landing pipeline stages | claim withdrawn — see Limitations |
 
@@ -164,13 +167,13 @@ session, use `--test`.
 | Reach envelope (fwd / up / down / lat) | 0.48 / 0.43 / 0.47 / 0.47 m | [C] |
 | Payload (static / walking) | 6 kg / 2 kg | [C] |
 | Hip roll, postural thermal demand | 38.2 Nm RMS = 89% of nominal | [C] |
-| Jump: flight time / foot clearance | 210 ms / 3.3 cm | [C] |
+| Jump: flight time / clearance / CoM rise | 250 ms / +8.2 cm / +5.3 cm from take-off (PUNTA 0.15, size-36 foot) | [C] |
 | Hallux contribution to jump height | +150% | [C] |
-| E1 capture-point steps | 6 | [C] |
+| E1 capture-point support events | 6 | [C] |
 | E2 event-triggered cycles | 32 | [C] |
-| E3 commanded forward walking | 11 steps (pass threshold ≥ 10) | [C] |
+| E3 commanded forward walking | 11 support events (threshold ≥ 10; measured flight 15 ms over 11.2 s — no flight phase) | [C] |
 | Fall: impact speed / impulse | 2.60 m/s · 274.9 N·s over 150 ms | [C] |
-| Sit-to-stand: seat reaction | 651 N = 100.1% of weight, Σ Fz balance closed | [C] |
+| Sit-to-stand: seat reaction | 649 N = 100% of weight (04/08 re-measure), Σ Fz balance closed | [C] |
 
 `[C]` computed in simulation, reproducible with `--test`.
 
@@ -196,7 +199,12 @@ toe-brake multiplier (×3.9) were measured at 62.8 kg and did not survive the ma
 would return only with a dated re-measurement. The E4–E7 modules are kept in the repository
 because the code and the negative result are both part of the record.
 
-**Sensitivity is high.** A 3.3% mass change reduced the achieved forward step count by 42% at
+
+> **Canon C — the plateau.** The walking canon is **654 supports, 120 s alive, +2.49 / +2.62 / +2.58 m on MuJoCo 3.1.6, 3.2.7 and 3.11.0** (roll term −0.035, support imposed by clock at 0.180 s, leg kp ×2 = 400 with the feed-forward table left at ×3 — the quirk is part of the canon). Direction and order of magnitude agree across three solver builds, three identical runs per build. **+9.695622 m remains the measured maximum**, obtained at roll −0.05 on MuJoCo 3.11.0 + numpy 2.4.4 and declared for what it is: outside the −0.037…−0.034 plateau the direction of travel **alternates every ~3 thousandths of roll** (a comb, not a threshold) and depends on the numpy build as well. Event-triggered support (T_MAX 0.60) is *not* equivalent to the clock outside the campaign machine.
+>
+> **Model note.** `tx34_piedevero.xml` is the canon model **verbatim as measured**: it predates the safeguard torque alignment (C7) and actuator naming (B7) — realigning it would re-measure the canon. Its URDF carries the same pre-safeguard efforts. Declared, open item.
+
+**Sensitivity is high.** A 3.3% mass change reduced the achieved forward support-event count by 42% at
 unchanged controller tuning. Any result here is conditional on a mass that has no CAD behind it.
 
 ---
@@ -258,7 +266,7 @@ caught by comparison.
 **Measurement window.** RMS and duty-cycle figures are computed over the steady-state window,
 not the whole run: including the settling phase dilutes the denominator and returns optimistic
 values. On the same data the hip roll RMS is 43.1 N·m over the full run and 53.7 N·m in regime.
-Energy per step, being an integral over completed steps, is insensitive to the window.
+Energy per support event, being an integral over completed support events, is insensitive to the window.
 
 **Force balance.** Measured contact forces are reported with their closure check, Σ Fz against
 m·g. A force that does not close is not published.
@@ -368,6 +376,19 @@ set PYTHONUTF8=1
 
 and repeat the command. If this is needed, please report it — the modules are meant to print
 plain ASCII.
+
+**`mj_name2id(..., mjOBJ_ACTUATOR, ...)` returns `-1` for every actuator name**
+
+Intentional: actuators in `models/*.xml` carry no `name` attribute. Beware the silent
+trap: numpy accepts `-1` as an index, so indexing actuator arrays with a stray `-1` reads
+the **last** actuator of the list instead of raising an error - this has already produced
+one clean-looking false positive during analysis. Resolve actuators through
+`model.actuator_trnid` (joint -> actuator), as the `aid` dict in `core/gait_core.py` does:
+
+```python
+aid = {mujoco.mj_id2name(m, mujoco.mjtObj.mjOBJ_JOINT, m.actuator_trnid[i][0]): i
+       for i in range(m.nu)}
+```
 
 **A number does not match this README**
 First check the first line of output: it must read `[MASSA MODELLO] 66.228 kg`. If it does and

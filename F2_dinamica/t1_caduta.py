@@ -46,8 +46,8 @@ import json
 import numpy as np
 import mujoco
 
-VERSIONE = '1.1'
-XML = _MP('tx34_v1.xml')
+VERSIONE = '1.2'
+XML = _MP('tx34_piedevero.xml')   # CANONE C (04/08): piede 16,5/6,0; il v1 (29,5) e' storia
 COM_DROP = 0.60
 SOGLIA_E2 = 150.0
 K1, K2, XB = 4.0, 0.8, 0.05

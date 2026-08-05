@@ -6,7 +6,7 @@ passi continui col CAPTURE POINT. Il piede di swing insegue in tempo reale
 p = com + v*sqrt(h/g) (+ semipasso laterale), niente copione.
 
     python e1_capture.py            demo 3D: marcia e poi spinta avanti (auto)
-    python e1_capture.py --test     criterio E1: >= 4 passi senza caduta
+    python e1_capture.py --test     criterio E1: >= 4 appoggi senza caduta
 
 Obiettivo dichiarato: battere il muro dei 2 passi. Stop-loss: una sessione.
 """
@@ -191,24 +191,24 @@ def prova(spinta=0.3, T=16.0, verbose=False):
             c.d.qvel[0] += spinta
         if not c.frame():
             if verbose:
-                print('  caduta a t=%.1f dopo %d passi (x=%.2f)'
+                print('  caduta a t=%.1f dopo %d appoggi (x=%.2f)'
                       % (t, c.passi, c.d.qpos[0]))
             return c.passi, float(c.d.qpos[0]), t
     if verbose:
-        print('  IN PIEDI a fine prova: %d passi, x=%.2f' % (c.passi, c.d.qpos[0]))
+        print('  IN PIEDI a fine prova: %d appoggi, x=%.2f' % (c.passi, c.d.qpos[0]))
     return c.passi, float(c.d.qpos[0]), None
 
 def campagna():
     print('e1_capture.py - versione ' + VERSIONE)
-    print('E1 capture point: criterio >= 4 passi senza caduta.')
+    print('E1 capture point: criterio >= 4 appoggi senza caduta.')
     for nome, sp in (('marcia (senza spinta)', 0.0), ('spinta avanti 0,3', 0.3),
                      ('spinta avanti 0,5', 0.5)):
         p, x, tc = prova(spinta=sp, verbose=False)
-        print('%-24s -> passi %3d | x %+.2f m | %s' %
+        print('%-24s -> appoggi %3d | x %+.2f m | %s' %
               (nome, p, x, 'IN PIEDI' if tc is None else 'caduta a %.1f s' % tc))
     p, x, tc = prova(spinta=0.3)
     esito = 'PASS' if (p >= 4 and tc is None) else ('PARZIALE' if p >= 4 else 'FAIL')
-    print('ESITO E1: %s (%d passi con spinta 0,3)' % (esito, p))
+    print('ESITO E1: %s (%d appoggi con spinta 0,3)' % (esito, p))
     json.dump(dict(versione=VERSIONE, esito=esito, passi=p, x_m=round(x, 2)),
               open(_OUT('e1_capture.json'), 'w'), indent=1)
 

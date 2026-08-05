@@ -42,15 +42,16 @@ import json
 import numpy as np
 import mujoco
 
-VERSIONE = '1.2'
-XML = _MP('tx34_v1.xml')
+VERSIONE = '1.3'
+XML = _MP('tx34_piedevero.xml')   # CANONE C (04/08): piede 16,5/6,0; il v1 (29,5) e' storia
 L1, L2 = 0.38, 0.40
 ZA_CR = 0.62          # caricamento entro l'autorita' della caviglia (scoperta 9)
 T_CR, T_PUSH = 0.9, 0.14
 KXA, KLEAN = 0.75, 0.35  # caricamento VERTICALE da salto: petto su
 KC, KCD, KP, KD = 3.0, 0.5, 2.5, 0.4
 K1, K2, XB = 4.0, 0.8, 0.05
-PUNTA = 0.35          # spinta di caviglia al decollo [rad]
+PUNTA = 0.15          # spinta di caviglia al decollo [rad] - CANONE C (B43): 0,15 -> 250 ms, +8,2 cm
+                      # (il vecchio canone 210/+3,3 era a PUNTA 0,35 sul piede 29,5)
 
 def ik(xa, za):
     D = np.hypot(xa, za)
@@ -195,6 +196,7 @@ def prova(registra=False):
     picchi_giu = dict(knee=0.0, hip=0.0, ankle=0.0)
     f_att = 0.0
     apice_com = 0.0
+    com_distacco = None   # B44: l'apice si misura DAL DISTACCO, non dalla quota in piedi
     tr = dict(t=[], fs=[], zp=[], tk=[])
     com0 = None
     for i in range(int(T/dt)):
@@ -227,7 +229,11 @@ def prova(registra=False):
         if s.fase == 'volo':
             clear_max = max(clear_max, zp)
             t_volo += dt
-            apice_com = max(apice_com, float(d.subtree_com[0][2]) - com0)
+            if com_distacco is None:
+                com_distacco = float(d.subtree_com[0][2])   # primo frame di volo = distacco
+            apice_com = max(apice_com, float(d.subtree_com[0][2]) - com_distacco)
+            # [B44] la vecchia metrica (rispetto alla quota in piedi) dava +0,0:
+            # il robot si accovaccia di ~16 cm prima di partire. RITIRATA.
         if s.fase in ('atterra', 'risale'):
             f_att = max(f_att, fs)
             for nome, ch in (('knee', 'r_knee'), ('hip', 'r_hip_pitch'),
