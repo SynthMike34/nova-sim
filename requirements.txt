@@ -1,0 +1,8 @@
+# NOVA-SIM - verified version ranges (B8: ranges, not pins)
+# Walking canon verified on MuJoCo 3.1.6, 3.2.7, 3.10.0, 3.11.0
+# and on two operating systems (Linux/Windows: 1 mm apart on 3.10.0).
+mujoco>=3.1.6,<4
+# NumPy verified on 1.26 and 2.4; outside the roll plateau results
+# depend on the NumPy build as well (declared in README).
+numpy>=1.26
+matplotlib

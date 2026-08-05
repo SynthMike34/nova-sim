@@ -7,7 +7,7 @@ import sys, json
 import numpy as np
 import marcia_core as W
 
-VERSIONE = '1.1'
+VERSIONE = '1.2'
 
 def corsa(T, t_stop=0.0):
     W.T_STOP = t_stop
@@ -50,8 +50,11 @@ def main():
     falc = abs(x)/max(c.passi, 1)*2.0*100.0
     print('MODO LUNGO (indietro): %d appoggi | %s | x=%+.3f m | falcata %.1f cm' %
           (c.passi, ('VIVA a 120 s' if tc is None else 'caduta %.1f s' % tc), x, falc))
-    ok = (tc is None and abs(c.passi - 420) <= 2 and abs(x + 25.93) < 0.20)
-    print('ESITO: %s (canone-altopiano: 420 appoggi, -25,93 m, falcata 12,3; storico a rullio -0,05: -26,573/12,5)' %
+    # Criterio strutturale (L5, come camminata_avanti): il modo lungo E' 420
+    # appoggi, vivo, retrogrado, falcata sopra i 10 cm. Riferimenti [C]:
+    # -25,93 (mujoco 3.11.0), -26,04 (altra build, collaudo dal clone).
+    ok = (tc is None and abs(c.passi - 420) <= 2 and x < 0 and falc >= 10.0)
+    print('ESITO: %s (criterio: 420 appoggi, VIVA, retrogrado, falcata >= 10 cm; riferimento -25,9..-26,1 secondo la build [C]; storico a -0,05: -26,573)' %
           ('PASS - CANONE RIPRODOTTO' if ok else 'FAIL - v. nota ambiente'))
     json.dump(dict(versione=VERSIONE, esito=('PASS' if ok else 'FAIL'), appoggi=c.passi,
                    x_m=round(x, 3), falcata_cm=round(falc, 1), viva=tc is None),

@@ -42,7 +42,7 @@ import json
 import numpy as np
 import mujoco
 
-VERSIONE = '1.3'
+VERSIONE = '1.4'
 XML = _MP('tx34_piedevero.xml')   # CANONE C (04/08): piede 16,5/6,0; il v1 (29,5) e' storia
 L1, L2 = 0.38, 0.40
 ZA_CR = 0.62          # caricamento entro l'autorita' della caviglia (scoperta 9)
@@ -272,6 +272,9 @@ def campagna():
         print('Coppie di picco in spinta [Nm]: ginocchio %.1f / anca %.1f / caviglia %.1f'
               % (r['picchi_spinta_Nm']['knee'], r['picchi_spinta_Nm']['hip'],
                  r['picchi_spinta_Nm']['ankle']))
+        if r['picchi_spinta_Nm']['knee'] >= 119.9 and r['picchi_spinta_Nm']['hip'] >= 119.9:
+            print('NOTA-CANONE [C]: ginocchio E anca sono AL CAP (120/120 Nm) - questo salto'
+                  " e' il TETTO dell'hardware, piu' in alto non puo'. A PUNTA 0,35 non saturavano.")
         print('Forza max al primo impatto: %.0f N' % r['f_atterraggio_N'])
         esito = 'MISURATO (atterraggio aperto)' if r['volo'] else 'FAIL'
         print('ESITO SALTO: ' + esito)

@@ -26,6 +26,8 @@ The model weighs 66.23 kg, stands 1.55 m, and has 25 actuated joints. Physics is
 
 ## Requirements
 
+> The walking canon is verified on **MuJoCo 3.1.6, 3.2.7, 3.10.0 and 3.11.0**, with **NumPy 1.26 and 2.4**, on Linux and Windows (see `requirements.txt`).
+
 **Operating system** — Windows 10/11 · macOS 12+ · Ubuntu 20.04+
 
 **Python 3.10**
@@ -56,7 +58,7 @@ cd nova-sim
 ### Step 2 — Install the libraries
 
 ```bash
-pip install mujoco numpy matplotlib
+pip install -r requirements.txt   # mujoco>=3.1.6,<4 - numpy>=1.26 - matplotlib
 ```
 
 Takes 2–5 minutes. It should end with `Successfully installed...`.
@@ -200,7 +202,7 @@ would return only with a dated re-measurement. The E4–E7 modules are kept in t
 because the code and the negative result are both part of the record.
 
 
-> **Canon C — the plateau.** The walking canon is **654 supports, 120 s alive, +2.49 / +2.62 / +2.58 m on MuJoCo 3.1.6, 3.2.7 and 3.11.0** (roll term −0.035, support imposed by clock at 0.180 s, leg kp ×2 = 400 with the feed-forward table left at ×3 — the quirk is part of the canon). Direction and order of magnitude agree across three solver builds, three identical runs per build. **+9.695622 m remains the measured maximum**, obtained at roll −0.05 on MuJoCo 3.11.0 + numpy 2.4.4 and declared for what it is: outside the −0.037…−0.034 plateau the direction of travel **alternates every ~3 thousandths of roll** (a comb, not a threshold) and depends on the numpy build as well. Event-triggered support (T_MAX 0.60) is *not* equivalent to the clock outside the campaign machine.
+> **Canon C — the plateau.** The walking canon is **654 supports, 120 s alive, +2.49 / +2.62 / +2.58 m on MuJoCo 3.1.6, 3.2.7 and 3.11.0, +2.66 on 3.10.0** (roll term −0.035, support imposed by clock at 0.180 s, leg kp ×2 = 400 with the feed-forward table left at ×3 — the quirk is part of the canon). Direction and order of magnitude agree across **four** solver builds (three identical runs per build) and across operating systems: on 3.10.0 the same run gives **+2.655481 m on Linux and +2.656692 m on Windows - one millimetre apart**. **+9.695622 m remains the measured maximum**, obtained at roll −0.05 on MuJoCo 3.11.0 + numpy 2.4.4 and declared for what it is: outside the −0.037…−0.034 plateau the direction of travel **alternates every ~3 thousandths of roll** (a comb, not a threshold) and depends on the numpy build as well. Event-triggered support (T_MAX 0.60) is *not* equivalent to the clock outside the campaign machine.
 >
 > **Model note.** `tx34_piedevero.xml` is the canon model **verbatim as measured**: it predates the safeguard torque alignment (C7) and actuator naming (B7) — realigning it would re-measure the canon. Its URDF carries the same pre-safeguard efforts. Declared, open item.
 
