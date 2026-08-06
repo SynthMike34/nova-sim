@@ -50,8 +50,14 @@ T_CR, T_PUSH = 0.9, 0.14
 KXA, KLEAN = 0.75, 0.35  # caricamento VERTICALE da salto: petto su
 KC, KCD, KP, KD = 3.0, 0.5, 2.5, 0.4
 K1, K2, XB = 4.0, 0.8, 0.05
-PUNTA = 0.15          # spinta di caviglia al decollo [rad] - CANONE C (B43): 0,15 -> 250 ms, +8,2 cm
-                      # (il vecchio canone 210/+3,3 era a PUNTA 0,35 sul piede 29,5)
+PUNTA = -0.35         # plantarflessione al decollo [rad] - CANONE (B49): -0,35 -> 270 ms, CoM +7,1
+# [B49] Il termine si chiamava "spinta di caviglia al decollo" ed era in realta'
+# dorsiflessione - punta su: a_cmd = clip(liv + trim - PUNTA), il segno positivo
+# SOTTRAE. Il canone precedente (+0,15 -> 250 ms, +8,2 cm) non era un compromesso
+# di taratura: era un segno sbagliato. Invertirlo e' plantarflessione vera.
+# Scelto -0,35 e NON il migliore (-0,45): li' la caviglia siede a 1,3 N*m dal cap,
+# e un canone sul bordo di una saturazione e' cio' che B43-B45 hanno disfatto.
+# (il vecchissimo canone 210/+3,3 era a PUNTA +0,35 sul piede 29,5)
 
 def ik(xa, za):
     D = np.hypot(xa, za)
@@ -201,6 +207,7 @@ def prova(registra=False):
     #  dentro la fase si trovava il SECONDO picco - 1840 N invece di 2767.)
     f_primo, t_primo, fase_primo = 0.0, None, ''
     in_aria, ricontatto, primo_chiuso = False, False, False
+    n_aria, t_ric = 0, 0.0
     apice_com = 0.0
     com_distacco = None   # B44: l'apice si misura DAL DISTACCO, non dalla quota in piedi
     tr = dict(t=[], fs=[], zp=[], tk=[])
@@ -228,16 +235,19 @@ def prova(registra=False):
             return out
         d = s.d
         fs = s.forza_suolo()
-        if t_volo > 0 and not primo_chiuso:      # [B47] finestra fisica
-            if not in_aria and fs < 5.0:
-                in_aria = True                   # aria VERA: il suolo si e' scaricato
-            if in_aria and not ricontatto and fs > 50.0:
-                ricontatto = True                # rientro: da qui si cerca il picco
+        if t_volo > 0 and not primo_chiuso:      # [B47+B49] finestra fisica
+            if not in_aria:
+                n_aria = n_aria + 1 if fs < 5.0 else 0
+                if n_aria >= 8:                  # aria SOSTENUTA >=40 ms [B49]: i colpetti
+                    in_aria = True               # di punta al decollo (~10 ms) non armano
+            elif not ricontatto and fs > 50.0:
+                ricontatto, t_ric = True, i*dt   # rientro VERO
             if ricontatto:
-                if fs > f_primo:
-                    f_primo, t_primo, fase_primo = fs, i*dt, s.fase
-                elif f_primo > 200.0 and fs < 0.6*f_primo:
-                    primo_chiuso = True          # primo picco superato: congelato
+                if i*dt <= t_ric + 0.060:        # primo impatto = max nei 60 ms dal
+                    if fs > f_primo:             # ricontatto: copre punta->tallone [B49]
+                        f_primo, t_primo, fase_primo = fs, i*dt, s.fase
+                else:
+                    primo_chiuso = True
         zp = min(float(d.xpos[s.fid[0]][2]), float(d.xpos[s.fid[1]][2])) - s.z_piede0
         if s.fase == 'spinta':
             for nome, ch in (('knee', 'r_knee'), ('hip', 'r_hip_pitch'),
@@ -296,7 +306,7 @@ def campagna():
                  r['picchi_spinta_Nm']['ankle']))
         if r['picchi_spinta_Nm']['knee'] >= 119.9 and r['picchi_spinta_Nm']['hip'] >= 119.9:
             print('NOTA-CANONE [C]: ginocchio E anca sono AL CAP (120/120 Nm) - questo salto'
-                  " e' il TETTO dell'hardware, piu' in alto non puo'. A PUNTA 0,35 non saturavano.")
+                  " e' il TETTO dell'hardware, piu' in alto non puo'. A PUNTA +0,35 (verso vecchio) non saturavano.")
         print('Forza max al primo impatto: %.0f N (t = %.3f s, in fase %s)'
               % (r['f_atterraggio_N'], r['t_primo_impatto_s'], r['fase_primo_impatto']))
         print('Picco successivo in fase atterra: %.0f N' % r['f_secondo_picco_atterra_N'])
