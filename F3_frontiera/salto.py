@@ -195,6 +195,12 @@ def prova(registra=False):
     picchi_su = dict(knee=0.0, hip=0.0, ankle=0.0)
     picchi_giu = dict(knee=0.0, hip=0.0, ankle=0.0)
     f_att = 0.0
+    # [B47] PRIMO IMPATTO col criterio FISICO, non di fase: e' il primo picco di
+    # Fz dopo il distacco, qualunque fase la macchina a stati stia dichiarando.
+    # (il picco vero cade ~5 ms PRIMA del passaggio a 'atterra': cercandolo solo
+    #  dentro la fase si trovava il SECONDO picco - 1840 N invece di 2767.)
+    f_primo, t_primo, fase_primo = 0.0, None, ''
+    in_aria, ricontatto, primo_chiuso = False, False, False
     apice_com = 0.0
     com_distacco = None   # B44: l'apice si misura DAL DISTACCO, non dalla quota in piedi
     tr = dict(t=[], fs=[], zp=[], tk=[])
@@ -213,12 +219,25 @@ def prova(registra=False):
                        v_decollo_m_s=round(v_decollo, 2),
                        picchi_spinta_Nm=dict((k, round(vv, 1))
                                              for k, vv in picchi_su.items()),
-                       f_atterraggio_N=round(f_att, 0))
+                       f_atterraggio_N=round(f_primo, 0),
+                       t_primo_impatto_s=(round(t_primo, 3) if t_primo else None),
+                       fase_primo_impatto=fase_primo,
+                       f_secondo_picco_atterra_N=round(f_att, 0))
             if registra:
                 out['tracce'] = tr
             return out
         d = s.d
         fs = s.forza_suolo()
+        if t_volo > 0 and not primo_chiuso:      # [B47] finestra fisica
+            if not in_aria and fs < 5.0:
+                in_aria = True                   # aria VERA: il suolo si e' scaricato
+            if in_aria and not ricontatto and fs > 50.0:
+                ricontatto = True                # rientro: da qui si cerca il picco
+            if ricontatto:
+                if fs > f_primo:
+                    f_primo, t_primo, fase_primo = fs, i*dt, s.fase
+                elif f_primo > 200.0 and fs < 0.6*f_primo:
+                    primo_chiuso = True          # primo picco superato: congelato
         zp = min(float(d.xpos[s.fid[0]][2]), float(d.xpos[s.fid[1]][2])) - s.z_piede0
         if s.fase == 'spinta':
             for nome, ch in (('knee', 'r_knee'), ('hip', 'r_hip_pitch'),
@@ -254,7 +273,10 @@ def prova(registra=False):
                v_decollo_m_s=round(v_decollo, 2),
                picchi_spinta_Nm=dict((k, round(v, 1)) for k, v in picchi_su.items()),
                picchi_atterraggio_Nm=dict((k, round(v, 1)) for k, v in picchi_giu.items()),
-               f_atterraggio_N=round(f_att, 0),
+               f_atterraggio_N=round(f_primo, 0),
+               t_primo_impatto_s=(round(t_primo, 3) if t_primo else None),
+               fase_primo_impatto=fase_primo,
+               f_secondo_picco_atterra_N=round(f_att, 0),
                eretta=bool(s.d.qpos[2] >= 0.88 and pf < 9.0))
     if registra:
         out['tracce'] = tr
@@ -275,7 +297,9 @@ def campagna():
         if r['picchi_spinta_Nm']['knee'] >= 119.9 and r['picchi_spinta_Nm']['hip'] >= 119.9:
             print('NOTA-CANONE [C]: ginocchio E anca sono AL CAP (120/120 Nm) - questo salto'
                   " e' il TETTO dell'hardware, piu' in alto non puo'. A PUNTA 0,35 non saturavano.")
-        print('Forza max al primo impatto: %.0f N' % r['f_atterraggio_N'])
+        print('Forza max al primo impatto: %.0f N (t = %.3f s, in fase %s)'
+              % (r['f_atterraggio_N'], r['t_primo_impatto_s'], r['fase_primo_impatto']))
+        print('Picco successivo in fase atterra: %.0f N' % r['f_secondo_picco_atterra_N'])
         esito = 'MISURATO (atterraggio aperto)' if r['volo'] else 'FAIL'
         print('ESITO SALTO: ' + esito)
         json.dump(dict(versione=VERSIONE, esito=esito,
