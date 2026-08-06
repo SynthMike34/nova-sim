@@ -78,10 +78,17 @@ def misura_impatto(m, d, T, registra=False, gia_spento=True):
     t_150 = None
     F_picco = 0.0
     acc_picco = 0.0
-    impulso = 0.0
+    impulso = 0.0                              # finestra STORICA dal primo contatto
+    # [B48] IMPULSO D'IMPATTO con ancora FISICA: il primo carico d'ARTO >= 150 N.
+    # In S2 il primo contatto >20 N e' un DITO ancora a terra (74,8 N a 2,515) e la
+    # finestra storica si CHIUDEVA 270 ms prima della mano (2,935): 59,5 N*s invece
+    # di 260,5. La finestra vecchia resta in stampa come impulso di ROLLIO pre-impatto.
+    t_impatto = None
+    impulso_impatto = 0.0
     v_impatto = 0.0
     per_body = {}
     PIEDI = ('r_foot', 'l_foot')
+    BRACCIA = ('r_upper_arm', 'l_upper_arm', 'r_forearm', 'l_forearm', 'r_hand', 'l_hand')
     tr = dict(t=[], F=[])
     f6 = np.zeros(6)
     for i in range(int(T/dt)):
@@ -91,6 +98,7 @@ def misura_impatto(m, d, T, registra=False, gia_spento=True):
         vcom = (d.subtree_com[0] - com)/dt
         F_tot = 0.0
         F_corpo = 0.0                              # tutto tranne i piedi
+        F_arto = 0.0
         for c in range(d.ncon):
             g1, g2 = d.contact[c].geom1, d.contact[c].geom2
             if 0 in (g1, g2):                      # 0 = pavimento
@@ -102,6 +110,8 @@ def misura_impatto(m, d, T, registra=False, gia_spento=True):
                 per_body[nb] = max(per_body.get(nb, 0.0), fN)
                 if nb not in PIEDI:
                     F_corpo += fN
+                if nb in BRACCIA:
+                    F_arto += fN
         if F_corpo > 20.0 and primo_contatto is None:  # i piedi non sono un impatto
             primo_contatto = t
         if primo_contatto is not None and t_150 is None:
@@ -109,9 +119,13 @@ def misura_impatto(m, d, T, registra=False, gia_spento=True):
                 com_v_prev if com_v_prev is not None else vcom)))
             if F_corpo >= SOGLIA_E2:
                 t_150 = (t - primo_contatto)*1000.0
+        if t_impatto is None and F_arto >= SOGLIA_E2:
+            t_impatto = t                          # [B48] l'arto colpisce: qui l'impatto
+        if t_impatto is not None and t - t_impatto <= 0.15:
+            impulso_impatto += F_tot*dt            # [B48] finestra 150 ms dall'impatto
         if primo_contatto is not None:
             F_picco = max(F_picco, F_tot)
-            if t - primo_contatto <= 0.15:         # impulso della finestra d'impatto
+            if t - primo_contatto <= 0.15:         # finestra storica (rollio pre-impatto)
                 impulso += F_tot*dt
         v_now = d.cvel[tid][3:6].copy()
         acc = float(np.linalg.norm(v_now - v_prev))/dt
@@ -129,7 +143,9 @@ def misura_impatto(m, d, T, registra=False, gia_spento=True):
                F_segmento_N=round(seg[1], 0),
                acc_picco_torso_g=round(acc_picco/9.81, 1),
                t_oltre_150N_ms=(round(t_150, 1) if t_150 is not None else None),
-               impulso_150ms_Ns=round(impulso, 1),
+               impulso_150ms_Ns=round(impulso_impatto, 1),
+               t_impatto_s=(round(t_impatto, 3) if t_impatto is not None else None),
+               impulso_rollio_preimpatto_Ns=round(impulso, 1),
                forze_per_segmento=dict((k, round(v, 0)) for k, v in
                                        sorted(per_body.items(), key=lambda kv: -kv[1])[:6]))
     if registra:
@@ -201,8 +217,11 @@ def campagna():
         print('  v impatto %.2f m/s | F picco %.0f N (%s: %.0f N) | acc torso %.1f g'
               % (r['v_impatto_m_s'], r['F_picco_tot_N'], r['segmento_critico'],
                  r['F_segmento_N'], r['acc_picco_torso_g']))
-        print('  150 N (corpo) superati in %s ms | impulso 150 ms %.1f N*s | zone: %s'
+        print('  150 N (corpo) superati in %s ms | impulso impatto %.1f N*s '
+              '(150 ms dal primo carico d\'arto >=150 N [B48]) | '
+              'impulso di rollio pre-impatto %.1f | zone: %s'
               % (r['t_oltre_150N_ms'], r['impulso_150ms_Ns'],
+                 r['impulso_rollio_preimpatto_Ns'],
                  ', '.join('%s %.0fN' % kv for kv in list(r['forze_per_segmento'].items())[:4])))
         if 't_trigger_E1_s' in r:
             print('  E1 (|rollio|>15 gradi) scattato %.2f s dopo la spinta' % r['t_trigger_E1_s'])
