@@ -7,7 +7,7 @@
   "v1_note": "Limiti gambe (hip/knee/ankle) applicati direttamente da nova_safeguard su attuatori proprietari TX-34 (MyActuator RMD-X). Nessuna dipendenza da SDK esterni.",
   "safeguard_monitoring": "nova_safeguard monitora velocita' e accelerazione dei giunti gambe (RMD-X, CAN-FD) a 100 Hz, oltre a coppia e forza di contatto.",
   "rev_v695": "A8: ankle_pitch +/-30 gia' coerente (fonte di verita'). Solo bump versione.",
-  "last_updated": "Luglio 2026 \u2014 canone 28/07/2026",
+  "last_updated": "Luglio 2026 — canone 28/07/2026",
   "_changelog": "v6.9.5-r1: aggiunti shoulder_l_yaw (CAN 20) e shoulder_r_yaw (CAN 23). || v6.9.5-r2: aggiunti waist_rotation (CAN 50), toes_l (CAN 51), toes_r (CAN 52); coppie allineate a can_devices (waist 2,5 Nm, toes 10 Nm). || v8.0: rimossi riferimenti legacy a base di locomozione esterna; enforcement -> 'nova_safeguard direct'. || v9.1: corretta massa RMD-X8-120 nelle note dei giunti (1,4 -> 1,2 kg); unita rigidezza molla SEA caviglia da N/m a Nm/rad (giunto rotazionale). || v11.4 (28/07/2026): range allineati ai limiti software dopo audit NOVA-SIM; hip_pitch, shoulder_pitch, shoulder_roll, waist e toes portati agli sw; spalla pitch RMD-X8-120 (43 Nm), spalla roll RMD-X6-P20-60 (20 Nm).",
   "note_perimetro": "File distribuito nel repository pubblico NOVA-SIM (perimetro locomozione e postura). I range e le coppie qui elencati sono i limiti applicati dal safeguard; il modello di simulazione e' allineato a questi valori (verificabile con tools/confronta_range.py)."
  },
@@ -84,7 +84,7 @@
    "speed_max_dps": 40,
    "torque_max_Nm": 80.0,
    "enforcement": "nova_safeguard direct (CAN-FD)",
-   "note": "MyActuator RMD-X8-120 \u2014 43 Nm nom / 110 Nm picco / 1.2 kg \u2014 verificato datasheet luglio 2026"
+   "note": "MyActuator RMD-X8-120 — 43 Nm nom / 110 Nm picco / 1.2 kg — verificato datasheet luglio 2026"
   },
   "hip_l_roll": {
    "hw_deg": [
@@ -98,7 +98,7 @@
    "speed_max_dps": 40,
    "torque_max_Nm": 80.0,
    "enforcement": "nova_safeguard direct (CAN-FD)",
-   "note": "MyActuator RMD-X8-120 \u2014 43 Nm nom / 110 Nm picco / 1.2 kg \u2014 verificato datasheet luglio 2026"
+   "note": "MyActuator RMD-X8-120 — 43 Nm nom / 110 Nm picco / 1.2 kg — verificato datasheet luglio 2026"
   },
   "hip_l_pitch": {
    "hw_deg": [
@@ -112,7 +112,7 @@
    "speed_max_dps": 60,
    "torque_max_Nm": 120.0,
    "enforcement": "nova_safeguard direct (CAN-FD)",
-   "note": "MyActuator RMD-X12-P20-320 \u2014 85 Nm nom / 320 Nm picco / 2.4 kg \u2014 verificato datasheet OpenELAB luglio 2026"
+   "note": "MyActuator RMD-X12-P20-320 — 85 Nm nom / 320 Nm picco / 2.4 kg — verificato datasheet OpenELAB luglio 2026"
   },
   "hip_r_yaw": {
    "hw_deg": [
@@ -126,7 +126,7 @@
    "speed_max_dps": 40,
    "torque_max_Nm": 80.0,
    "enforcement": "nova_safeguard direct (CAN-FD)",
-   "note": "MyActuator RMD-X8-120 \u2014 43 Nm nom / 110 Nm picco / 1.2 kg \u2014 verificato datasheet luglio 2026"
+   "note": "MyActuator RMD-X8-120 — 43 Nm nom / 110 Nm picco / 1.2 kg — verificato datasheet luglio 2026"
   },
   "hip_r_roll": {
    "hw_deg": [
@@ -140,7 +140,7 @@
    "speed_max_dps": 40,
    "torque_max_Nm": 80.0,
    "enforcement": "nova_safeguard direct (CAN-FD)",
-   "note": "MyActuator RMD-X8-120 \u2014 43 Nm nom / 110 Nm picco / 1.2 kg \u2014 verificato datasheet luglio 2026"
+   "note": "MyActuator RMD-X8-120 — 43 Nm nom / 110 Nm picco / 1.2 kg — verificato datasheet luglio 2026"
   },
   "hip_r_pitch": {
    "hw_deg": [
@@ -154,7 +154,7 @@
    "speed_max_dps": 60,
    "torque_max_Nm": 120.0,
    "enforcement": "nova_safeguard direct (CAN-FD)",
-   "note": "MyActuator RMD-X12-P20-320 \u2014 85 Nm nom / 320 Nm picco / 2.4 kg \u2014 verificato datasheet OpenELAB luglio 2026"
+   "note": "MyActuator RMD-X12-P20-320 — 85 Nm nom / 320 Nm picco / 2.4 kg — verificato datasheet OpenELAB luglio 2026"
   },
   "knee_l": {
    "hw_deg": [
@@ -168,7 +168,7 @@
    "speed_max_dps": 90,
    "torque_max_Nm": 120,
    "enforcement": "nova_safeguard direct (CAN-FD)",
-   "note": "MyActuator RMD-X12-P20-320 \u2014 85 Nm nom / 320 Nm picco / 2.4 kg \u2014 verificato datasheet OpenELAB luglio 2026"
+   "note": "MyActuator RMD-X12-P20-320 — 85 Nm nom / 320 Nm picco / 2.4 kg — verificato datasheet OpenELAB luglio 2026"
   },
   "knee_r": {
    "hw_deg": [
@@ -182,7 +182,7 @@
    "speed_max_dps": 90,
    "torque_max_Nm": 120,
    "enforcement": "nova_safeguard direct (CAN-FD)",
-   "note": "MyActuator RMD-X12-P20-320 \u2014 85 Nm nom / 320 Nm picco / 2.4 kg \u2014 verificato datasheet OpenELAB luglio 2026"
+   "note": "MyActuator RMD-X12-P20-320 — 85 Nm nom / 320 Nm picco / 2.4 kg — verificato datasheet OpenELAB luglio 2026"
   },
   "ankle_l_pitch": {
    "hw_deg": [
@@ -196,7 +196,7 @@
    "speed_max_dps": 120,
    "torque_max_Nm": 80,
    "enforcement": "nova_safeguard direct (CAN-FD)",
-   "note": "MyActuator RMD-X8-120 + SEA molla Ti-6Al-4V (K=800 Nm/rad) \u2014 43 Nm nom / 110 Nm picco / 1.5 kg (attuatore 1.2 + molla 0.3) \u2014 verificato datasheet luglio 2026"
+   "note": "MyActuator RMD-X8-120 + SEA molla Ti-6Al-4V (K=800 Nm/rad) — 43 Nm nom / 110 Nm picco / 1.5 kg (attuatore 1.2 + molla 0.3) — verificato datasheet luglio 2026"
   },
   "ankle_l_roll": {
    "hw_deg": [
@@ -210,7 +210,7 @@
    "speed_max_dps": 120,
    "torque_max_Nm": 40.0,
    "enforcement": "nova_safeguard direct (CAN-FD)",
-   "note": "MyActuator RMD-X8-120 + SEA molla Ti-6Al-4V (K=800 Nm/rad) \u2014 43 Nm nom / 110 Nm picco / 1.5 kg (attuatore 1.2 + molla 0.3) \u2014 verificato datasheet luglio 2026"
+   "note": "MyActuator RMD-X8-120 + SEA molla Ti-6Al-4V (K=800 Nm/rad) — 43 Nm nom / 110 Nm picco / 1.5 kg (attuatore 1.2 + molla 0.3) — verificato datasheet luglio 2026"
   },
   "ankle_r_pitch": {
    "hw_deg": [
@@ -224,7 +224,7 @@
    "speed_max_dps": 120,
    "torque_max_Nm": 80,
    "enforcement": "nova_safeguard direct (CAN-FD)",
-   "note": "MyActuator RMD-X8-120 + SEA molla Ti-6Al-4V (K=800 Nm/rad) \u2014 43 Nm nom / 110 Nm picco / 1.5 kg (attuatore 1.2 + molla 0.3) \u2014 verificato datasheet luglio 2026"
+   "note": "MyActuator RMD-X8-120 + SEA molla Ti-6Al-4V (K=800 Nm/rad) — 43 Nm nom / 110 Nm picco / 1.5 kg (attuatore 1.2 + molla 0.3) — verificato datasheet luglio 2026"
   },
   "ankle_r_roll": {
    "hw_deg": [
@@ -238,7 +238,7 @@
    "speed_max_dps": 120,
    "torque_max_Nm": 40.0,
    "enforcement": "nova_safeguard direct (CAN-FD)",
-   "note": "MyActuator RMD-X8-120 + SEA molla Ti-6Al-4V (K=800 Nm/rad) \u2014 43 Nm nom / 110 Nm picco / 1.5 kg (attuatore 1.2 + molla 0.3) \u2014 verificato datasheet luglio 2026"
+   "note": "MyActuator RMD-X8-120 + SEA molla Ti-6Al-4V (K=800 Nm/rad) — 43 Nm nom / 110 Nm picco / 1.5 kg (attuatore 1.2 + molla 0.3) — verificato datasheet luglio 2026"
   },
   "shoulder_pitch": {
    "hw_deg": [
@@ -279,7 +279,7 @@
    "torque_max_Nm": 8.0,
    "servo": "Dynamixel MX-106T",
    "gear_ratio": "da verificare in prototipo",
-   "note": "Aggiunto in revisione Giugno 2026 \u2014 era mancante in v6.9.5 originale (Nota 5 \u00a73.2 vFINAL)"
+   "note": "Aggiunto in revisione Giugno 2026 — era mancante in v6.9.5 originale (Nota 5 §3.2 vFINAL)"
   },
   "shoulder_r_yaw": {
    "can_id": 23,
@@ -295,7 +295,7 @@
    "torque_max_Nm": 8.0,
    "servo": "Dynamixel MX-106T",
    "gear_ratio": "da verificare in prototipo",
-   "note": "Aggiunto in revisione Giugno 2026 \u2014 era mancante in v6.9.5 originale (Nota 5 \u00a73.2 vFINAL)"
+   "note": "Aggiunto in revisione Giugno 2026 — era mancante in v6.9.5 originale (Nota 5 §3.2 vFINAL)"
   },
   "waist_rotation": {
    "can_id": 50,
@@ -310,7 +310,7 @@
    "speed_max_dps": 20,
    "torque_max_Nm": 2.5,
    "servo": "NEMA 23 stepper",
-   "note": "Rotazione vita NEMA 23 (hip sway, dissociazione fianchi/busto) \u2014 attuatore stepper, NON Dynamixel. Driver dedicato, non su bus CAN Dynamixel standard. Coppia 2.5 Nm da can_devices_v2.json (waist_joint.id=50) e confermata da documentazione interna TDD (sistemi speciali) (NEMA 23, coppia 2.5 Nm). Il prompt di fix indicava 1.26 Nm: scartato perche' in conflitto con le fonti di verita' (che 'fanno fede'). sw=90% hw."
+   "note": "Rotazione vita NEMA 23 (hip sway, dissociazione fianchi/busto) — attuatore stepper, NON Dynamixel. Driver dedicato, non su bus CAN Dynamixel standard. Coppia 2.5 Nm da can_devices_v2.json (waist_joint.id=50) e confermata da documentazione interna TDD (sistemi speciali) (NEMA 23, coppia 2.5 Nm). Il prompt di fix indicava 1.26 Nm: scartato perche' in conflitto con le fonti di verita' (che 'fanno fede'). sw=90% hw."
   },
   "toes_l": {
    "can_id": 51,
@@ -325,7 +325,7 @@
    "speed_max_dps": 60,
    "torque_max_Nm": 10.0,
    "servo": "Dynamixel XL430",
-   "note": "SEA dita piede SX \u2014 flessione plantare collettiva (tutte e 5 le dita insieme, 0-45 deg). V1.0 collettivo; V2.0 roadmap: dita indipendenti. Nome canonico in can_devices_v2.json: toes_l_collective (id=51). Coppia 10 Nm da can_devices_v2.json e documentazione interna TDD (mappa DOF); il prompt indicava 1.5 Nm (scartato, conflitto con fonti di verita'). sw=90% hw, lower bound a 2 deg come gli altri giunti a fondo corsa 0."
+   "note": "SEA dita piede SX — flessione plantare collettiva (tutte e 5 le dita insieme, 0-45 deg). V1.0 collettivo; V2.0 roadmap: dita indipendenti. Nome canonico in can_devices_v2.json: toes_l_collective (id=51). Coppia 10 Nm da can_devices_v2.json e documentazione interna TDD (mappa DOF); il prompt indicava 1.5 Nm (scartato, conflitto con fonti di verita'). sw=90% hw, lower bound a 2 deg come gli altri giunti a fondo corsa 0."
   },
   "toes_r": {
    "can_id": 52,
@@ -340,7 +340,7 @@
    "speed_max_dps": 60,
    "torque_max_Nm": 10.0,
    "servo": "Dynamixel XL430",
-   "note": "SEA dita piede DX \u2014 specifica identica a toes_l. Nome canonico in can_devices_v2.json: toes_r_collective (id=52). Coppia 10 Nm (fonte di verita')."
+   "note": "SEA dita piede DX — specifica identica a toes_l. Nome canonico in can_devices_v2.json: toes_r_collective (id=52). Coppia 10 Nm (fonte di verita')."
   },
   "elbow": {
    "hw_deg": [
@@ -386,20 +386,24 @@
   "enforcement": "nova_safeguard node, 100Hz"
  },
  "_nova_sim_campaign_v1": {
-  "_source": "Campagna virtuale NOVA-SIM, canone 28/07/2026 @66,228 kg \u2014 21 risultati verificati [C], 2 claim ritirati. [C] = calcolato in simulazione, riproducibile con --test.",
+  "_source": "Campagna virtuale NOVA-SIM, canone 28/07/2026 @66,228 kg — 21 risultati verificati [C], 2 claim ritirati. [C] = calcolato in simulazione, riproducibile con --test.",
   "verifica_range_C": "Range software verificati in simulazione su tutta la campagna: ginocchio 2-117 sfruttato al 92% (squat 108 gradi), caviglia +/-27 = vincolo dominante dello squat (24,2 usati), hip sway 11,1 dentro +/-27 di roll (il valore 10,7 era misurato @62,8 kg, non riverificato dopo la correzione di massa). Massa del modello 66,228 kg, stampata da ogni modulo.",
   "canone_28_07_2026": "STORICO (canone 28/07, PIEDE 29,5 cm - SUPERATO dal Canone C del 04/08: v. chiavi camminata/salto/t18_power_loss/inviluppo_spinte) [C]: campione v2 (y_in 0,02, lean 0,15; avanzamento 0,331 m su 2 appoggi, misurato); picco anca roll 72,1 Nm (margine 10% sul limitatore 80); energia 98,7 J/appoggio e 17,7 W; duty >43 Nm in regime 8,2% (caso peggiore, lato R; lato L 7,7%); za squat 0,60 m; rialzata 3,00 s con piedi raccolti (KXA 0,15), coppie 61,9/61,0/47,2 Nm, reazione sulla seduta 651 N (RIMISURA 04/08 con controllo intermedio: 649 N = 100%) (bilancio Sigma Fz chiuso); reach 0,48/0,43/0,47/0,47 m; inviluppo di equilibrio 0,60/0,50/0,40 m/s; carico 6 kg da fermo e 2 kg in movimento; salto 210 ms di volo e 3,3 cm di quota, BOM 120/120 Nm simultanei; caduta 2,60 m/s, impulso 274,9 N*s su 150 ms, 17,1 g, preavviso mano-tronco 425 ms; contributo alluce +150%; E1 6 appoggi, E2 32 cicli, E3 11 appoggi (eventi di appoggio: volo misurato 15 ms su 11,2 s, assente).",
   "termico_anca_roll_C": "E3 a cadenza reale (T_sw 0,180 s), finestra di regime: RMS totale 53,7 Nm = 125% del nominale continuativo dell'X8 (43 Nm); componente posturale 38,2 Nm = 89% del nominale su 70,2% del ciclo; transitori di contatto 29,8% del tempo per il 64% della dissipazione. Il picco del transitorio e' governato dalla rigidezza del servo di posizione, non dalla cinematica del passo: con forcerange a +/-200 Nm la domanda satura anche quel limite. Il cap di 80 Nm opera come limitatore di progetto. Obiettivo: picco di touchdown <=53 Nm riporta il totale al 100% del nominale. Nota di metodo: le stesse grandezze calcolate sull'intero run invece che sulla finestra di regime danno 43,1 Nm di RMS e 25,0 di posturale, valori diluiti dalla fase di assestamento e non usati.",
   "sensibilita_massa_C": "Da 62,8 a 66,228 kg (+5,5%): regime balistico -54% (quota di salto), contatto -100% (pipeline di atterraggio azzerata), quasi-statico invariato (inviluppo di equilibrio, reach). A taratura euristica invariata, +3,3% di massa riduce del 42% gli appoggi raggiunti su E3. La sensibilita si propaga nel bilancio termico: l'aumento di massa ha richiesto lean 0,12 -> 0,15, e il lean genera la componente posturale del carico sull'anca roll.",
   "claim_ritirati": "Pipeline di atterraggio 0,36 s e moltiplicatore di frenata delle dita x3,9: misurati a 62,8 kg, NON conservati a 66,23 kg. Sono scoperte di sensibilita alla massa, non errori di misura, e rientrerebbero solo con una ritaratura datata. Non vanno usati come risultati.",
   "decisioni_recepite": "D1 ginocchio 100 -> 120 Nm (salto 120,0 Nm misurati; X12-P20-320, 85 nom / 320 picco). D2 caviglia pitch 60 -> 80 Nm (tacchi a h=0: 73,6 Nm misurati; X8-120, 43 nom / 110 picco). D3 spalla pitch -> RMD-X8-120, 43 Nm; spalla roll -> RMD-X6-P20-60, 20 Nm, back-drive 1,6 Nm. Approvate da Michel Maddalena, recepite nel TDD v11.4. Nota: i valori di coppia sono limitatori di progetto; il metro di verifica termica e' il nominale continuativo del costruttore, valutato in RMS sul ciclo.",
-  "requisito_spalla_C": "Il requisito di coppia della spalla pitch e' 44 Nm statici per 8 kg a 0,45 m dalla spalla (momento del carico 35,3 + contributo del braccio 8,8; pendenza misurata 4,5 Nm/kg). La saturazione osservata a 40 Nm nel reach alto a braccio scarico e' un artefatto della rigidezza del servo di posizione \u2014 la statica del braccio scarico richiede circa 9 Nm \u2014 e non costituisce un requisito di piattaforma. Requisito della spalla roll: 16,0 Nm sostenuti a 81 gradi di abduzione (gravita del braccio 8,7 piu contatto 15 N a leva 0,48 m), duty continuo, pari all'80% del nominale dell'X6.",
+  "requisito_spalla_C": "Il requisito di coppia della spalla pitch e' 44 Nm statici per 8 kg a 0,45 m dalla spalla (momento del carico 35,3 + contributo del braccio 8,8; pendenza misurata 4,5 Nm/kg). La saturazione osservata a 40 Nm nel reach alto a braccio scarico e' un artefatto della rigidezza del servo di posizione — la statica del braccio scarico richiede circa 9 Nm — e non costituisce un requisito di piattaforma. Requisito della spalla roll: 16,0 Nm sostenuti a 81 gradi di abduzione (gravita del braccio 8,7 piu contatto 15 N a leva 0,48 m), duty continuo, pari all'80% del nominale dell'X6.",
   "proposte_aperte": "[PROPOSTA] Atterraggio in piedi da salto: caviglia >=+/-35 gradi, oppure suola >=13 cm insieme a coppia di caviglia >=100 Nm. Il tallone da solo non basta (misurato). [PROPOSTA] Dita indipendenti (hallux 0-50 gradi) rinviate a V2.0: in V1.0 la flessione plantare e' collettiva, e la rigidezza solidale risulta preferibile al grado di liberta aggiuntivo.",
   "limite_campione_C": "Il campione v2 e' verificato su 2 appoggi (avanzamento 0,331 m, 2232 campioni). Richiedendo 4 appoggi con la stessa configurazione il modello cade a 11,97 s dopo 1,10 m: la camminata continua oltre i 2 appoggi richiede la configurazione E3, non il campione. Riproducibile con core/metriche_coppie.py --test.",
-  "camminata": "CANONE-ALTOPIANO (05/08, piede 16,5/6,0): 654 appoggi, VIVA 120 s, rullio -0,035, appoggio 0,180 s A OROLOGIO, kp gambe 400 (x2; ff al quirk x3) -> x = +2,491220 (mujoco 3.11.0) / +2,621374 (3.2.7) / +2,581697 (3.1.6), numpy 2.4.4, tre run identici per build [C]. Altopiano rullio -0,037..-0,034. MASSIMO MISURATO (dichiarato, non canone): +9,695622 m a rullio -0,05 su 3.11.0+np2.4.4; fuori altopiano la direzione ALTERNA ogni ~3 millesimi (pettine) e dipende anche da numpy (-8,53 con np1.26 / -2,72 con np2.4 su 3.1.6). 'A evento' NON equivale all'orologio fuori campagna (3.1.6: 174 appoggi, caduta 35,1 s, +0,596 - discrepanza L4 CHIUSA cosi'). MODO LUNGO a -0,035: 420 appoggi, -25,93 m, falcata 12,3 [C] (storico a -0,05: -26,573/12,5). Partenza 2,41 s; arresto in piedi, inerzia -1,76 cm a rullio -0,035 [C] (storico a -0,05: +1,07). 5/6 criteri v1.2 (mancano i passi veri). Moduli: camminata_avanti/indietro/partenza_arresto.",
-  "salto": "CANONE C: PUNTA 0,15 -> volo 250 ms, piedi +8,2 cm, CoM +5,3 cm DAL DISTACCO (B44: la vecchia metrica dalla quota in piedi dava +0,0 perche' il robot si accovaccia di 16 cm; RITIRATA), v decollo 0,78 m/s [C]. Storico (piede 29,5, PUNTA 0,35): volo 210 ms. Atterraggio in piedi: APERTO. SATURAZIONE DICHIARATA [C]: a PUNTA 0,15 ginocchio E anca al cap 120/120 Nm - il salto canone e' il tetto dell'hardware (a PUNTA 0,35 non saturavano).",
+  "camminata": "CANONE L8 (07/08, piede 16,5/6,0, LEVA DI ESTENSIONE EST_ZA 0,025 con EST_FRAZ 0,40): 654 appoggi, VIVA 120 s, rullio -0,035, appoggio 0,180 s A OROLOGIO, kp gambe 400 -> x = +6,44...+6,56 m su QUATTRO build (3.11.0 +6,561833 / 3.2.7 +6,438 / 3.10.0 Windows +6,472821 / 3.1.6 +6,474), dispersione 1,9%, tre run identici per build [C]. Falcata 2,0 cm, velocita 0,0547 m/s, ciclo 0,360 s. LA FASCIA E' CONCORDE NEL SEGNO E IRREGOLARE NEL VALORE: a 0,028 crolla a +3,50, a 0,035 risale a +5,75, a 0,040 inverte a -28,8 - stesso statuto dell'altopiano di rullio, DICHIARATO. SUPERATO (non sbagliato) il canone-altopiano +2,491220 del 05/08: e' la stessa andatura a leva spenta, conservata come controllo. Massimo misurato, dichiarato e non canone: +9,695622 m a rullio -0,05. INDIETRO: 420 appoggi, -25,93/-26,04 m, falcata 12,3 cm, GIRA A LEVA SPENTA - accesa l'isola muore in 5,7 s (la leva e' direzionale: estende verso il contatto anteriore). Commit aa47880.",
+  "salto": "CANONE B49 (07/08): PUNTA -0,35 -> volo 270 ms, piedi +6,0 cm, CoM +7,1 cm DAL DISTACCO (+34%), caviglia 70,6 su 80, ginocchio e anca AL CAP 120/120, v decollo 0,72 m/s [C]. IL TERMINE AVEVA IL SEGNO SBAGLIATO: 'PUNTA' si chiamava spinta di caviglia al decollo ed era DORSIFLESSIONE - il canone precedente (+0,15: volo 250 ms, piedi +8,2, CoM +5,3) non era un compromesso di taratura, era un segno invertito. Il vecchio termine sbatteva i piedi in su senza alzare il corpo. Altopiano largo (CoM 7,00-7,63 da -0,25 a -0,65) identico su tre build; -0,35 e NON il valore migliore perche a -0,45 la caviglia siede a 1,3 Nm dal cap. Storico (piede 29,5, PUNTA 0,35): volo 210 ms. PRIMO IMPATTO 2583 N = 398% del peso [B47: il primo picco cade DOPO IL DISTACCO, cinque millisecondi PRIMA che la macchina a stati dichiari l'atterraggio - il vecchio 1840 era il SECONDO picco]. Atterraggio in piedi: APERTO - il gesto e perso al distacco, non all'atterraggio (deficit 39 cm, le tre leve insieme ne recuperano 7,5).",
   "t18_power_loss": "RITIRATO il canone 1,51 m/s (era il piede 29,5). Sul piede canone: testa 3,64 m/s, quiete 14,34 s, FAIL alle soglie [A] in tutte le strategie -> domanda di laboratorio (T18 resta test di collaudo reale, par.12).",
   "inviluppo_spinte": "Inviluppo in stazione [C, banco c19]: NUDO avanti 0,35 / laterale 0,50 / indietro 0,35 kN*ms; TACCHI 0,35 / 0,40 / 0,15 (l'indietro crolla di due terzi). Modulo repo del banco: in arrivo (aperto L4).",
-  "note_metodo": "[C10] I transitori sono misurati su caviglia RIGIDA: il SEA da 2,3 kNm/rad del par.2.3 non e' nel modello. [C11] Il bilancio termico di camminata e' dichiarato a kp=200 [A]; il canone cammina a kp 400. [C15] Nessun test 'da fermo' e' passivo: ogni modulo dichiara il suo controllore di stazione. [C16] cammina_tx34.py ha un controllore embedded distinto da gait_core: quantificazione APERTA. [C17] E3 (accoppiato) gira a kp 600 (x3), fuori dal canone kp 400: i suoi numeri si leggono con questa avvertenza [C]. [BUSSOLA, per il TDD] Il canarino di gait_core e' (2, 0,330795) su tutte e tre le build; il campione a kp 200 e' stabile alla versione, e' E2 a kp 400 a non esserlo: LA FRAGILITA' ARRIVA CON LA RIGIDEZZA (si lega a C17). [CANARINO, deciso 05/08] resta 0,330795 (pre-C7, provato su tre build); 0,330576 a verbale come effetto attribuito del waist a 2,5."
+  "note_metodo": "[C10] I transitori sono misurati su caviglia RIGIDA: il SEA da 2,3 kNm/rad del par.2.3 non e' nel modello. [C11] Il bilancio termico di camminata e' dichiarato a kp=200 [A]; il canone cammina a kp 400. [C15] Nessun test 'da fermo' e' passivo: ogni modulo dichiara il suo controllore di stazione. [C16] cammina_tx34.py ha un controllore embedded distinto da gait_core: quantificazione APERTA. [C17] E3 (accoppiato) gira a kp 600 (x3), fuori dal canone kp 400: i suoi numeri si leggono con questa avvertenza [C]. [BUSSOLA, per il TDD] Il canarino di gait_core e' (2, 0,330795) su tutte e tre le build; il campione a kp 200 e' stabile alla versione, e' E2 a kp 400 a non esserlo: LA FRAGILITA' ARRIVA CON LA RIGIDEZZA (si lega a C17). [CANARINO, deciso 05/08] resta 0,330795 (pre-C7, provato su tre build); 0,330576 a verbale come effetto attribuito del waist a 2,5.",
+  "caduta_t1": "[B48] L'IMPULSO ERA ANCORATO AL POSTO SBAGLIATO: la finestra da 150 ms partiva dal 'primo contatto >20 N', che nello scenario in servizio e UN DITO DEL PIEDE ancora a terra, e si chiudeva 270 ms PRIMA che la mano colpisse. Riancorato al primo carico d'arto >=150 N: S2 260,5 N*s contro i 59,5 precedenti (sbagliato di 4,4 volte). CONFERMA INDIPENDENTE: nello scenario S1 (drop libero) le due finestre COINCIDONO a 0 ms - li il primo contatto E' l'impatto, per costruzione - e S1 da 276,6 N*s. Verificato su tre ambienti. Preavviso mano-tronco 420 ms (non 425): e la MANO, non il dito. v impatto 2,47 m/s in servizio, 2,60 nel drop.",
+  "seduta": "Reazione sulla seduta 649 N [C, rimisura 04/08 con bilancio Sigma Fz al 100,1%; il 651 era la chiusura v11.4]. Rialzata 3,00 s con piedi raccolti, anca 73,4 Nm (+19% sul piede nuovo). NOTA DI MANUTENZIONE [setaccio 06/08]: sgabbiando la finestra semantica l'anca tocca il CAP di 120 Nm per venti millisecondi al cambio fase discesa->seduta (quattro campioni; a +/-50 ms sta a 10-15 Nm). E' un TRANSIENTE DI COMANDO, non un carico: nessun numero pubblicato cambia, ma il gradino di comando va smussato o dichiarato.",
+  "canarino_gait_core": "LA GUARDIA DEL TRONCO, con l'invocazione CONGELATA - una guardia che si invoca in tre modi diversi non guardia niente: gait_core.gait(xml='tx34_v1.xml', step=0.14, t_sw=0.6, lift=0.04, y_in=0.02, lean=0.15, za0=0.78, n_passi=2, Ky=5.0, Kyd=2.0, Kx=2.5, xb=0.02) -> (2, 0.330576) sul modello pubblicato (C7), (2, 0.330795) sul pre-C7. Mancava n_passi=2 (il default e 6): senza, esce (2, 1.106488) e il canarino sembra mosso. I guadagni sono espliciti perche se anche uno solo cambiasse il canarino cambierebbe SENZA CHE NESSUNO TOCCHI IL TRONCO. Il valore 0,352 che comparve nell'Estratto era preso da un report invece che dalla misura (verbale 30/07, errore n.2).",
+  "fonte_unica": "DAL 07/08 I NUMERI VIVONO IN canone.json DEL TDD MODULARE. Questo file resta la configurazione che i moduli leggono; le chiavi _nova_sim_campaign_v1 sono un verbale, non la fonte. Se un numero qui diverge dal canone, VINCE IL MODULO: py canone_tool.py --aggiorna <outputs> lo dice."
  }
 }
