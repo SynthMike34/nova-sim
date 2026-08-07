@@ -54,9 +54,11 @@ def main():
     print('PARTENZA: primo appoggio a %.2f s (keyframe qvel=0: parte DA FERMO)' % (t1 or -1))
     print('ARRESTO a 30 s: %s | z=%.3f m | inerzia residua %+.2f cm' %
           ('IN PIEDI per i 30 s successivi' if in_piedi else 'CADUTA', z, inerzia))
-    # Criterio VERO (L5): parte da fermo e RESTA IN PIEDI. L'inerzia e' informativa:
-    # [C] fra -1,8 e -3,6 cm secondo la build (misurati: -1,76 qui; -2,71 Linux
-    # 3.10.0; -3,53 Windows 3.10.0); +1,07 a rullio -0,05 (storico).
+    # Criterio VERO (L5): parte da fermo e RESTA IN PIEDI. L'inerzia e' informativa.
+    # [L8, leva a canone] su questo container: -2,42 cm (tre run identici); primo
+    # appoggio 2,41 INVARIATO. Intervallo multi-build SENZA leva (storico L5):
+    # -1,8..-3,6 (-1,76 qui; -2,71 Linux 3.10.0; -3,53 Windows 3.10.0) - da
+    # rimisurare per-build con la leva; +1,07 a rullio -0,05 (piu' storico).
     ok = (in_piedi and t1 is not None and abs(t1 - 2.41) < 0.10)
     print('ESITO: %s (criterio: parte da fermo ~2,41 s e resta IN PIEDI 30 s; '
       'inerzia informativa fra -1,8 e -3,6 cm secondo la build [C])' % ('PASS' if ok else 'FAIL'))

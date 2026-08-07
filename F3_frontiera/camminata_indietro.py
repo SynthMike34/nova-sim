@@ -44,7 +44,11 @@ def png(nome, ts, xs, ev, titolo):
 
 def main():
     print('camminata_indietro.py - versione ' + VERSIONE)
-    W.canone(t_appoggio=0.28)        # seconda isola: 420 appoggi, -26,57 m
+    # [L8] la leva d'estensione e' DIREZIONALE (estende verso il contatto
+    # ANTERIORE): con la leva accesa l'isola retrograda MUORE (12 appoggi,
+    # cade a 5,7 s - tre run identici). L'indietro corre a LEVA SPENTA,
+    # dichiarato: il suo canone resta 420 / -25,928421 / falcata 12,3.
+    W.canone(t_appoggio=0.28, est_za=0.0)   # seconda isola, leva OFF
     c, tc, ts, xs, ev = corsa(120.0)
     x = float(c.d.qpos[0])
     falc = abs(x)/max(c.passi, 1)*2.0*100.0

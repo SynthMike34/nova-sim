@@ -145,8 +145,8 @@ session, use `--test`.
 | `F3_frontiera/e1_capture.py` | Capture-point stepping | 6 support events · 2–4 cm placement error |
 | `F3_frontiera/e2_timing.py` | Event-triggered timing | 32 synchronised cycles |
 | `F3_frontiera/e3_accoppiato.py` | Commanded forward walking (historical bench, kp 600) | 11 support events · progress figure retired |
-| `F3_frontiera/camminata_avanti.py` | **Forward walking - Canon C (plateau)** | **654 supports · 120 s alive · +2.49 / +2.62 / +2.66 / +2.58 m on 4 builds** (3.11.0 / 3.2.7 / 3.10.0 / 3.1.6; max measured +9.6956) |
-| `F3_frontiera/camminata_indietro.py` | Long mode (0.28 s support) | 420 supports · −25.93 m · 12.3 cm stride (roll −0.035) |
+| `F3_frontiera/camminata_avanti.py` | **Forward walking - canon (L8, extension lever)** | **654 supports · 120 s alive · +6.44…+6.56 m on 4 builds** (this build +6.561833, three identical runs; stride 2.0 cm/cycle vs 0.72 without the lever). Lever-off base: +2.49 / +2.62 / +2.66 / +2.58 (max measured +9.6956, lever off) |
+| `F3_frontiera/camminata_indietro.py` | Long mode (0.28 s support) | 420 supports · −25.93 m · 12.3 cm stride (roll −0.035). **Lever off, declared**: the extension lever is direction-specific — with it on, the backward island falls (12 supports, 5.7 s) |
 | `F3_frontiera/partenza_arresto.py` | Start from rest / stop | first support 2.41 s · standing after stop · inertia −1.8…−3.6 cm by build (−1.76 on 3.11.0) |
 | `F3_frontiera/e3_rms.py` | Hip roll thermal load | 53.7 Nm RMS in regime |
 | `F3_frontiera/salto.py` | Jump | 270 ms flight · feet +6.0 cm · CoM +7.1 cm from take-off (B44, B49) |
@@ -173,6 +173,7 @@ session, use `--test`.
 | Squat depth | 0.60 m | [C] at software limits |
 | Sit-to-stand | 3.00 s, feet-tucked strategy | [C] |
 | Reach envelope (fwd / up / down / lat) | 0.48 / 0.43 / 0.47 / 0.47 m (`tx34_v1` model, 29.5 cm foot — the reach envelope is set by the arm and the CoM, not by the foot) | [C] |
+| Forward walking (canon, L8) | **654 supports · +6.44…+6.56 m in 120 s across four builds** (this build +6.561833, three identical runs) · cycle unchanged · stride **2.0 cm/cycle vs 0.72** without the lever · leg-extension lever **EST_ZA 0.025** (cosine ramp over the last 40% of the true swing). The working band is **sign-consistent and value-irregular**: 0.028 → +3.50 m, 0.040 inverts the direction — the same statute as the roll plateau. The lever is direction-specific: the backward island runs with it off | [C] |
 | Payload (static / walking) | **2 kg static** (`f1c_carico.py`, tx34_v1 model: extended, tucked and marching all cap at 2 kg — the limiter is the **elbow at 8 N·m** after the C7 safeguard alignment; the earlier 6 kg figure predates C7). **Walking: retracted** — the 2 kg figure was the old 29.5 cm foot. On the canon configuration (size-36 foot, E2 gait) **100 g on the torso brings it down** (12.9 s), 250 g in one hand halves its life, flip-flops end it in 6 s. The frontal hip is at its 80 N·m cap in every row — unloaded included — and no larger actuator fixes it (60→140 N·m tried). Standing it absorbs a 0.35 m/s push; walking it cannot carry 100 g: different limits — standing, the CoM sits over the support polygon; walking, it rides 8.1 cm outside it | [C] |
 | Hip roll, postural thermal demand | 38.2 Nm RMS = 89% of nominal | [C] |
 | Jump: flight time / clearance / CoM rise | 270 ms / +6.0 cm / +7.1 cm from take-off (PUNTA −0.35, size-36 foot) | [C] |
@@ -234,7 +235,7 @@ The E4–E7 modules are kept in the repository because the code and the negative
 of the record.
 
 
-> **Canon C — the plateau.** The walking canon is **654 supports, 120 s alive, +2.49 / +2.62 / +2.58 m on MuJoCo 3.1.6, 3.2.7 and 3.11.0, +2.66 on 3.10.0** (roll term −0.035, support imposed by clock at 0.180 s, leg kp ×2 = 400 with the feed-forward table left at ×3 — the quirk is part of the canon). Direction and order of magnitude agree across **four** solver builds (three identical runs per build) and across operating systems: on 3.10.0 the same run gives **+2.655481 m on Linux and +2.656692 m on Windows - one millimetre apart**. **+9.695622 m remains the measured maximum**, obtained at roll −0.05 on MuJoCo 3.11.0 + numpy 2.4.4 and declared for what it is: outside the −0.037…−0.034 plateau the direction of travel **alternates every ~3 thousandths of roll** (a comb, not a threshold) and depends on the numpy build as well. Event-triggered support (T_MAX 0.60) is *not* equivalent to the clock outside the campaign machine.
+> **Canon C — the plateau (lever-off base).** Since L8 the walking canon includes the extension lever (see Key results); the figures below are the lever-off control, still reproduced bit-exact (this build +2.491220). The base gait is **654 supports, 120 s alive, +2.49 / +2.62 / +2.58 m on MuJoCo 3.1.6, 3.2.7 and 3.11.0, +2.66 on 3.10.0** (roll term −0.035, support imposed by clock at 0.180 s, leg kp ×2 = 400 with the feed-forward table left at ×3 — the quirk is part of the canon). Direction and order of magnitude agree across **four** solver builds (three identical runs per build) and across operating systems: on 3.10.0 the same run gives **+2.655481 m on Linux and +2.656692 m on Windows - one millimetre apart**. **+9.695622 m remains the measured maximum**, obtained at roll −0.05 on MuJoCo 3.11.0 + numpy 2.4.4 and declared for what it is: outside the −0.037…−0.034 plateau the direction of travel **alternates every ~3 thousandths of roll** (a comb, not a threshold) and depends on the numpy build as well. Event-triggered support (T_MAX 0.60) is *not* equivalent to the clock outside the campaign machine.
 >
 > **Model note.** `tx34_piedevero.xml` is the canon model **verbatim as measured**: it predates the safeguard torque alignment (C7) and actuator naming (B7) — realigning it would re-measure the canon. Its URDF carries the same pre-safeguard efforts. Declared, open item.
 >
@@ -291,6 +292,26 @@ nominal. Indefinite continuous walking is not sustained. This is a prediction to
 hardware with torque control.
 
 ---
+
+## Retracted figures — the running list
+
+Every number we have had to take back stays on the record. The full stories are in the
+sections above; this table is the index, newest last.
+
+| figure | was published as | now reads |
+|---|---|---|
+| Landing pipeline, time to upright rest | 0.36 s | withdrawn — did not survive the mass correction to 66.23 kg |
+| Toe-brake multiplier | ×3.9 | withdrawn — same mass correction |
+| Walking payload | 2 kg | 100 g brings the canon gait down — the 2 kg was the old 29.5 cm foot |
+| Hallux contribution to jump height | +150% | none on the size-36 foot — the +150% was the old 29.5 cm foot |
+| Power-loss head impact (coast) | 1.51 m/s (earlier canon, 29.5 cm foot) | 3.64 m/s on the anatomical foot — the 1.51 does not reproduce |
+| Historical bench forward progress (e3, kp 600) | a progress figure | retired — support events only |
+| Jump — flight / clearance / CoM rise | 250 ms · 8.2 cm · 5.3 cm | 270 ms · 6.0 cm · 7.1 cm — the ankle term had the wrong sign (B49) |
+| Forward walking distance | +2.49 m in 120 s | **superseded, not wrong** — the leg-extension lever (EST_ZA 0.025) entered the canon: +6.44…+6.56 m across four builds. The old figure is the same gait with the lever off, and remains the base control, reproduced bit-exact |
+
+The jump correction deserves one more line: the feet clearance goes **down** (8.2 → 6.0 cm) while
+the centre-of-mass rise goes **up 34%** (5.3 → 7.1 cm). The old positive term was dorsiflexion —
+it flicked the feet up without lifting the body. The number that matters is the CoM.
 
 ## Measurement conventions
 

@@ -48,6 +48,16 @@ FRAZ = 1.0            # [FORK] frazione dell'appoggio in cui il termine e' ACCES
 MORBIDA = False       # [FORK] False = interruttore secco, True = spegnimento a coseno
 PRESS = 0.0           # [FORK] estensione della gamba in volo nell'ultima frazione: atterraggio deciso
 U_PRESS = 0.7         # [FORK] da quale frazione di u comincia la pressione
+# [CANONE L8 07/08, ex cantiere-7 BUSSOLA] GAMBA ESTESA PRIMA DEL CONTATTO
+# La rampa e' sulla frazione VERA dello swing (t_f/T_MIN, che arriva a 1,0),
+# non su u = t_f/T_NOM che si ferma a 0,60 (B34): qualunque soglia sopra 0,60
+# su u non si accende mai - la trappola di chi ricostruisce dalla fisica (12o).
+# Fascia verificata 0,015-0,030 su 4 build: CONCORDE NEL SEGNO, IRREGOLARE NEL
+# VALORE (0,028 -> +3,50; 0,040 INVERTE): stesso statuto del rullio -0,035.
+# 0,025 e' il centro della fascia, non il bordo.
+EST_FRAZ = 0.40       # frazione finale dello swing in cui i termini salgono (0 = spento)
+EST_ZA = 0.025        # allungamento verso il basso [m] - CANONE L8
+EST_XA = 0.0          # avanzamento del piede rispetto al capture point [m]
 T_STOP = 0.0          # [FORK] istante in cui si smette di comandare il passo (0 = mai)
 T_RAMPA = 0.0         # [FORK] secondi di riduzione progressiva del passo prima dello stop (NOVA)
 L1, L2 = 0.38, 0.40
@@ -164,6 +174,12 @@ class Camminatrice:
                 if T_RAMPA > 0.0 and T_STOP > 0.0:
                     xa *= float(np.clip((T_STOP - self.t_tot)/T_RAMPA, 0.0, 1.0))
                 za = ZA0 - LIFT*np.sin(np.pi*u)
+                if EST_FRAZ > 0.0:
+                    _w = float(np.clip(self.t_f/max(T_MIN, 1e-9), 0.0, 1.0))
+                    _q = float(np.clip((_w - (1.0 - EST_FRAZ))/EST_FRAZ, 0.0, 1.0))
+                    _r = 0.5 - 0.5*np.cos(np.pi*_q)
+                    za += EST_ZA*_r
+                    xa += EST_XA*_r
                 if PRESS != 0.0 and u > U_PRESS:
                     za += PRESS*(u - U_PRESS)/max(1.0 - U_PRESS, 1e-9)
                 qh, qk = ik(xa, za)
@@ -285,7 +301,8 @@ if __name__ == '__main__':
         demo()
 
 # ---------------- API CANONE (Campagna C, 04/08) ----------------
-def canone(kpf=2.0, t_appoggio=0.18, rullio=-0.035, xoff=-0.04, t_nom=0.30):
+def canone(kpf=2.0, t_appoggio=0.18, rullio=-0.035, xoff=-0.04, t_nom=0.30,
+           est_za=0.025, est_fraz=0.40):
     """CANONE-ALTOPIANO (05/08): kp gambe = base x kpf (2.0 = kp 400), appoggio
     IMPOSTO A OROLOGIO, rullio -0,035. Regge su TRE build [C, tre run/build]:
     mujoco 3.11.0 x=+2,491220 | 3.2.7 +2,621374 | 3.1.6 +2,581697 (654, VIVA).
@@ -296,7 +313,7 @@ def canone(kpf=2.0, t_appoggio=0.18, rullio=-0.035, xoff=-0.04, t_nom=0.30):
     2.4.4 - dichiarato, non canone. 'A evento' (T_MAX 0.60) NON equivale
     all'orologio fuori dalla macchina di campagna (3.1.6: caduta 35,1 s,
     +0,596): l'invocazione canonica e' A OROLOGIO."""
-    global T_MIN, T_MAX, RULLIO, XOFF, T_NOM
+    global T_MIN, T_MAX, RULLIO, XOFF, T_NOM, EST_ZA, EST_FRAZ
     base = {n: (float(m.actuator_gainprm[AID[n]][0]) / _KPF_ATTUALE[0],
                 float(m.actuator_biasprm[AID[n]][1]) / _KPF_ATTUALE[0])
             for n in GAMBE}
@@ -307,6 +324,7 @@ def canone(kpf=2.0, t_appoggio=0.18, rullio=-0.035, xoff=-0.04, t_nom=0.30):
     _KPF_ATTUALE[0] = kpf
     T_MIN = T_MAX = t_appoggio
     RULLIO, XOFF, T_NOM = rullio, xoff, t_nom
+    EST_ZA, EST_FRAZ = est_za, est_fraz
     # NOTA-CANONE (quirk dichiarato): KP_ATT resta alla tabella d'import (x3).
     # La compensazione ff divide per x3 mentre i guadagni girano a x2: cosi'
     # correva la campagna (via-c18) e cosi' nasce il 654/+9,695622. NON pulire.

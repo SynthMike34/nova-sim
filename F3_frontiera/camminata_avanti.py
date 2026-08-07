@@ -50,15 +50,19 @@ def main():
     print('Camminata AVANTI: %d appoggi | %s | x=%+.6f m | v=%.4f m/s' %
           (c.passi, ('VIVA a 120 s' if tc is None else 'caduta %.1f s' % tc), x, x/120.0))
     import mujoco
-    ATTESI = {'3.11.0': 2.491220, '3.2.7': 2.621374, '3.1.6': 2.581697}
+    # [L8] canone CON LEVA (EST_ZA 0,025): fascia +6,44..+6,56 su 4 build [C-BUSSOLA,
+    # 3 run/build]; su questo container 3.11.0 = +6,561833 (tre run identici).
+    # BASE a leva spenta (canone-altopiano storico): 2,491220 / 2,621374 / 2,581697.
+    ATTESI = {'3.11.0': 6.561833}
     att = ATTESI.get(mujoco.__version__)
     if att is not None:
         ok = (tc is None and c.passi == 654 and abs(x - att) < 0.02)
-        rif = 'atteso %+.6f su mujoco %s' % (att, mujoco.__version__)
+        rif = 'atteso %+.6f su mujoco %s [L8]' % (att, mujoco.__version__)
     else:
-        ok = (tc is None and c.passi == 654 and x > 0)
-        rif = 'build %s fuori tabella: criterio 654/VIVA/avanti' % mujoco.__version__
-    print('ESITO: %s (canone-altopiano rullio -0,035; %s)' %
+        ok = (tc is None and c.passi == 654 and 6.40 <= x <= 6.60)
+        rif = ('build %s: criterio strutturale 654/VIVA/avanti, fascia +6,44..+6,56 [L8]'
+               % mujoco.__version__)
+    print('ESITO: %s (canone L8: leva EST_ZA 0,025; %s)' %
           ('PASS - CANONE RIPRODOTTO' if ok else 'FAIL', rif))
     print('Massimo misurato (dichiarato, non canone): +9,695622 m a rullio -0,05'
           ' su mujoco 3.11.0 + numpy 2.4.4.')
