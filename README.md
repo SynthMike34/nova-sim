@@ -149,8 +149,8 @@ session, use `--test`.
 | `F3_frontiera/camminata_indietro.py` | Long mode (0.28 s support) | 420 supports · −25.93 m · 12.3 cm stride (roll −0.035) |
 | `F3_frontiera/partenza_arresto.py` | Start from rest / stop | first support 2.41 s · standing after stop · inertia −1.8…−3.6 cm by build (−1.76 on 3.11.0) |
 | `F3_frontiera/e3_rms.py` | Hip roll thermal load | 53.7 Nm RMS in regime |
-| `F3_frontiera/salto.py` | Jump | 250 ms flight · feet +8.2 cm · CoM +5.3 cm from take-off (B44) |
-| `F3_frontiera/e0_dita.py` | Toe mechanics | hallux extension at take-off: no effect on the size-36 foot (250→245 ms, 8.2→8.1 cm) — B45: 6 N·m cap, lever arm halved by the short forefoot; the +150% was the old 29.5 cm foot, retracted |
+| `F3_frontiera/salto.py` | Jump | 270 ms flight · feet +6.0 cm · CoM +7.1 cm from take-off (B44, B49) |
+| `F3_frontiera/e0_dita.py` | Toe mechanics | hallux extension at take-off: no effect on the size-36 foot — B45: 6 N·m cap, lever arm halved by the short forefoot; the +150% was the old 29.5 cm foot, retracted. *Measured before the B49 sign correction; the null result is unaffected.* |
 | `F3_frontiera/e4_atterra.py` `e5_volano.py` `e6_supervisore.py` `e7_pipeline.py` | Landing pipeline stages | claim withdrawn — see Limitations |
 
 ### Core and tools
@@ -175,7 +175,8 @@ session, use `--test`.
 | Reach envelope (fwd / up / down / lat) | 0.48 / 0.43 / 0.47 / 0.47 m (`tx34_v1` model, 29.5 cm foot — the reach envelope is set by the arm and the CoM, not by the foot) | [C] |
 | Payload (static / walking) | **2 kg static** (`f1c_carico.py`, tx34_v1 model: extended, tucked and marching all cap at 2 kg — the limiter is the **elbow at 8 N·m** after the C7 safeguard alignment; the earlier 6 kg figure predates C7). **Walking: retracted** — the 2 kg figure was the old 29.5 cm foot. On the canon configuration (size-36 foot, E2 gait) **100 g on the torso brings it down** (12.9 s), 250 g in one hand halves its life, flip-flops end it in 6 s. The frontal hip is at its 80 N·m cap in every row — unloaded included — and no larger actuator fixes it (60→140 N·m tried). Standing it absorbs a 0.35 m/s push; walking it cannot carry 100 g: different limits — standing, the CoM sits over the support polygon; walking, it rides 8.1 cm outside it | [C] |
 | Hip roll, postural thermal demand | 38.2 Nm RMS = 89% of nominal | [C] |
-| Jump: flight time / clearance / CoM rise | 250 ms / +8.2 cm / +5.3 cm from take-off (PUNTA 0.15, size-36 foot) | [C] |
+| Jump: flight time / clearance / CoM rise | 270 ms / +6.0 cm / +7.1 cm from take-off (PUNTA −0.35, size-36 foot) | [C] |
+| Jump: first impact force | 2583 N = 398% of body weight (B47 criterion: first peak after take-off, not first peak inside the landing phase) | [C] |
 | Hallux contribution to jump height | none on the size-36 foot (B45: 6 N·m cap, halved lever); the +150% was measured on the old 29.5 cm foot — retracted | [C] |
 | E1 capture-point support events | 6 | [C] |
 | E2 event-triggered cycles | 32 | [C] |
@@ -201,11 +202,36 @@ Heuristic control throughout — no MPC, no learned policy, no torque control.
 **No result has been validated on physical hardware.** These are reproducible orders of
 magnitude, not certified measurements.
 
-**Two claims have been withdrawn.** The landing pipeline (0.36 s to upright rest) and the
-toe-brake multiplier (×3.9) were measured at 62.8 kg and did not survive the mass correction to
-66.23 kg: both go to zero. They are mass-sensitivity findings, not measurement errors, and
-would return only with a dated re-measurement. The E4–E7 modules are kept in the repository
-because the code and the negative result are both part of the record.
+**Ten published figures have been withdrawn.** Each is listed below with the measurement that
+replaced it.
+
+| Claim | Published | What replaced it |
+|---|---|---|
+| Landing pipeline — time to upright rest | 0.36 s | not conserved at 66.23 kg |
+| Toe-brake multiplier at touchdown | ×3.9 | not conserved at 66.23 kg |
+| Hallux contribution to jump height | +150% | none, on a size-36 foot |
+| Power loss — head velocity | 1.51 m/s | does not reproduce; 3.64 |
+| Payload while walking | 2 kg | none — 100 g brings it down |
+| Payload, static | 6 kg | 2 kg, elbow-limited after safeguard alignment |
+| Forward balance envelope | 0.60 m/s | 0.35 on the anatomical foot |
+| Cross-platform figures | identical to the last digit | agree within 0.5% |
+| Jump — first impact force | 1840 N | **2583 N** — the module reported the second peak, inside the landing phase (B47) |
+| Jump — flight / clearance / CoM rise | 250 ms · 8.2 cm · 5.3 cm | **270 · 6.0 · 7.1** — the ankle term had the wrong sign (B49) |
+
+**Almost none of them were arithmetic errors.** They were correct numbers measuring the wrong
+quantity: a window that included the robot standing still, a contact counted as a step, a
+coefficient produced by reading the wrong actuator, a jump height measured from a height the robot
+leaves before it jumps, an impulse anchored to a toe still on the ground. That failure mode is more
+dangerous than a bug, because it looks like a result — and none of these was visible by reading the
+code. They were found by instrumenting it.
+
+**The last one is the most instructive.** A term in the jump controller was named *ankle push at
+take-off* and was in fact dorsiflexion — it pointed the toes the wrong way. The published figure was
+not a tuning compromise: it was an inverted sign. Correcting it raised the centre of mass 34% while
+foot clearance fell, because the old term flicked the feet up without lifting the body.
+
+The E4–E7 modules are kept in the repository because the code and the negative result are both part
+of the record.
 
 
 > **Canon C — the plateau.** The walking canon is **654 supports, 120 s alive, +2.49 / +2.62 / +2.58 m on MuJoCo 3.1.6, 3.2.7 and 3.11.0, +2.66 on 3.10.0** (roll term −0.035, support imposed by clock at 0.180 s, leg kp ×2 = 400 with the feed-forward table left at ×3 — the quirk is part of the canon). Direction and order of magnitude agree across **four** solver builds (three identical runs per build) and across operating systems: on 3.10.0 the same run gives **+2.655481 m on Linux and +2.656692 m on Windows - one millimetre apart**. **+9.695622 m remains the measured maximum**, obtained at roll −0.05 on MuJoCo 3.11.0 + numpy 2.4.4 and declared for what it is: outside the −0.037…−0.034 plateau the direction of travel **alternates every ~3 thousandths of roll** (a comb, not a threshold) and depends on the numpy build as well. Event-triggered support (T_MAX 0.60) is *not* equivalent to the clock outside the campaign machine.
